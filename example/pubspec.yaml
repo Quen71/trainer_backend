@@ -1,0 +1,28 @@
+name: trainer_backend_example
+description: "Example of how to use the trainer_backend package."
+publish_to: 'none'
+
+version: 0.0.1+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: 3.29.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_speed_dial: ^7.0.0
+  supabase_flutter: ^2.5.8
+  intl: ^0.20.2
+
+  trainer_backend:
+    path: ../
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
