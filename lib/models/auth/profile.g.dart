@@ -19,6 +19,10 @@ abstract class _$ProfileCWProxy {
 
   Profile role(UserRole role);
 
+  Profile programs(List<Program> programs);
+
+  Profile sessionLogs(List<SessionLog> sessionLogs);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Profile(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -32,6 +36,8 @@ abstract class _$ProfileCWProxy {
     DateTime updatedAt,
     String? fullName,
     UserRole role,
+    List<Program> programs,
+    List<SessionLog> sessionLogs,
   });
 }
 
@@ -60,6 +66,13 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
   Profile role(UserRole role) => this(role: role);
 
   @override
+  Profile programs(List<Program> programs) => this(programs: programs);
+
+  @override
+  Profile sessionLogs(List<SessionLog> sessionLogs) =>
+      this(sessionLogs: sessionLogs);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Profile(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -74,6 +87,8 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
     Object? updatedAt = const $CopyWithPlaceholder(),
     Object? fullName = const $CopyWithPlaceholder(),
     Object? role = const $CopyWithPlaceholder(),
+    Object? programs = const $CopyWithPlaceholder(),
+    Object? sessionLogs = const $CopyWithPlaceholder(),
   }) {
     return Profile(
       id: id == const $CopyWithPlaceholder()
@@ -100,6 +115,14 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
           ? _value.role
           // ignore: cast_nullable_to_non_nullable
           : role as UserRole,
+      programs: programs == const $CopyWithPlaceholder()
+          ? _value.programs
+          // ignore: cast_nullable_to_non_nullable
+          : programs as List<Program>,
+      sessionLogs: sessionLogs == const $CopyWithPlaceholder()
+          ? _value.sessionLogs
+          // ignore: cast_nullable_to_non_nullable
+          : sessionLogs as List<SessionLog>,
     );
   }
 }
@@ -122,6 +145,14 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
       fullName: json['full_name'] as String?,
       role: $enumDecodeNullable(_$UserRoleEnumMap, json['role']) ??
           UserRole.standard,
+      programs: (json['programs'] as List<dynamic>?)
+              ?.map((e) => Program.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <Program>[],
+      sessionLogs: (json['session_logs'] as List<dynamic>?)
+              ?.map((e) => SessionLog.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const <SessionLog>[],
     );
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
@@ -131,9 +162,11 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'role': _$UserRoleEnumMap[instance.role]!,
       'created_at': instance.createdAt.toIso8601String(),
       'updated_at': instance.updatedAt.toIso8601String(),
+      'programs': instance.programs,
+      'session_logs': instance.sessionLogs,
     };
 
 const _$UserRoleEnumMap = {
   UserRole.standard: 'standard',
-  UserRole.admin: 'admin',
+  UserRole.coach: 'coach',
 };

@@ -1,6 +1,8 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:trainer_backend/models/auth/enums/user_role.dart';
+import 'package:trainer_backend/models/history/session_log.dart';
+import 'package:trainer_backend/models/training/program.dart';
 
 part 'profile.g.dart';
 
@@ -19,6 +21,8 @@ class Profile {
     required this.updatedAt,
     this.fullName,
     this.role = UserRole.standard,
+    this.programs = const <Program>[],
+    this.sessionLogs = const <SessionLog>[],
   });
 
   /// Creates a [Profile] from a JSON object.
@@ -45,6 +49,13 @@ class Profile {
   /// The timestamp when the user profile was last updated.
   @JsonKey(name: 'updated_at')
   final DateTime updatedAt;
+
+  /// A list of recent programs associated with the user.
+  final List<Program> programs;
+
+  /// A list of recent session logs associated with the user.
+  @JsonKey(name: 'session_logs')
+  final List<SessionLog> sessionLogs;
 
   /// Converts this [Profile] to a JSON object.
   Map<String, dynamic> toJson() => _$ProfileToJson(this);

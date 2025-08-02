@@ -9,6 +9,7 @@ import 'package:trainer_backend/models/training/program.dart';
 import 'package:trainer_backend/models/training/session.dart';
 import 'package:trainer_backend/services/auth.service.dart';
 import 'package:trainer_backend/services/programs.service.dart';
+import 'package:trainer_backend_example/profile_test.screen.dart';
 import 'package:trainer_backend_example/program_detail.screen.dart';
 import 'package:trainer_backend_example/sessions_logs.screen.dart';
 
@@ -58,15 +59,31 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
               child: const Text('Fetch My Programs'),
             ),
             const SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) => const SessionsLogsScreen(),
-                  ),
-                );
-              },
-              child: const Text('View Session History'),
+            Wrap(
+              spacing: 10,
+              alignment: WrapAlignment.center,
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const SessionsLogsScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('View Session History'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const ProfileTestScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Test Profile Loading'),
+                ),
+              ],
             ),
             if (_isLoading)
               const Padding(
@@ -86,7 +103,7 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          MaterialPageRoute<void>(
                             builder: (BuildContext context) => ProgramDetailScreen(program: program),
                           ),
                         );

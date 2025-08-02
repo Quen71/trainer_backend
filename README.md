@@ -34,13 +34,25 @@ A Flutter package providing a complete client-side SDK to interact with the Trai
 
 ### Installation
 
-1.  Add `trainer_backend` to your `pubspec.yaml` dependencies:
+1.  Add `trainer_backend` to your `pubspec.yaml` dependencies.
+
+    **Option A: From pub.dev (if available)**
+    ```yaml
+    dependencies:
+      trainer_backend: ^1.0.0 # Replace with the latest version
+    ```
+
+    **Option B: From GitHub**
+    This is useful if you want to use the latest development version or if the package is private.
 
     ```yaml
     dependencies:
-      flutter:
-        sdk: flutter
-      trainer_backend: <latest_version> # or use a git dependency
+      trainer_backend:
+        git:
+          url: https://github.com/your-username/trainer_backend.git
+          # Optionally, specify a branch, tag, or commit hash:
+          # ref: main
+          # ref: v1.2.3
     ```
 
 2.  Create a `.env` file in the root of your project. This file will store your Supabase credentials.

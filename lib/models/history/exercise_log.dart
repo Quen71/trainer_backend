@@ -30,6 +30,8 @@ class SetLog {
 
   /// The number of repetitions performed in the set.
   final int reps;
+
+  //TODO: add an orderInExercise field ?
 }
 
 /// A sealed class representing a log for a single exercise performance.
@@ -76,6 +78,8 @@ sealed class ExerciseLog {
 
   /// The name of the exercise, fetched from the database.
   final String exerciseName;
+
+  //TODO: add a orderInSession field ?
 
   /// Converts this [ExerciseLog] to a JSON object.
   ///

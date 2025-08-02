@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/models/models.export.dart';
 
 /// A service class for handling user authentication with Supabase.
 ///
@@ -21,6 +22,33 @@ class AuthService {
   ///
   /// This can be used to listen for user sign-in and sign-out events in real-time.
   static Stream<AuthState> get onAuthStateChange => TrainerAPI.authManager.onAuthStateChange;
+
+  /// Retrieves the full user profile along with an initial set of their
+  /// programs and session logs.
+  ///
+  /// This method is ideal for fetching the initial data needed when a user
+  /// logs in or opens the app.
+  ///
+  /// - [limit]: The maximum number of programs and session logs to retrieve.
+  ///
+  /// Returns a [Profile] object populated with the user's data.
+  /// Throws an [Exception] if the RPC call fails or returns no data.
+  static Future<Profile> getProfileWithInitialData({required int limit}) async {
+    try {
+      final dynamic response = await TrainerAPI.client.rpc(
+        'get_profile_with_initial_data',
+        params: <String, dynamic>{'p_limit': limit},
+      );
+
+      if (response == null) {
+        throw Exception('Failed to retrieve profile: No data returned.');
+      }
+
+      return Profile.fromJson(response as Map<String, dynamic>);
+    } catch (e) {
+      throw Exception('Failed to retrieve profile: $e');
+    }
+  }
 
   /// Signs up a new user with email, password, and username.
   ///
@@ -213,9 +241,7 @@ class AuthService {
   /// Throws an [AuthException] if the update fails.
   static Future<void> updatePassword({required String newPassword}) async {
     try {
-      await TrainerAPI.authManager.updateUser(
-        UserAttributes(password: newPassword),
-      );
+      await TrainerAPI.authManager.updateUser(UserAttributes(password: newPassword));
     } on AuthException {
       rethrow;
     }

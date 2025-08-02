@@ -55,6 +55,7 @@ sealed class SessionLog {
   final DateTime startedAt;
 
   /// The timestamp when the session ended. Can be null if in progress.
+  // TODO: make this required in the database
   final DateTime? endedAt;
 
   /// Converts this [SessionLog] to a JSON object.
