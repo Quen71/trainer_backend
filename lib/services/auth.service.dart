@@ -21,7 +21,21 @@ class AuthService {
   /// A stream that notifies of changes in the authentication state.
   ///
   /// This can be used to listen for user sign-in and sign-out events in real-time.
-  static Stream<AuthState> get onAuthStateChange => TrainerAPI.authManager.onAuthStateChange;
+  static Stream<AppAuthState> get onAuthStateChange async* {
+    yield const AppAuthInitial();
+
+    await for (final AuthState authState in TrainerAPI.authManager.onAuthStateChange) {
+      yield const AppAuthLoading();
+
+      final User? user = authState.session?.user;
+
+      if (user != null) {
+        yield AppAuthenticated(user);
+      } else {
+        yield const AppUnauthenticated();
+      }
+    }
+  }
 
   /// Retrieves the full user profile along with an initial set of their
   /// programs and session logs.

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:trainer_backend/models/models.export.dart';
 import 'package:trainer_backend/services/auth.service.dart';
 import 'package:trainer_backend/trainer_backend.configuration.dart';
 import 'package:trainer_backend_example/auth_test.screen.dart';
@@ -28,18 +28,21 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         ),
-        home: StreamBuilder<AuthState>(
+        home: StreamBuilder<AppAuthState>(
           stream: AuthService.onAuthStateChange,
-          builder: (BuildContext context, AsyncSnapshot<AuthState> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(body: Center(child: CircularProgressIndicator()));
+          builder: (BuildContext context, AsyncSnapshot<AppAuthState> snapshot) {
+            switch (snapshot.data) {
+              case AppAuthenticated():
+                return const HomeTestScreen();
+              case AppUnauthenticated():
+                return const AuthTestScreen();
+              case AppAuthInitial():
+              case AppAuthLoading():
+              case null:
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
             }
-
-            if (snapshot.hasData && snapshot.data!.session != null) {
-              return const HomeTestScreen();
-            }
-
-            return const AuthTestScreen();
           },
         ),
       );

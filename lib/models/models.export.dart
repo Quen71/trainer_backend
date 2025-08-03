@@ -1,6 +1,7 @@
 export 'api/session_api_response.dart';
 export 'auth/enums/user_role.dart';
 export 'auth/profile.dart';
+export 'auth/state/app_auth_state.dart';
 export 'history/exercise_log.dart';
 export 'history/round_log.dart';
 export 'history/session_log.dart';
