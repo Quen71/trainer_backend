@@ -98,6 +98,13 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
                   return Card(
                     margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
                     child: ListTile(
+                      leading: IconButton(
+                        icon: Icon(
+                          program.isFavorite ? Icons.star : Icons.star_border,
+                          color: program.isFavorite ? Colors.amber : null,
+                        ),
+                        onPressed: () => _toggleFavoriteStatus(program, index),
+                      ),
                       title: Text(program.name),
                       subtitle: Text('ID: ${program.id} - Created: ${program.createdAt.toLocal()}'),
                       trailing: const Icon(Icons.chevron_right),
@@ -295,6 +302,20 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> _toggleFavoriteStatus(Program program, int index) async {
+    await _handleApiCall<Program>(
+      () => program.isFavorite
+          ? ProgramsService.removeProgramFromFavorites(program.id)
+          : ProgramsService.addProgramToFavorites(program.id),
+      onSuccess: (Program updatedProgram) {
+        setState(() {
+          _fetchedPrograms[index] = updatedProgram;
+        });
+        return 'Program "${updatedProgram.name}" favorite status updated.';
+      },
+    );
   }
 
   Future<void> _handleApiCall<T>(

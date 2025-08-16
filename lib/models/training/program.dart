@@ -15,6 +15,7 @@ class Program {
     required this.name,
     this.description,
     this.sessions = const <Session>[],
+    required this.isFavorite,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -32,6 +33,7 @@ class Program {
         id: 0,
         userId: '',
         name: name,
+        isFavorite: false,
         description: description,
         sessions: sessions,
         createdAt: DateTime.now(),
@@ -55,6 +57,11 @@ class Program {
 
   /// The list of sessions that make up this program.
   final List<Session> sessions;
+
+  /// Whether the program is marked as a favorite by the user.
+  /// This field is excluded from JSON serialization.
+  @JsonKey(includeToJson: false)
+  final bool isFavorite;
 
   /// The timestamp when the program was created.
   final DateTime createdAt;

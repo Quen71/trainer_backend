@@ -132,4 +132,34 @@ class ProgramsService {
 
     return deletedId as int;
   }
+
+  /// Adds a program to the user's favorites.
+  ///
+  /// - [programId]: The ID of the program to add to favorites.
+  ///
+  /// Returns a [Future] with the updated [Program] object.
+  /// Throws a [PostgrestException] if the RPC call fails.
+  static Future<Program> addProgramToFavorites(int programId) async {
+    final dynamic updatedProgramData = await _client.rpc(
+      'add_program_to_favorites',
+      params: <String, dynamic>{'p_program_id': programId},
+    );
+
+    return Program.fromJson(updatedProgramData as Map<String, dynamic>);
+  }
+
+  /// Removes a program from the user's favorites.
+  ///
+  /// - [programId]: The ID of the program to remove from favorites.
+  ///
+  /// Returns a [Future] with the updated [Program] object.
+  /// Throws a [PostgrestException] if the RPC call fails.
+  static Future<Program> removeProgramFromFavorites(int programId) async {
+    final dynamic updatedProgramData = await _client.rpc(
+      'remove_program_from_favorites',
+      params: <String, dynamic>{'p_program_id': programId},
+    );
+
+    return Program.fromJson(updatedProgramData as Map<String, dynamic>);
+  }
 }

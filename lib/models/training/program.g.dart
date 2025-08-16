@@ -17,6 +17,8 @@ abstract class _$ProgramCWProxy {
 
   Program sessions(List<Session> sessions);
 
+  Program isFavorite(bool isFavorite);
+
   Program createdAt(DateTime createdAt);
 
   Program updatedAt(DateTime updatedAt);
@@ -33,6 +35,7 @@ abstract class _$ProgramCWProxy {
     String name,
     String? description,
     List<Session> sessions,
+    bool isFavorite,
     DateTime createdAt,
     DateTime updatedAt,
   });
@@ -60,6 +63,9 @@ class _$ProgramCWProxyImpl implements _$ProgramCWProxy {
   Program sessions(List<Session> sessions) => this(sessions: sessions);
 
   @override
+  Program isFavorite(bool isFavorite) => this(isFavorite: isFavorite);
+
+  @override
   Program createdAt(DateTime createdAt) => this(createdAt: createdAt);
 
   @override
@@ -79,6 +85,7 @@ class _$ProgramCWProxyImpl implements _$ProgramCWProxy {
     Object? name = const $CopyWithPlaceholder(),
     Object? description = const $CopyWithPlaceholder(),
     Object? sessions = const $CopyWithPlaceholder(),
+    Object? isFavorite = const $CopyWithPlaceholder(),
     Object? createdAt = const $CopyWithPlaceholder(),
     Object? updatedAt = const $CopyWithPlaceholder(),
   }) {
@@ -103,6 +110,10 @@ class _$ProgramCWProxyImpl implements _$ProgramCWProxy {
           ? _value.sessions
           // ignore: cast_nullable_to_non_nullable
           : sessions as List<Session>,
+      isFavorite: isFavorite == const $CopyWithPlaceholder()
+          ? _value.isFavorite
+          // ignore: cast_nullable_to_non_nullable
+          : isFavorite as bool,
       createdAt: createdAt == const $CopyWithPlaceholder()
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
@@ -134,6 +145,7 @@ Program _$ProgramFromJson(Map<String, dynamic> json) => Program(
               ?.map((e) => Session.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const <Session>[],
+      isFavorite: json['is_favorite'] as bool,
       createdAt: DateTime.parse(json['created_at'] as String),
       updatedAt: DateTime.parse(json['updated_at'] as String),
     );
