@@ -50,3 +50,24 @@ class AppAuthenticated extends AppAuthState {
 class AppUnauthenticated extends AppAuthState {
   const AppUnauthenticated();
 }
+
+/// A state indicating that the user has authenticated via a recovery method (e.g., OTP)
+/// and needs to update their password before proceeding.
+///
+/// This state holds the [user] object from Supabase.
+class AppAuthPasswordRecovery extends AppAuthState {
+  const AppAuthPasswordRecovery(this.user);
+
+  /// The Supabase user object.
+  final User user;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is AppAuthPasswordRecovery && other.user == user;
+  }
+
+  @override
+  int get hashCode => user.hashCode;
+}

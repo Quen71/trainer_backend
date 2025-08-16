@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
             switch (snapshot.data) {
               case AppAuthenticated():
                 return const HomeTestScreen();
+              case AppAuthPasswordRecovery():
               case AppUnauthenticated():
                 return const AuthTestScreen();
               case AppAuthInitial():

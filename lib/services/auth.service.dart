@@ -1,6 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
-import 'package:trainer_backend/models/models.export.dart';
+import 'package:trainer_backend/models/models.export.dart' hide Session;
 
 /// A service class for handling user authentication with Supabase.
 ///
@@ -24,15 +24,35 @@ class AuthService {
   static Stream<AppAuthState> get onAuthStateChange async* {
     yield const AppAuthInitial();
 
-    await for (final AuthState authState in TrainerAPI.authManager.onAuthStateChange) {
+    await for (final AuthState data in TrainerAPI.authManager.onAuthStateChange) {
       yield const AppAuthLoading();
 
-      final User? user = authState.session?.user;
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
 
-      if (user != null) {
-        yield AppAuthenticated(user);
-      } else {
-        yield const AppUnauthenticated();
+      switch (event) {
+        case AuthChangeEvent.passwordRecovery:
+          if (session != null) {
+            yield AppAuthPasswordRecovery(session.user);
+          }
+          break;
+
+        case AuthChangeEvent.signedIn:
+        case AuthChangeEvent.initialSession:
+        case AuthChangeEvent.tokenRefreshed:
+        case AuthChangeEvent.userUpdated:
+        case AuthChangeEvent.mfaChallengeVerified:
+          if (session != null) {
+            yield AppAuthenticated(session.user);
+          } else {
+            yield const AppUnauthenticated();
+          }
+          break;
+
+        case AuthChangeEvent.signedOut:
+        case AuthChangeEvent.userDeleted:
+          yield const AppUnauthenticated();
+          break;
       }
     }
   }
