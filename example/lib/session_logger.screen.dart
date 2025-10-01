@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:trainer_backend/models/api/create_session_log_response.dart';
 import 'package:trainer_backend/models/history/exercise_log.dart';
 import 'package:trainer_backend/models/history/round_log.dart';
 import 'package:trainer_backend/models/history/session_log.dart';
@@ -113,6 +114,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
           classicSetControllers.add(<String, TextEditingController>{
             'weight': TextEditingController(text: set.weight.toString()),
             'reps': TextEditingController(text: set.repsNumber.toString()),
+            'restDuration': TextEditingController(text: set.restDuration.inSeconds.toString()),
           });
         }
       }
@@ -190,8 +192,13 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
     try {
       final SessionLog sessionLog = _buildSessionLog();
       log('Creating session log: ${sessionLog.toJson()}');
-      final SessionLog createdLog = await HistoryService.createSessionLog(sessionLog);
+      final CreateSessionLogResponse response = await HistoryService.createSessionLog(sessionLog);
+      final SessionLog createdLog = response.sessionLog;
 
+      // In a real app, you would now use `response.updatedSessionPreview`
+      // to show a dialog to the user, asking if they want to update their
+      // session objectives with the new performance.
+      log('Received updated session preview: ${response.updatedSessionPreview.toJson()}');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -229,6 +236,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
               final AmrapExerciseLog log = switch (exercise) {
                 AmrapExercise e => AmrapExerciseLog.forCreation(
                     sessionExerciseId: e.id,
+                    orderInRoundLog: j + 1,
                     repsNumber: int.tryParse(currentControllers['reps']!.text) ?? 0,
                     weight: double.tryParse(currentControllers['weight']!.text) ?? 0,
                   ),
@@ -242,6 +250,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
           }
           return AmrapSessionLog.forCreation(
             sessionId: s.id,
+            name: s.name,
             startedAt: _startTime,
             endedAt: DateTime.now(),
             rounds: rounds,
@@ -257,6 +266,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
               final EmomExerciseLog log = switch (exercise) {
                 EmomExercise e => EmomExerciseLog.forCreation(
                     sessionExerciseId: e.id,
+                    orderInRoundLog: j + 1,
                     duration: Duration(
                       seconds: int.tryParse(currentControllers['duration']!.text) ?? 0,
                     ),
@@ -273,6 +283,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
           }
           return EmomSessionLog.forCreation(
             sessionId: s.id,
+            name: s.name,
             startedAt: _startTime,
             endedAt: DateTime.now(),
             rounds: rounds,
@@ -288,6 +299,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
               final HiitExerciseLog log = switch (exercise) {
                 HiitExercise e => HiitExerciseLog.forCreation(
                     sessionExerciseId: e.id,
+                    orderInRoundLog: j + 1,
                     effortDuration: Duration(
                       seconds: int.tryParse(currentControllers['effortDuration']!.text) ?? 0,
                     ),
@@ -306,6 +318,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
           }
           return HiitSessionLog.forCreation(
             sessionId: s.id,
+            name: s.name,
             startedAt: _startTime,
             endedAt: DateTime.now(),
             rounds: rounds,
@@ -320,7 +333,9 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
     int controllerIndex = 0;
     final List<ClassicExerciseLog> exerciseLogs = <ClassicExerciseLog>[];
 
-    for (final ClassicExercise exercise in _sortedExercises.whereType<ClassicExercise>()) {
+    final List<ClassicExercise> classicExercises = _sortedExercises.whereType<ClassicExercise>().toList();
+    for (int exerciseIdx = 0; exerciseIdx < classicExercises.length; exerciseIdx++) {
+      final ClassicExercise exercise = classicExercises[exerciseIdx];
       final List<SetLog> sets = <SetLog>[];
       final ClassicExerciseParameters params = exercise.objectiveParameters ?? exercise.templateParameters;
       for (int i = 0; i < params.sets.length; i++) {
@@ -329,12 +344,14 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
               _controllers[0][controllerIndex]['reps']!.text,
             ) ??
             0;
-        sets.add(SetLog(number: i + 1, reps: reps, weight: weight));
+        final int rest = int.tryParse(_controllers[0][controllerIndex]['restDuration']!.text) ?? 0;
+        sets.add(SetLog(number: i + 1, reps: reps, weight: weight, restDuration: Duration(seconds: rest)));
         controllerIndex++;
       }
       exerciseLogs.add(
         ClassicExerciseLog.forCreation(
           sessionExerciseId: exercise.id,
+          orderInRoundLog: exerciseIdx + 1,
           sets: sets,
         ),
       );
@@ -346,6 +363,7 @@ class _SessionLoggerScreenState extends State<SessionLoggerScreen> {
 
     return ClassicSessionLog.forCreation(
       sessionId: widget.session.id,
+      name: widget.session.name,
       startedAt: _startTime,
       endedAt: DateTime.now(),
       rounds: <RoundLog<ClassicExerciseLog>>[roundLog],
@@ -666,6 +684,13 @@ class _ClassicSetList extends StatelessWidget {
                     child: _LogTextField(
                       controller: controllers[controllerIdx]['reps']!,
                       labelText: 'Reps',
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _LogTextField(
+                      controller: controllers[controllerIdx]['restDuration']!,
+                      labelText: 'Rest (s)',
                     ),
                   ),
                 ],

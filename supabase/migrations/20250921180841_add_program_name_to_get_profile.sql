@@ -1,3 +1,4 @@
+-- Adds program_name to the session_logs returned by get_profile_with_initial_data
 CREATE OR REPLACE FUNCTION public.get_profile_with_initial_data(p_limit integer)
 RETURNS jsonb
 LANGUAGE plpgsql
@@ -20,7 +21,6 @@ BEGIN
                         SELECT jsonb_agg(program_data)
                         FROM (
                             SELECT
-                                -- La structure de cet objet est basée sur votre fonction get_user_programs existante pour la cohérence
                                 jsonb_build_object(
                                     'id', prog.id,
                                     'user_id', prog.user_id,
@@ -84,10 +84,11 @@ BEGIN
                         SELECT jsonb_agg(log_data)
                         FROM (
                             SELECT
-                                -- La structure de cet objet est basée sur votre fonction get_user_sessions_logs
                                 jsonb_build_object(
                                     'id', sl.id,
                                     'session_id', sl.session_id,
+                                    'name', s.name,
+                                    'program_name', prog.name,
                                     'started_at', sl.started_at,
                                     'ended_at', sl.ended_at,
                                     'type', s.type,
@@ -100,6 +101,7 @@ BEGIN
                                                     SELECT jsonb_agg(
                                                         el.performance || jsonb_build_object(
                                                             'type', s.type,
+                                                             'order_in_round_log', el.order_in_round_log,
                                                             'exercise_name', (
                                                                 SELECT ex.name
                                                                 FROM public.session_exercises se
@@ -119,6 +121,7 @@ BEGIN
                                 ) as log_data
                             FROM public.session_logs sl
                             JOIN public.sessions s ON sl.session_id = s.id
+                            JOIN public.programs prog ON s.program_id = prog.id
                             WHERE sl.user_id = v_user_id
                             ORDER BY sl.started_at DESC
                             LIMIT p_limit
@@ -134,4 +137,3 @@ BEGIN
     );
 END;
 $$;
-

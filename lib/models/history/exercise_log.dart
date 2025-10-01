@@ -14,6 +14,7 @@ class SetLog {
     required this.number,
     required this.weight,
     required this.reps,
+    required this.restDuration,
   });
 
   /// Creates a [SetLog] from a JSON object.
@@ -31,7 +32,9 @@ class SetLog {
   /// The number of repetitions performed in the set.
   final int reps;
 
-  //TODO: add an orderInExercise field ?
+  /// The duration of rest after the set.
+  @DurationConverter()
+  final Duration restDuration;
 }
 
 /// A sealed class representing a log for a single exercise performance.
@@ -50,6 +53,7 @@ sealed class ExerciseLog {
     required this.id,
     required this.sessionExerciseId,
     required this.exerciseName,
+    required this.orderInRoundLog,
   });
 
   /// A factory for creating an [ExerciseLog] instance from a JSON object.
@@ -79,7 +83,8 @@ sealed class ExerciseLog {
   /// The name of the exercise, fetched from the database.
   final String exerciseName;
 
-  //TODO: add a orderInSession field ?
+  /// The order of this exercise within the round.
+  final int orderInRoundLog;
 
   /// Converts this [ExerciseLog] to a JSON object.
   ///
@@ -96,6 +101,7 @@ class ClassicExerciseLog extends ExerciseLog {
     required super.id,
     required super.sessionExerciseId,
     required super.exerciseName,
+    required super.orderInRoundLog,
     required this.sets,
   });
 
@@ -105,12 +111,14 @@ class ClassicExerciseLog extends ExerciseLog {
   /// added by the backend during fetch operations.
   factory ClassicExerciseLog.forCreation({
     required int sessionExerciseId,
+    required int orderInRoundLog,
     required List<SetLog> sets,
   }) =>
       ClassicExerciseLog(
         id: 0,
         sessionExerciseId: sessionExerciseId,
         exerciseName: '', // Name is added during fetch, not creation
+        orderInRoundLog: orderInRoundLog,
         sets: sets,
       );
 
@@ -133,6 +141,7 @@ class AmrapExerciseLog extends ExerciseLog {
     required super.id,
     required super.sessionExerciseId,
     required super.exerciseName,
+    required super.orderInRoundLog,
     required this.repsNumber,
     required this.weight,
   });
@@ -143,6 +152,7 @@ class AmrapExerciseLog extends ExerciseLog {
   /// added by the backend during fetch operations.
   factory AmrapExerciseLog.forCreation({
     required int sessionExerciseId,
+    required int orderInRoundLog,
     required int repsNumber,
     required double weight,
   }) =>
@@ -150,6 +160,7 @@ class AmrapExerciseLog extends ExerciseLog {
         id: 0,
         sessionExerciseId: sessionExerciseId,
         exerciseName: '', // Name is added during fetch, not creation
+        orderInRoundLog: orderInRoundLog,
         repsNumber: repsNumber,
         weight: weight,
       );
@@ -176,6 +187,7 @@ class EmomExerciseLog extends ExerciseLog {
     required super.id,
     required super.sessionExerciseId,
     required super.exerciseName,
+    required super.orderInRoundLog,
     required this.duration,
     required this.repsNumber,
     required this.weight,
@@ -187,6 +199,7 @@ class EmomExerciseLog extends ExerciseLog {
   /// added by the backend during fetch operations.
   factory EmomExerciseLog.forCreation({
     required int sessionExerciseId,
+    required int orderInRoundLog,
     required Duration duration,
     required int repsNumber,
     required double weight,
@@ -195,6 +208,7 @@ class EmomExerciseLog extends ExerciseLog {
         id: 0,
         sessionExerciseId: sessionExerciseId,
         exerciseName: '', // Name is added during fetch, not creation
+        orderInRoundLog: orderInRoundLog,
         duration: duration,
         repsNumber: repsNumber,
         weight: weight,
@@ -226,6 +240,7 @@ class HiitExerciseLog extends ExerciseLog {
     required super.id,
     required super.sessionExerciseId,
     required super.exerciseName,
+    required super.orderInRoundLog,
     required this.effortDuration,
     required this.restDuration,
     required this.weight,
@@ -237,6 +252,7 @@ class HiitExerciseLog extends ExerciseLog {
   /// added by the backend during fetch operations.
   factory HiitExerciseLog.forCreation({
     required int sessionExerciseId,
+    required int orderInRoundLog,
     required Duration effortDuration,
     required Duration restDuration,
     required double weight,
@@ -245,6 +261,7 @@ class HiitExerciseLog extends ExerciseLog {
         id: 0,
         sessionExerciseId: sessionExerciseId,
         exerciseName: '', // Name is added during fetch, not creation
+        orderInRoundLog: orderInRoundLog,
         effortDuration: effortDuration,
         restDuration: restDuration,
         weight: weight,

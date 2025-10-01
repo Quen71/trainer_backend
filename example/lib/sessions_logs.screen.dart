@@ -114,30 +114,22 @@ class _SessionLogCard extends StatelessWidget {
     final (String type, String durationStr, String details) = switch (log) {
       ClassicSessionLog l => (
           'CLASSIC',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           'Rounds: ${l.rounds.length}'
         ),
       AmrapSessionLog l => (
           'AMRAP',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           'Rounds: ${l.rounds.length}'
         ),
       EmomSessionLog l => (
           'EMOM',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           'Rounds: ${l.rounds.length}'
         ),
       HiitSessionLog l => (
           'HIIT',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           'Rounds: ${l.rounds.length}'
         ),
     };
@@ -145,10 +137,14 @@ class _SessionLogCard extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: ListTile(
-        title: Text('Session Log #${log.id}'),
+        title: Text(log.name),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Text(
+              log.programName,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
             Text('Type: $type'),
             Text('Started: $formattedDate'),
             Text('Duration: $durationStr'),
