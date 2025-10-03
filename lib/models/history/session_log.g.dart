@@ -11,9 +11,13 @@ abstract class _$ClassicSessionLogCWProxy {
 
   ClassicSessionLog sessionId(int sessionId);
 
+  ClassicSessionLog name(String name);
+
+  ClassicSessionLog programName(String programName);
+
   ClassicSessionLog startedAt(DateTime startedAt);
 
-  ClassicSessionLog endedAt(DateTime? endedAt);
+  ClassicSessionLog endedAt(DateTime endedAt);
 
   ClassicSessionLog rounds(List<RoundLog<ClassicExerciseLog>> rounds);
 
@@ -26,8 +30,10 @@ abstract class _$ClassicSessionLogCWProxy {
   ClassicSessionLog call({
     int id,
     int sessionId,
+    String name,
+    String programName,
     DateTime startedAt,
-    DateTime? endedAt,
+    DateTime endedAt,
     List<RoundLog<ClassicExerciseLog>> rounds,
   });
 }
@@ -45,10 +51,17 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
   ClassicSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
 
   @override
+  ClassicSessionLog name(String name) => this(name: name);
+
+  @override
+  ClassicSessionLog programName(String programName) =>
+      this(programName: programName);
+
+  @override
   ClassicSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
 
   @override
-  ClassicSessionLog endedAt(DateTime? endedAt) => this(endedAt: endedAt);
+  ClassicSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
 
   @override
   ClassicSessionLog rounds(List<RoundLog<ClassicExerciseLog>> rounds) =>
@@ -65,6 +78,8 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
   ClassicSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? programName = const $CopyWithPlaceholder(),
     Object? startedAt = const $CopyWithPlaceholder(),
     Object? endedAt = const $CopyWithPlaceholder(),
     Object? rounds = const $CopyWithPlaceholder(),
@@ -78,6 +93,14 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String,
+      programName: programName == const $CopyWithPlaceholder()
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder()
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -85,7 +108,7 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
       endedAt: endedAt == const $CopyWithPlaceholder()
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
-          : endedAt as DateTime?,
+          : endedAt as DateTime,
       rounds: rounds == const $CopyWithPlaceholder()
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
@@ -106,9 +129,13 @@ abstract class _$AmrapSessionLogCWProxy {
 
   AmrapSessionLog sessionId(int sessionId);
 
+  AmrapSessionLog name(String name);
+
+  AmrapSessionLog programName(String programName);
+
   AmrapSessionLog startedAt(DateTime startedAt);
 
-  AmrapSessionLog endedAt(DateTime? endedAt);
+  AmrapSessionLog endedAt(DateTime endedAt);
 
   AmrapSessionLog rounds(List<RoundLog<AmrapExerciseLog>> rounds);
 
@@ -121,8 +148,10 @@ abstract class _$AmrapSessionLogCWProxy {
   AmrapSessionLog call({
     int id,
     int sessionId,
+    String name,
+    String programName,
     DateTime startedAt,
-    DateTime? endedAt,
+    DateTime endedAt,
     List<RoundLog<AmrapExerciseLog>> rounds,
   });
 }
@@ -140,10 +169,17 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
   AmrapSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
 
   @override
+  AmrapSessionLog name(String name) => this(name: name);
+
+  @override
+  AmrapSessionLog programName(String programName) =>
+      this(programName: programName);
+
+  @override
   AmrapSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
 
   @override
-  AmrapSessionLog endedAt(DateTime? endedAt) => this(endedAt: endedAt);
+  AmrapSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
 
   @override
   AmrapSessionLog rounds(List<RoundLog<AmrapExerciseLog>> rounds) =>
@@ -160,6 +196,8 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
   AmrapSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? programName = const $CopyWithPlaceholder(),
     Object? startedAt = const $CopyWithPlaceholder(),
     Object? endedAt = const $CopyWithPlaceholder(),
     Object? rounds = const $CopyWithPlaceholder(),
@@ -173,6 +211,14 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String,
+      programName: programName == const $CopyWithPlaceholder()
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder()
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -180,7 +226,7 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
       endedAt: endedAt == const $CopyWithPlaceholder()
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
-          : endedAt as DateTime?,
+          : endedAt as DateTime,
       rounds: rounds == const $CopyWithPlaceholder()
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
@@ -200,9 +246,13 @@ abstract class _$EmomSessionLogCWProxy {
 
   EmomSessionLog sessionId(int sessionId);
 
+  EmomSessionLog name(String name);
+
+  EmomSessionLog programName(String programName);
+
   EmomSessionLog startedAt(DateTime startedAt);
 
-  EmomSessionLog endedAt(DateTime? endedAt);
+  EmomSessionLog endedAt(DateTime endedAt);
 
   EmomSessionLog rounds(List<RoundLog<EmomExerciseLog>> rounds);
 
@@ -215,8 +265,10 @@ abstract class _$EmomSessionLogCWProxy {
   EmomSessionLog call({
     int id,
     int sessionId,
+    String name,
+    String programName,
     DateTime startedAt,
-    DateTime? endedAt,
+    DateTime endedAt,
     List<RoundLog<EmomExerciseLog>> rounds,
   });
 }
@@ -234,10 +286,17 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
   EmomSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
 
   @override
+  EmomSessionLog name(String name) => this(name: name);
+
+  @override
+  EmomSessionLog programName(String programName) =>
+      this(programName: programName);
+
+  @override
   EmomSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
 
   @override
-  EmomSessionLog endedAt(DateTime? endedAt) => this(endedAt: endedAt);
+  EmomSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
 
   @override
   EmomSessionLog rounds(List<RoundLog<EmomExerciseLog>> rounds) =>
@@ -254,6 +313,8 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
   EmomSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? programName = const $CopyWithPlaceholder(),
     Object? startedAt = const $CopyWithPlaceholder(),
     Object? endedAt = const $CopyWithPlaceholder(),
     Object? rounds = const $CopyWithPlaceholder(),
@@ -267,6 +328,14 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String,
+      programName: programName == const $CopyWithPlaceholder()
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder()
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -274,7 +343,7 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
       endedAt: endedAt == const $CopyWithPlaceholder()
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
-          : endedAt as DateTime?,
+          : endedAt as DateTime,
       rounds: rounds == const $CopyWithPlaceholder()
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
@@ -294,9 +363,13 @@ abstract class _$HiitSessionLogCWProxy {
 
   HiitSessionLog sessionId(int sessionId);
 
+  HiitSessionLog name(String name);
+
+  HiitSessionLog programName(String programName);
+
   HiitSessionLog startedAt(DateTime startedAt);
 
-  HiitSessionLog endedAt(DateTime? endedAt);
+  HiitSessionLog endedAt(DateTime endedAt);
 
   HiitSessionLog rounds(List<RoundLog<HiitExerciseLog>> rounds);
 
@@ -309,8 +382,10 @@ abstract class _$HiitSessionLogCWProxy {
   HiitSessionLog call({
     int id,
     int sessionId,
+    String name,
+    String programName,
     DateTime startedAt,
-    DateTime? endedAt,
+    DateTime endedAt,
     List<RoundLog<HiitExerciseLog>> rounds,
   });
 }
@@ -328,10 +403,17 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
   HiitSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
 
   @override
+  HiitSessionLog name(String name) => this(name: name);
+
+  @override
+  HiitSessionLog programName(String programName) =>
+      this(programName: programName);
+
+  @override
   HiitSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
 
   @override
-  HiitSessionLog endedAt(DateTime? endedAt) => this(endedAt: endedAt);
+  HiitSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
 
   @override
   HiitSessionLog rounds(List<RoundLog<HiitExerciseLog>> rounds) =>
@@ -348,6 +430,8 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
   HiitSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
+    Object? name = const $CopyWithPlaceholder(),
+    Object? programName = const $CopyWithPlaceholder(),
     Object? startedAt = const $CopyWithPlaceholder(),
     Object? endedAt = const $CopyWithPlaceholder(),
     Object? rounds = const $CopyWithPlaceholder(),
@@ -361,6 +445,14 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
+      name: name == const $CopyWithPlaceholder()
+          ? _value.name
+          // ignore: cast_nullable_to_non_nullable
+          : name as String,
+      programName: programName == const $CopyWithPlaceholder()
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder()
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -368,7 +460,7 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
       endedAt: endedAt == const $CopyWithPlaceholder()
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
-          : endedAt as DateTime?,
+          : endedAt as DateTime,
       rounds: rounds == const $CopyWithPlaceholder()
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
@@ -391,10 +483,10 @@ ClassicSessionLog _$ClassicSessionLogFromJson(Map<String, dynamic> json) =>
     ClassicSessionLog(
       id: (json['id'] as num).toInt(),
       sessionId: (json['session_id'] as num).toInt(),
+      name: json['name'] as String,
+      programName: json['program_name'] as String,
       startedAt: DateTime.parse(json['started_at'] as String),
-      endedAt: json['ended_at'] == null
-          ? null
-          : DateTime.parse(json['ended_at'] as String),
+      endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
           .map((e) => RoundLog<ClassicExerciseLog>.fromJson(
               e as Map<String, dynamic>,
@@ -407,8 +499,10 @@ Map<String, dynamic> _$ClassicSessionLogToJson(ClassicSessionLog instance) =>
     <String, dynamic>{
       'id': instance.id,
       'session_id': instance.sessionId,
+      'name': instance.name,
+      'program_name': instance.programName,
       'started_at': instance.startedAt.toIso8601String(),
-      'ended_at': instance.endedAt?.toIso8601String(),
+      'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
           .map((e) => e.toJson(
                 (value) => value.toJson(),
@@ -420,10 +514,10 @@ AmrapSessionLog _$AmrapSessionLogFromJson(Map<String, dynamic> json) =>
     AmrapSessionLog(
       id: (json['id'] as num).toInt(),
       sessionId: (json['session_id'] as num).toInt(),
+      name: json['name'] as String,
+      programName: json['program_name'] as String,
       startedAt: DateTime.parse(json['started_at'] as String),
-      endedAt: json['ended_at'] == null
-          ? null
-          : DateTime.parse(json['ended_at'] as String),
+      endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
           .map((e) => RoundLog<AmrapExerciseLog>.fromJson(
               e as Map<String, dynamic>,
@@ -436,8 +530,10 @@ Map<String, dynamic> _$AmrapSessionLogToJson(AmrapSessionLog instance) =>
     <String, dynamic>{
       'id': instance.id,
       'session_id': instance.sessionId,
+      'name': instance.name,
+      'program_name': instance.programName,
       'started_at': instance.startedAt.toIso8601String(),
-      'ended_at': instance.endedAt?.toIso8601String(),
+      'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
           .map((e) => e.toJson(
                 (value) => value.toJson(),
@@ -449,10 +545,10 @@ EmomSessionLog _$EmomSessionLogFromJson(Map<String, dynamic> json) =>
     EmomSessionLog(
       id: (json['id'] as num).toInt(),
       sessionId: (json['session_id'] as num).toInt(),
+      name: json['name'] as String,
+      programName: json['program_name'] as String,
       startedAt: DateTime.parse(json['started_at'] as String),
-      endedAt: json['ended_at'] == null
-          ? null
-          : DateTime.parse(json['ended_at'] as String),
+      endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
           .map((e) => RoundLog<EmomExerciseLog>.fromJson(
               e as Map<String, dynamic>,
@@ -465,8 +561,10 @@ Map<String, dynamic> _$EmomSessionLogToJson(EmomSessionLog instance) =>
     <String, dynamic>{
       'id': instance.id,
       'session_id': instance.sessionId,
+      'name': instance.name,
+      'program_name': instance.programName,
       'started_at': instance.startedAt.toIso8601String(),
-      'ended_at': instance.endedAt?.toIso8601String(),
+      'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
           .map((e) => e.toJson(
                 (value) => value.toJson(),
@@ -478,10 +576,10 @@ HiitSessionLog _$HiitSessionLogFromJson(Map<String, dynamic> json) =>
     HiitSessionLog(
       id: (json['id'] as num).toInt(),
       sessionId: (json['session_id'] as num).toInt(),
+      name: json['name'] as String,
+      programName: json['program_name'] as String,
       startedAt: DateTime.parse(json['started_at'] as String),
-      endedAt: json['ended_at'] == null
-          ? null
-          : DateTime.parse(json['ended_at'] as String),
+      endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
           .map((e) => RoundLog<HiitExerciseLog>.fromJson(
               e as Map<String, dynamic>,
@@ -494,8 +592,10 @@ Map<String, dynamic> _$HiitSessionLogToJson(HiitSessionLog instance) =>
     <String, dynamic>{
       'id': instance.id,
       'session_id': instance.sessionId,
+      'name': instance.name,
+      'program_name': instance.programName,
       'started_at': instance.startedAt.toIso8601String(),
-      'ended_at': instance.endedAt?.toIso8601String(),
+      'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
           .map((e) => e.toJson(
                 (value) => value.toJson(),

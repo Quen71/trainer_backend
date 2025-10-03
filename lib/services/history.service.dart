@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/models/api/create_session_log_response.dart';
 import 'package:trainer_backend/models/history/session_log.dart';
 
 /// A service class for managing user training history.
@@ -19,18 +22,24 @@ class HistoryService {
   /// - [sessionLog]: A [SessionLog] object containing the details of the
   ///   completed training session.
   ///
-  /// Returns a [Future] that completes with the created [SessionLog]
-  /// as returned by the backend, including its new ID.
+  /// Returns a [Future] that completes with a [CreateSessionLogResponse]
+  /// containing both the created log and a preview of the updated session.
   /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<SessionLog> createSessionLog(SessionLog sessionLog) async {
+  static Future<CreateSessionLogResponse> createSessionLog(
+    SessionLog sessionLog,
+  ) async {
     final Map<String, dynamic> sessionLogJson = sessionLog.toJson();
 
-    final dynamic newSessionLogData = await _client.rpc(
+    final dynamic responseData = await _client.rpc(
       'create_session_log',
       params: <String, dynamic>{'session_log_data': sessionLogJson},
     );
 
-    return SessionLog.fromJson(newSessionLogData as Map<String, dynamic>);
+    log('responseData: ${responseData['updated_session_preview']}');
+
+    return CreateSessionLogResponse.fromJson(
+      responseData as Map<String, dynamic>,
+    );
   }
 
   /// Fetches a paginated list of session logs for the current user.

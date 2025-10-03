@@ -14,44 +14,47 @@ class SessionLogDetailScreen extends StatelessWidget {
     final (String type, String durationStr, List<RoundLog> rounds) = switch (log) {
       ClassicSessionLog l => (
           'CLASSIC',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           l.rounds
         ),
       AmrapSessionLog l => (
           'AMRAP',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           l.rounds
         ),
       EmomSessionLog l => (
           'EMOM',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           l.rounds
         ),
       HiitSessionLog l => (
           'HIIT',
-          l.endedAt == null
-              ? 'In Progress'
-              : '${l.endedAt!.difference(l.startedAt).inMinutes}m ${l.endedAt!.difference(l.startedAt).inSeconds.remainder(60)}s',
+          '${l.endedAt.difference(l.startedAt).inMinutes}m ${l.endedAt.difference(l.startedAt).inSeconds.remainder(60)}s',
           l.rounds
         ),
     };
+    final List<RoundLog<ExerciseLog>> sortedRounds = rounds
+      ..sort((RoundLog<ExerciseLog> a, RoundLog<ExerciseLog> b) => a.roundNumber.compareTo(b.roundNumber));
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Log Detail #${log.id}'),
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(log.name),
+            Text(
+              log.programName,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           _buildInfoCard(type, durationStr, rounds.length),
           const SizedBox(height: 16),
-          ...rounds.map((RoundLog round) => _buildRoundCard(context, round)),
+          ...sortedRounds.map((RoundLog round) => _buildRoundCard(context, round)),
         ],
       ),
     );
@@ -72,23 +75,27 @@ class SessionLogDetailScreen extends StatelessWidget {
         ),
       );
 
-  Widget _buildRoundCard(BuildContext context, RoundLog round) => Card(
-        margin: const EdgeInsets.only(bottom: 16),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Round ${round.roundNumber}',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const Divider(),
-              ...round.exercises.map((ExerciseLog exerciseLog) => _buildExerciseLogTile(exerciseLog)),
-            ],
-          ),
+  Widget _buildRoundCard(BuildContext context, RoundLog round) {
+    final List<ExerciseLog> sortedExercises = round.exercises
+      ..sort((ExerciseLog a, ExerciseLog b) => a.orderInRoundLog.compareTo(b.orderInRoundLog));
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Round ${round.roundNumber}',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const Divider(),
+            ...sortedExercises.map((ExerciseLog exerciseLog) => _buildExerciseLogTile(exerciseLog)),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget _buildExerciseLogTile(ExerciseLog exerciseLog) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -96,7 +103,7 @@ class SessionLogDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              exerciseLog.exerciseName,
+              '${exerciseLog.orderInRoundLog}. ${exerciseLog.exerciseName}',
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
@@ -108,7 +115,11 @@ class SessionLogDetailScreen extends StatelessWidget {
   String _formatPerformance(ExerciseLog log) {
     switch (log) {
       case ClassicExerciseLog l:
-        return l.sets.map((SetLog set) => 'Set ${set.number}: ${set.reps} reps @ ${set.weight}kg').join('\n');
+        final List<SetLog> sortedSets = l.sets..sort((SetLog a, SetLog b) => a.number.compareTo(b.number));
+        return sortedSets
+            .map((SetLog set) =>
+                'Set ${set.number}: ${set.reps} reps @ ${set.weight}kg, Rest: ${set.restDuration.inSeconds}s')
+            .join('\n');
       case AmrapExerciseLog l:
         return '${l.repsNumber} reps @ ${l.weight}kg';
       case EmomExerciseLog l:

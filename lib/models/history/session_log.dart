@@ -21,8 +21,10 @@ sealed class SessionLog {
   const SessionLog({
     required this.id,
     required this.sessionId,
+    required this.name,
+    required this.programName,
     required this.startedAt,
-    this.endedAt,
+    required this.endedAt,
   });
 
   /// A factory for creating a [SessionLog] instance from a JSON object.
@@ -51,12 +53,17 @@ sealed class SessionLog {
   /// The ID of the original [Session] this log corresponds to.
   final int sessionId;
 
+  /// The name of the session, fetched from the database.
+  final String name;
+
+  /// The name of the program this session belongs to.
+  final String programName;
+
   /// The timestamp when the session started.
   final DateTime startedAt;
 
   /// The timestamp when the session ended. Can be null if in progress.
-  // TODO: make this required in the database
-  final DateTime? endedAt;
+  final DateTime endedAt;
 
   /// Converts this [SessionLog] to a JSON object.
   ///
@@ -72,8 +79,10 @@ class ClassicSessionLog extends SessionLog {
   const ClassicSessionLog({
     required super.id,
     required super.sessionId,
+    required super.name,
+    required super.programName,
     required super.startedAt,
-    super.endedAt,
+    required super.endedAt,
     required this.rounds,
   });
 
@@ -82,13 +91,16 @@ class ClassicSessionLog extends SessionLog {
   /// The [id] is initialized to 0 as it will be assigned by the database.
   factory ClassicSessionLog.forCreation({
     required int sessionId,
+    required String name,
     required DateTime startedAt,
-    DateTime? endedAt,
+    required DateTime endedAt,
     required List<RoundLog<ClassicExerciseLog>> rounds,
   }) =>
       ClassicSessionLog(
         id: 0,
         sessionId: sessionId,
+        name: name,
+        programName: '',
         startedAt: startedAt,
         endedAt: endedAt,
         rounds: rounds,
@@ -115,8 +127,10 @@ class AmrapSessionLog extends SessionLog {
   const AmrapSessionLog({
     required super.id,
     required super.sessionId,
+    required super.name,
+    required super.programName,
     required super.startedAt,
-    super.endedAt,
+    required super.endedAt,
     required this.rounds,
   });
 
@@ -125,13 +139,16 @@ class AmrapSessionLog extends SessionLog {
   /// The [id] is initialized to 0 as it will be assigned by the database.
   factory AmrapSessionLog.forCreation({
     required int sessionId,
+    required String name,
     required DateTime startedAt,
-    DateTime? endedAt,
+    required DateTime endedAt,
     required List<RoundLog<AmrapExerciseLog>> rounds,
   }) =>
       AmrapSessionLog(
         id: 0,
         sessionId: sessionId,
+        name: name,
+        programName: '',
         startedAt: startedAt,
         endedAt: endedAt,
         rounds: rounds,
@@ -155,8 +172,10 @@ class EmomSessionLog extends SessionLog {
   const EmomSessionLog({
     required super.id,
     required super.sessionId,
+    required super.name,
+    required super.programName,
     required super.startedAt,
-    super.endedAt,
+    required super.endedAt,
     required this.rounds,
   });
 
@@ -165,13 +184,16 @@ class EmomSessionLog extends SessionLog {
   /// The [id] is initialized to 0 as it will be assigned by the database.
   factory EmomSessionLog.forCreation({
     required int sessionId,
+    required String name,
     required DateTime startedAt,
-    DateTime? endedAt,
+    required DateTime endedAt,
     required List<RoundLog<EmomExerciseLog>> rounds,
   }) =>
       EmomSessionLog(
         id: 0,
         sessionId: sessionId,
+        name: name,
+        programName: '',
         startedAt: startedAt,
         endedAt: endedAt,
         rounds: rounds,
@@ -195,8 +217,10 @@ class HiitSessionLog extends SessionLog {
   const HiitSessionLog({
     required super.id,
     required super.sessionId,
+    required super.name,
+    required super.programName,
     required super.startedAt,
-    super.endedAt,
+    required super.endedAt,
     required this.rounds,
   });
 
@@ -205,13 +229,16 @@ class HiitSessionLog extends SessionLog {
   /// The [id] is initialized to 0 as it will be assigned by the database.
   factory HiitSessionLog.forCreation({
     required int sessionId,
+    required String name,
     required DateTime startedAt,
-    DateTime? endedAt,
+    required DateTime endedAt,
     required List<RoundLog<HiitExerciseLog>> rounds,
   }) =>
       HiitSessionLog(
         id: 0,
         sessionId: sessionId,
+        name: name,
+        programName: '',
         startedAt: startedAt,
         endedAt: endedAt,
         rounds: rounds,

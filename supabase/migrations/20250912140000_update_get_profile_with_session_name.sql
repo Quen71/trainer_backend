@@ -20,7 +20,6 @@ BEGIN
                         SELECT jsonb_agg(program_data)
                         FROM (
                             SELECT
-                                -- La structure de cet objet est basée sur votre fonction get_user_programs existante pour la cohérence
                                 jsonb_build_object(
                                     'id', prog.id,
                                     'user_id', prog.user_id,
@@ -84,10 +83,10 @@ BEGIN
                         SELECT jsonb_agg(log_data)
                         FROM (
                             SELECT
-                                -- La structure de cet objet est basée sur votre fonction get_user_sessions_logs
                                 jsonb_build_object(
                                     'id', sl.id,
                                     'session_id', sl.session_id,
+                                    'name', s.name, -- Added session name here
                                     'started_at', sl.started_at,
                                     'ended_at', sl.ended_at,
                                     'type', s.type,
@@ -100,6 +99,7 @@ BEGIN
                                                     SELECT jsonb_agg(
                                                         el.performance || jsonb_build_object(
                                                             'type', s.type,
+                                                             'order_in_round_log', el.order_in_round_log, -- Added order
                                                             'exercise_name', (
                                                                 SELECT ex.name
                                                                 FROM public.session_exercises se
@@ -134,4 +134,3 @@ BEGIN
     );
 END;
 $$;
-

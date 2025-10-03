@@ -62,12 +62,22 @@ class ProgramsService {
     return programsJson.map((dynamic p) => Program.fromJson(p as Map<String, dynamic>)).toList();
   }
 
-  /// Updates an existing program with all its sessions and exercises.
+  /// Updates an existing program's metadata and the order of its sessions.
   ///
-  /// The [program] object should contain the complete, updated data.
+  /// This method updates the program's `name` and `description`. It also
+  /// iterates through the sessions provided in the [program] object and updates
+  /// their `orderInProgram` in the database.
   ///
-  /// Returns a [Future] with the updated [Program] object.
-  /// Throws a [PostgrestException] if the RPC call fails.
+  /// **Important:** This function does not update the content of the sessions
+  /// (e.g., name, type, exercises). It only handles the reordering of sessions.
+  ///
+  /// The [program] object should contain the complete, updated data for the
+  /// program and all its sessions.
+  ///
+  /// Returns a [Future] with the updated [Program] object, reflecting the
+  /// changes.
+  /// Throws a [PostgrestException] if the RPC call fails or if the program
+  /// does not belong to the current user.
   static Future<Program> updateFullProgram(Program program) async {
     final Map<String, dynamic> programJson = program.toJson();
 
