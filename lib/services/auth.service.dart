@@ -20,30 +20,77 @@ class AuthService {
 
   /// A stream that notifies of changes in the authentication state.
   ///
-  /// This can be used to listen for user sign-in and sign-out events in real-time.
+  /// This stream listens to Supabase authentication events and converts them into
+  /// [AppAuthState] objects that can be consumed by the application layer.
+  ///
+  /// The stream handles different authentication events with specific behaviors:
+  ///
+  /// **Token Refresh Events** ([AuthChangeEvent.tokenRefreshed]):
+  /// - Occurs automatically every ~3600 seconds (1 hour) by default
+  /// - Emits [AppAuthenticated] with `isTokenRefresh: true`
+  /// - Does NOT emit [AppAuthLoading] to avoid UI flicker
+  /// - Should be handled silently by the UI (no data refetch, no notifications)
+  ///
+  /// **Sign-in Events** (signedIn, initialSession, etc.):
+  /// - Emits [AppAuthLoading] followed by [AppAuthenticated] with `isTokenRefresh: false`
+  /// - UI should respond by fetching user data and showing welcome messages
+  ///
+  /// **Sign-out Events** (signedOut, userDeleted):
+  /// - Emits [AppAuthLoading] followed by [AppUnauthenticated]
+  /// - UI should clear user data and redirect to login screen
+  ///
+  /// Example usage:
+  /// ```dart
+  /// AuthService.onAuthStateChange.listen((state) {
+  ///   if (state is AppAuthenticated) {
+  ///     if (!state.isTokenRefresh) {
+  ///       // Real sign-in event: fetch data, show messages
+  ///       fetchUserData();
+  ///     } else {
+  ///       // Token refresh: do nothing, keep existing state
+  ///     }
+  ///   }
+  /// });
+  /// ```
   static Stream<AppAuthState> get onAuthStateChange async* {
     yield const AppAuthInitial();
 
     await for (final AuthState data in TrainerAPI.authManager.onAuthStateChange) {
-      yield const AppAuthLoading();
-
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
 
       switch (event) {
         case AuthChangeEvent.passwordRecovery:
+          // User is recovering their password via OTP
+          yield const AppAuthLoading();
           if (session != null) {
             yield AppAuthPasswordRecovery(session.user);
           }
           break;
 
+        case AuthChangeEvent.tokenRefreshed:
+          // Automatic token refresh - should be transparent to the user
+          // No loading state to avoid UI flicker
+          // The isTokenRefresh flag tells the UI to skip data refetch
+          if (session != null) {
+            yield AppAuthenticated(session.user, isTokenRefresh: true);
+          } else {
+            yield const AppUnauthenticated();
+          }
+          break;
+
         case AuthChangeEvent.signedIn:
         case AuthChangeEvent.initialSession:
-        case AuthChangeEvent.tokenRefreshed:
         case AuthChangeEvent.userUpdated:
         case AuthChangeEvent.mfaChallengeVerified:
+          // Real authentication events that require full UI response
+          // Show loading state, then authenticated state with isTokenRefresh: false
+          yield const AppAuthLoading();
           if (session != null) {
-            yield AppAuthenticated(session.user);
+            yield AppAuthenticated(
+              session.user,
+              isTokenRefresh: false,
+            );
           } else {
             yield const AppUnauthenticated();
           }
@@ -51,6 +98,8 @@ class AuthService {
 
         case AuthChangeEvent.signedOut:
         case AuthChangeEvent.userDeleted:
+          // User explicitly signed out or account was deleted
+          yield const AppAuthLoading();
           yield const AppUnauthenticated();
           break;
       }

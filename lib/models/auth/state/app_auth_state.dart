@@ -25,22 +25,55 @@ class AppAuthLoading extends AppAuthState {
 
 /// The state representing a successfully authenticated user.
 ///
-/// This state holds the [user] object from Supabase.
+/// This state holds the [user] object from Supabase and includes metadata
+/// to distinguish between different authentication events.
+///
+/// The [isTokenRefresh] flag is used to differentiate automatic token refresh
+/// events from actual user sign-in events. This distinction is important because:
+/// - Token refresh happens automatically every hour and should be transparent to the user
+/// - Sign-in events require UI updates, data fetching, and user notifications
+///
+/// Example usage in UI layer:
+/// ```dart
+/// if (state is AppAuthenticated && !state.isTokenRefresh) {
+///   // This is a real sign-in, fetch user data and show welcome message
+///   fetchUserData();
+///   showWelcomeMessage();
+/// } else if (state is AppAuthenticated && state.isTokenRefresh) {
+///   // This is just a token refresh, do nothing (keep existing state)
+///   return;
+/// }
+/// ```
 class AppAuthenticated extends AppAuthState {
-  const AppAuthenticated(this.user);
+  const AppAuthenticated(this.user, {this.isTokenRefresh = false});
 
-  /// The Supabase user object.
+  /// The Supabase user object containing user identity and session information.
   final User user;
+
+  /// Indicates if this authentication state change is due to an automatic token refresh.
+  ///
+  /// When `true`, this state was triggered by Supabase automatically refreshing
+  /// the authentication token (typically every 3600 seconds). The UI should:
+  /// - NOT trigger data refetches
+  /// - NOT show login/welcome messages
+  /// - NOT navigate to a different screen
+  /// - Keep the existing user state as-is
+  ///
+  /// When `false`, this is a real authentication event (sign-in, initial session, etc.)
+  /// and the UI should perform all normal authentication actions.
+  ///
+  /// Defaults to `false`.
+  final bool isTokenRefresh;
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AppAuthenticated && other.user == user;
+    return other is AppAuthenticated && other.user == user && other.isTokenRefresh == isTokenRefresh;
   }
 
   @override
-  int get hashCode => user.hashCode;
+  int get hashCode => Object.hash(user, isTokenRefresh);
 }
 
 /// A state indicating that the user is not authenticated.
