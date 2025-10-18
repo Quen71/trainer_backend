@@ -17,7 +17,7 @@ A Flutter package providing a complete client-side SDK to interact with the Trai
 
 ## Features
 
-- **Authentication**: Full auth suite including email/password, Google, and Apple sign-in. Supports OTP verification and password management.
+- **Authentication**: Full auth suite including email/password, Google, and Apple sign-in. Supports OTP verification and password management. Includes optimized token refresh handling for seamless user experience.
 - **Program Management**: Full CRUD operations for multi-session training programs.
 - **Session & Exercise Management**: Detailed control over session structure, exercise ordering, and parameters.
 - **Progressive Overload**: Support for defining and updating template and objective parameters for exercises.
