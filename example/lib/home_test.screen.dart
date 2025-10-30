@@ -55,6 +55,12 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
+              onPressed: _testCreateEmptyProgram,
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              child: const Text('Create Empty Program (should fail)'),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
               onPressed: _isLoading ? null : _testFetchUserPrograms,
               child: const Text('Fetch My Programs'),
             ),
@@ -280,6 +286,19 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
         }
         return 'Program "${newProgram.name}" created successfully with ID: ${newProgram.id}';
       },
+    );
+  }
+
+  Future<void> _testCreateEmptyProgram() async {
+    final Program emptyProgram = Program.forCreation(
+      name: 'Empty Program ${DateTime.now().millisecondsSinceEpoch}',
+      description: 'This should fail due to validations',
+      sessions: const <Session>[],
+    );
+
+    await _handleApiCall<Program>(
+      () => ProgramsService.createFullProgram(emptyProgram),
+      onSuccess: (Program newProgram) => 'Unexpected success: created ID ${newProgram.id}',
     );
   }
 

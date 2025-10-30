@@ -18,10 +18,14 @@ class ProgramsService {
   /// Creates a new program with all its sessions and exercises.
   ///
   /// The [program] object should contain all the necessary details,
-  /// including a list of sessions.
+  /// including a non-empty list of sessions, and each session must include
+  /// at least one exercise.
   ///
   /// Returns a [Future] with the created [Program] object, including IDs.
-  /// Throws a [PostgrestException] if the RPC call fails.
+  /// Throws a [PostgrestException] if the RPC call fails. The RPC enforces
+  /// the following constraints and will raise an error if violated:
+  /// - A program must have at least one session.
+  /// - Each session must have at least one exercise.
   static Future<Program> createFullProgram(Program program) async {
     final Map<String, dynamic> programJson = program.toJson();
 
