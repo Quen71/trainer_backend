@@ -12,6 +12,7 @@ import 'package:trainer_backend/services/programs.service.dart';
 import 'package:trainer_backend_example/profile_test.screen.dart';
 import 'package:trainer_backend_example/program_detail.screen.dart';
 import 'package:trainer_backend_example/sessions_logs.screen.dart';
+import 'package:trainer_backend_example/subscriptions_test.screen.dart';
 
 class HomeTestScreen extends StatefulWidget {
   const HomeTestScreen({super.key});
@@ -88,6 +89,16 @@ class _HomeTestScreenState extends State<HomeTestScreen> {
                     );
                   },
                   child: const Text('Test Profile Loading'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (BuildContext context) => const SubscriptionsTestScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text('Test Subscriptions'),
                 ),
               ],
             ),

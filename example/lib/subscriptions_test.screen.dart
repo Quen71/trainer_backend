@@ -1,0 +1,507 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:trainer_backend/services/subscriptions.service.dart';
+
+/// Test screen for demonstrating subscription-related features.
+///
+/// This screen allows testing of subscription service methods including
+/// retrieving subscription summaries and checking feature access.
+class SubscriptionsTestScreen extends StatefulWidget {
+  const SubscriptionsTestScreen({super.key});
+
+  @override
+  State<SubscriptionsTestScreen> createState() => _SubscriptionsTestScreenState();
+}
+
+class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
+  Map<String, dynamic>? _subscriptionSummary;
+  Map<String, dynamic>? _featureAccessResult;
+  Offerings? _offerings;
+  CustomerInfo? _customerInfo;
+  bool _isLoadingSummary = false;
+  bool _isLoadingAccess = false;
+  bool _isLoadingOfferings = false;
+  bool _isLoadingPurchase = false;
+  bool _isLoadingRestore = false;
+  bool _isLoadingCustomerInfo = false;
+  String? _errorMessage;
+
+  Future<void> _testGetSubscriptionSummary() async {
+    setState(() {
+      _isLoadingSummary = true;
+      _errorMessage = null;
+      _subscriptionSummary = null;
+    });
+
+    try {
+      final Map<String, dynamic>? summary = await SubscriptionsService.getUserSubscriptionSummary();
+
+      setState(() {
+        _subscriptionSummary = summary;
+        _isLoadingSummary = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingSummary = false;
+      });
+    }
+  }
+
+  Future<void> _testCheckFeatureAccess(String featureKey) async {
+    setState(() {
+      _isLoadingAccess = true;
+      _errorMessage = null;
+      _featureAccessResult = null;
+    });
+
+    try {
+      final Map<String, dynamic> result = await SubscriptionsService.checkFeatureAccess(
+        featureKey: featureKey,
+      );
+
+      setState(() {
+        _featureAccessResult = result;
+        _isLoadingAccess = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingAccess = false;
+      });
+    }
+  }
+
+  Future<void> _testGetOfferings() async {
+    setState(() {
+      _isLoadingOfferings = true;
+      _errorMessage = null;
+      _offerings = null;
+    });
+
+    try {
+      final Offerings? offerings = await SubscriptionsService.getOfferings();
+
+      if (offerings != null) {
+        log(
+          name: 'RevenueCat',
+          'Offerings retrieved: ${offerings.all.length} offerings found',
+        );
+        for (final Offering offering in offerings.all.values) {
+          log(
+            name: 'RevenueCat',
+            'Offering "${offering.identifier}": ${offering.availablePackages.length} packages',
+          );
+          for (final Package package in offering.availablePackages) {
+            log(
+              name: 'RevenueCat',
+              'Package "${package.identifier}": ${package.storeProduct.title} - ${package.storeProduct.priceString}',
+            );
+          }
+        }
+        log(
+          name: 'RevenueCat',
+          'Offerings JSON: ${const JsonEncoder.withIndent('  ').convert(_offeringsToJson(offerings))}',
+        );
+      } else {
+        log(name: 'RevenueCat', 'No offerings available');
+      }
+
+      setState(() {
+        _offerings = offerings;
+        _isLoadingOfferings = false;
+      });
+    } catch (e) {
+      log(name: 'RevenueCat', 'Error getting offerings: $e', error: e);
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingOfferings = false;
+      });
+    }
+  }
+
+  Future<void> _testPurchasePackage(Package package) async {
+    setState(() {
+      _isLoadingPurchase = true;
+      _errorMessage = null;
+      _customerInfo = null;
+    });
+
+    try {
+      log(
+        name: 'RevenueCat',
+        'Attempting to purchase package: ${package.identifier} - ${package.storeProduct.title}',
+      );
+
+      final CustomerInfo customerInfo = await SubscriptionsService.purchasePackage(
+        package: package,
+      );
+
+      log(
+        name: 'RevenueCat',
+        'Purchase successful for package: ${package.identifier}',
+      );
+      log(
+        name: 'RevenueCat',
+        'Customer Info after purchase: ${const JsonEncoder.withIndent('  ').convert(_customerInfoToJson(customerInfo))}',
+      );
+
+      setState(() {
+        _customerInfo = customerInfo;
+        _isLoadingPurchase = false;
+      });
+    } catch (e) {
+      log(name: 'RevenueCat', 'Purchase failed: $e', error: e);
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingPurchase = false;
+      });
+    }
+  }
+
+  Future<void> _testRestorePurchases() async {
+    setState(() {
+      _isLoadingRestore = true;
+      _errorMessage = null;
+      _customerInfo = null;
+    });
+
+    try {
+      log(name: 'RevenueCat', 'Restoring purchases...');
+
+      final CustomerInfo customerInfo = await SubscriptionsService.restorePurchases();
+
+      log(
+        name: 'RevenueCat',
+        'Purchases restored successfully',
+      );
+      log(
+        name: 'RevenueCat',
+        'Customer Info after restore: ${const JsonEncoder.withIndent('  ').convert(_customerInfoToJson(customerInfo))}',
+      );
+
+      setState(() {
+        _customerInfo = customerInfo;
+        _isLoadingRestore = false;
+      });
+    } catch (e) {
+      log(name: 'RevenueCat', 'Restore purchases failed: $e', error: e);
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingRestore = false;
+      });
+    }
+  }
+
+  Future<void> _testGetCustomerInfo() async {
+    setState(() {
+      _isLoadingCustomerInfo = true;
+      _errorMessage = null;
+      _customerInfo = null;
+    });
+
+    try {
+      log(name: 'RevenueCat', 'Fetching customer info...');
+
+      final CustomerInfo customerInfo = await SubscriptionsService.getCustomerInfo();
+
+      log(
+        name: 'RevenueCat',
+        'Customer Info retrieved: ${const JsonEncoder.withIndent('  ').convert(_customerInfoToJson(customerInfo))}',
+      );
+
+      setState(() {
+        _customerInfo = customerInfo;
+        _isLoadingCustomerInfo = false;
+      });
+    } catch (e) {
+      log(name: 'RevenueCat', 'Get customer info failed: $e', error: e);
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingCustomerInfo = false;
+      });
+    }
+  }
+
+  Map<String, dynamic> _offeringsToJson(Offerings offerings) => <String, dynamic>{
+        'all': offerings.all.map(
+          (String key, Offering offering) => MapEntry<String, dynamic>(
+            key,
+            <String, dynamic>{
+              'identifier': offering.identifier,
+              'serverDescription': offering.serverDescription,
+              'availablePackages': offering.availablePackages
+                  .map(
+                    (Package package) => <String, dynamic>{
+                      'identifier': package.identifier,
+                      'packageType': package.packageType.toString(),
+                      'product': <String, dynamic>{
+                        'identifier': package.storeProduct.identifier,
+                        'title': package.storeProduct.title,
+                        'description': package.storeProduct.description,
+                        'price': package.storeProduct.price,
+                        'priceString': package.storeProduct.priceString,
+                        'currencyCode': package.storeProduct.currencyCode,
+                      },
+                    },
+                  )
+                  .toList(),
+            },
+          ),
+        ),
+        'current': offerings.current?.identifier,
+      };
+
+  Map<String, dynamic> _customerInfoToJson(CustomerInfo customerInfo) => <String, dynamic>{
+        'entitlements': customerInfo.entitlements.active.map(
+          (String key, EntitlementInfo entitlement) => MapEntry<String, dynamic>(
+            key,
+            <String, dynamic>{
+              'identifier': entitlement.identifier,
+              'isActive': entitlement.isActive,
+              'willRenew': entitlement.willRenew,
+              'periodType': entitlement.periodType.toString(),
+              'latestPurchaseDate': entitlement.latestPurchaseDate.toString(),
+              'originalPurchaseDate': entitlement.originalPurchaseDate.toString(),
+              'expirationDate': entitlement.expirationDate?.toString(),
+              'store': entitlement.store.toString(),
+              'productIdentifier': entitlement.productIdentifier,
+            },
+          ),
+        ),
+        'activeSubscriptions': customerInfo.activeSubscriptions.toList(),
+        'allPurchasedProductIdentifiers': customerInfo.allPurchasedProductIdentifiers.toList(),
+        'firstSeen': customerInfo.firstSeen.toString(),
+        'requestDate': customerInfo.requestDate.toString(),
+        'originalAppUserId': customerInfo.originalAppUserId,
+      };
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Subscriptions Test'),
+        ),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const Text(
+                'Subscription Service Tests',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _isLoadingSummary ? null : _testGetSubscriptionSummary,
+                child: _isLoadingSummary
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Get Subscription Summary'),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Test Feature Access:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 5),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: <Widget>[
+                  ElevatedButton(
+                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('Premium'),
+                    child: const Text('Check Premium'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('Pro'),
+                    child: const Text('Check Pro'),
+                  ),
+                  ElevatedButton(
+                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('export_data'),
+                    child: const Text('Check Export'),
+                  ),
+                ],
+              ),
+              if (_errorMessage != null) ...<Widget>[
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  color: Colors.red.shade100,
+                  child: Text(
+                    _errorMessage!,
+                    style: TextStyle(color: Colors.red.shade900),
+                  ),
+                ),
+              ],
+              if (_subscriptionSummary != null) ...<Widget>[
+                const SizedBox(height: 20),
+                const Text(
+                  'Subscription Summary:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    const JsonEncoder.withIndent('  ').convert(_subscriptionSummary),
+                    style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                  ),
+                ),
+              ],
+              if (_featureAccessResult != null) ...<Widget>[
+                const SizedBox(height: 20),
+                const Text(
+                  'Feature Access Result:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: (_featureAccessResult?['has_access'] == true ? Colors.green : Colors.red).shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Has Access: ${_featureAccessResult?['has_access']}',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: (_featureAccessResult?['has_access'] == true ? Colors.green : Colors.red).shade900,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        const JsonEncoder.withIndent('  ').convert(_featureAccessResult),
+                        style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              const SizedBox(height: 30),
+              const Divider(),
+              const SizedBox(height: 20),
+              const Text(
+                'RevenueCat Purchase Tests',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _isLoadingOfferings ? null : _testGetOfferings,
+                child: _isLoadingOfferings
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Get Offerings'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _isLoadingCustomerInfo ? null : _testGetCustomerInfo,
+                child: _isLoadingCustomerInfo
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Get Customer Info'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _isLoadingRestore ? null : _testRestorePurchases,
+                child: _isLoadingRestore
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Restore Purchases'),
+              ),
+              if (_offerings != null) ...<Widget>[
+                const SizedBox(height: 20),
+                const Text(
+                  'Available Packages:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ..._offerings!.all.values.expand(
+                  (Offering offering) => offering.availablePackages.map(
+                    (Package package) => Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: Card(
+                        child: ListTile(
+                          title: Text(package.storeProduct.title),
+                          subtitle: Text(
+                            '${package.storeProduct.priceString} - ${package.identifier}',
+                          ),
+                          trailing: _isLoadingPurchase
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : ElevatedButton(
+                                  onPressed: () => _testPurchasePackage(package),
+                                  child: const Text('Purchase'),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              if (_customerInfo != null) ...<Widget>[
+                const SizedBox(height: 20),
+                const Text(
+                  'Customer Info:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    const JsonEncoder.withIndent('  ').convert(_customerInfoToJson(_customerInfo!)),
+                    style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
+}
