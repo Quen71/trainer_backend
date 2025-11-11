@@ -1,0 +1,5 @@
+# Dart/Flutter generated files
+.dart_tool/
+.packages
+pubspec.lock
+
