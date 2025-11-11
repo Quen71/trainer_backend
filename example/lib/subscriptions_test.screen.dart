@@ -2,7 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:trainer_backend/models/subscriptions/customer_info.dart';
+import 'package:trainer_backend/models/subscriptions/entitlement_info.dart';
+import 'package:trainer_backend/models/subscriptions/feature_access.dart';
+import 'package:trainer_backend/models/subscriptions/offering.dart';
+import 'package:trainer_backend/models/subscriptions/offerings.dart';
+import 'package:trainer_backend/models/subscriptions/package.dart';
+import 'package:trainer_backend/models/subscriptions/subscription_summary.dart';
 import 'package:trainer_backend/services/subscriptions.service.dart';
 
 /// Test screen for demonstrating subscription-related features.
@@ -17,8 +23,8 @@ class SubscriptionsTestScreen extends StatefulWidget {
 }
 
 class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
-  Map<String, dynamic>? _subscriptionSummary;
-  Map<String, dynamic>? _featureAccessResult;
+  SubscriptionSummary? _subscriptionSummary;
+  FeatureAccess? _featureAccessResult;
   Offerings? _offerings;
   CustomerInfo? _customerInfo;
   bool _isLoadingSummary = false;
@@ -37,7 +43,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
     });
 
     try {
-      final Map<String, dynamic>? summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary? summary = await SubscriptionsService.getUserSubscriptionSummary();
 
       setState(() {
         _subscriptionSummary = summary;
@@ -59,7 +65,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
     });
 
     try {
-      final Map<String, dynamic> result = await SubscriptionsService.checkFeatureAccess(
+      final FeatureAccess result = await SubscriptionsService.checkFeatureAccess(
         featureKey: featureKey,
       );
 
@@ -237,7 +243,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                   .map(
                     (Package package) => <String, dynamic>{
                       'identifier': package.identifier,
-                      'packageType': package.packageType.toString(),
+                      'packageType': package.packageType,
                       'product': <String, dynamic>{
                         'identifier': package.storeProduct.identifier,
                         'title': package.storeProduct.title,
@@ -256,26 +262,26 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
       };
 
   Map<String, dynamic> _customerInfoToJson(CustomerInfo customerInfo) => <String, dynamic>{
-        'entitlements': customerInfo.entitlements.active.map(
+        'entitlements': customerInfo.entitlements.map(
           (String key, EntitlementInfo entitlement) => MapEntry<String, dynamic>(
             key,
             <String, dynamic>{
               'identifier': entitlement.identifier,
               'isActive': entitlement.isActive,
               'willRenew': entitlement.willRenew,
-              'periodType': entitlement.periodType.toString(),
-              'latestPurchaseDate': entitlement.latestPurchaseDate.toString(),
-              'originalPurchaseDate': entitlement.originalPurchaseDate.toString(),
-              'expirationDate': entitlement.expirationDate?.toString(),
-              'store': entitlement.store.toString(),
+              'periodType': entitlement.periodType,
+              'latestPurchaseDate': entitlement.latestPurchaseDate.toIso8601String(),
+              'originalPurchaseDate': entitlement.originalPurchaseDate.toIso8601String(),
+              'expirationDate': entitlement.expirationDate?.toIso8601String(),
+              'store': entitlement.store,
               'productIdentifier': entitlement.productIdentifier,
             },
           ),
         ),
-        'activeSubscriptions': customerInfo.activeSubscriptions.toList(),
-        'allPurchasedProductIdentifiers': customerInfo.allPurchasedProductIdentifiers.toList(),
-        'firstSeen': customerInfo.firstSeen.toString(),
-        'requestDate': customerInfo.requestDate.toString(),
+        'activeSubscriptions': customerInfo.activeSubscriptions,
+        'allPurchasedProductIdentifiers': customerInfo.allPurchasedProductIdentifiers,
+        'firstSeen': customerInfo.firstSeen.toIso8601String(),
+        'requestDate': customerInfo.requestDate.toIso8601String(),
         'originalAppUserId': customerInfo.originalAppUserId,
       };
 
@@ -359,7 +365,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    const JsonEncoder.withIndent('  ').convert(_subscriptionSummary),
+                    const JsonEncoder.withIndent('  ').convert(_subscriptionSummary!.toJson()),
                     style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                   ),
                 ),
@@ -377,22 +383,22 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: (_featureAccessResult?['has_access'] == true ? Colors.green : Colors.red).shade100,
+                    color: (_featureAccessResult!.hasAccess ? Colors.green : Colors.red).shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        'Has Access: ${_featureAccessResult?['has_access']}',
+                        'Has Access: ${_featureAccessResult!.hasAccess}',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: (_featureAccessResult?['has_access'] == true ? Colors.green : Colors.red).shade900,
+                          color: (_featureAccessResult!.hasAccess ? Colors.green : Colors.red).shade900,
                         ),
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        const JsonEncoder.withIndent('  ').convert(_featureAccessResult),
+                        const JsonEncoder.withIndent('  ').convert(_featureAccessResult!.toJson()),
                         style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                       ),
                     ],
