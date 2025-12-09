@@ -1,4 +1,5 @@
 import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:trainer_backend/models/subscriptions/introductory_price.dart';
 
 part 'store_product.g.dart';
 
@@ -16,6 +17,7 @@ class StoreProduct {
     required this.price,
     required this.priceString,
     required this.currencyCode,
+    this.introductoryPrice,
   });
 
   /// The product identifier from the store.
@@ -35,4 +37,11 @@ class StoreProduct {
 
   /// The currency code (e.g., "USD", "EUR").
   final String currencyCode;
+
+  /// Information about the introductory offer (free trial or discounted price).
+  ///
+  /// This field is null if no introductory offer is available for this product.
+  /// Note: RevenueCat Test Store does NOT support introductory offers, so this
+  /// will always be null when using the Test Store.
+  final IntroductoryPrice? introductoryPrice;
 }

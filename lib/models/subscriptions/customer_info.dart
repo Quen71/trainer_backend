@@ -18,6 +18,7 @@ class CustomerInfo {
     required this.firstSeen,
     required this.requestDate,
     required this.originalAppUserId,
+    this.managementURL,
   });
 
   /// Map of active entitlements, keyed by entitlement identifier.
@@ -37,4 +38,11 @@ class CustomerInfo {
 
   /// The original app user ID.
   final String originalAppUserId;
+
+  /// The URL to manage the customer's subscriptions.
+  ///
+  /// This URL can be used to redirect users to their platform's
+  /// subscription management page (App Store or Play Store).
+  /// May be null if not available.
+  final String? managementURL;
 }

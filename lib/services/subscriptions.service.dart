@@ -1,9 +1,13 @@
 import 'package:purchases_flutter/purchases_flutter.dart' as rc;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/constants/subscription.constants.dart';
 import 'package:trainer_backend/models/subscriptions/customer_info.dart';
 import 'package:trainer_backend/models/subscriptions/entitlement_info.dart';
+import 'package:trainer_backend/models/subscriptions/enums/package_type.dart';
+import 'package:trainer_backend/models/subscriptions/enums/period_unit.dart';
 import 'package:trainer_backend/models/subscriptions/feature_access.dart';
+import 'package:trainer_backend/models/subscriptions/introductory_price.dart';
 import 'package:trainer_backend/models/subscriptions/offering.dart';
 import 'package:trainer_backend/models/subscriptions/offerings.dart';
 import 'package:trainer_backend/models/subscriptions/package.dart';
@@ -115,6 +119,10 @@ class SubscriptionsService {
   ///
   /// The structure is: `Offerings` → `all` (`Map<String, Offering>`) →
   /// `Offering` → `availablePackages` (`List<Package>`).
+  ///
+  /// **Entitlement Information**: This method enriches packages with entitlement
+  /// information using local configuration mapping. Each package will have its
+  /// `entitlementIdentifier` field populated based on the product identifier.
   ///
   /// Throws a [rc.PurchasesError] if the RevenueCat SDK is not initialized or
   /// if a network error occurs.
@@ -238,6 +246,25 @@ class SubscriptionsService {
     }
   }
 
+  /// Gets the URL to the platform's subscription management page.
+  ///
+  /// This URL can be used to redirect users to their App Store or Play Store
+  /// subscription management page. The URL is retrieved from the current
+  /// customer info.
+  ///
+  /// Returns the management URL as a [String], or null if not available.
+  /// Throws an [Exception] if the RevenueCat SDK is not initialized.
+  static Future<String?> getManagementURL() async {
+    _checkRevenueCatInitialized();
+
+    try {
+      final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.getCustomerInfo();
+      return rcCustomerInfo.managementURL;
+    } on rc.PurchasesError catch (e) {
+      throw Exception('Failed to get management URL: ${e.message}');
+    }
+  }
+
   /// Checks if RevenueCat SDK has been initialized.
   ///
   /// Throws an [Exception] if RevenueCat has not been initialized.
@@ -250,21 +277,114 @@ class SubscriptionsService {
   }
 
   /// Converts a RevenueCat StoreProduct to a backend StoreProduct model.
-  static StoreProduct _convertStoreProduct(rc.StoreProduct rcStoreProduct) => StoreProduct(
-        identifier: rcStoreProduct.identifier,
-        title: rcStoreProduct.title,
-        description: rcStoreProduct.description,
-        price: rcStoreProduct.price,
-        priceString: rcStoreProduct.priceString,
-        currencyCode: rcStoreProduct.currencyCode,
+  ///
+  /// This method also converts the introductory price information if available.
+  /// Note: The Test Store does NOT support introductory offers, so
+  /// `introductoryPrice` will be null when using the Test Store.
+  static StoreProduct _convertStoreProduct(rc.StoreProduct rcStoreProduct) {
+    IntroductoryPrice? introductoryPrice;
+
+    if (rcStoreProduct.introductoryPrice != null) {
+      introductoryPrice = _convertIntroductoryPrice(rcStoreProduct.introductoryPrice!);
+    }
+
+    return StoreProduct(
+      identifier: rcStoreProduct.identifier,
+      title: rcStoreProduct.title,
+      description: rcStoreProduct.description,
+      price: rcStoreProduct.price,
+      priceString: rcStoreProduct.priceString,
+      currencyCode: rcStoreProduct.currencyCode,
+      introductoryPrice: introductoryPrice,
+    );
+  }
+
+  /// Converts a RevenueCat IntroductoryPrice to a backend IntroductoryPrice model.
+  static IntroductoryPrice _convertIntroductoryPrice(rc.IntroductoryPrice rcIntro) => IntroductoryPrice(
+        price: rcIntro.price,
+        priceString: rcIntro.priceString,
+        period: rcIntro.period,
+        cycles: rcIntro.cycles,
+        periodUnit: _convertPeriodUnit(rcIntro.periodUnit),
+        periodNumberOfUnits: rcIntro.periodNumberOfUnits,
       );
 
+  /// Converts a RevenueCat PeriodUnit to a backend PeriodUnit enum.
+  static PeriodUnit _convertPeriodUnit(rc.PeriodUnit rcPeriodUnit) {
+    switch (rcPeriodUnit) {
+      case rc.PeriodUnit.day:
+        return PeriodUnit.day;
+      case rc.PeriodUnit.week:
+        return PeriodUnit.week;
+      case rc.PeriodUnit.month:
+        return PeriodUnit.month;
+      case rc.PeriodUnit.year:
+        return PeriodUnit.year;
+      default:
+        return PeriodUnit.unknown;
+    }
+  }
+
+  /// Converts a RevenueCat PackageType to a backend PackageType enum.
+  ///
+  /// This method maps RevenueCat PackageType enum values to the backend
+  /// PackageType enum for type-safe handling throughout the application.
+  ///
+  /// - [type]: The RevenueCat PackageType to convert.
+  ///
+  /// Returns the corresponding backend [PackageType] enum value.
+  static PackageType _convertPackageType(rc.PackageType type) {
+    switch (type) {
+      case rc.PackageType.monthly:
+        return PackageType.monthly;
+      case rc.PackageType.annual:
+        return PackageType.annual;
+      case rc.PackageType.weekly:
+        return PackageType.weekly;
+      case rc.PackageType.sixMonth:
+        return PackageType.sixMonth;
+      case rc.PackageType.threeMonth:
+        return PackageType.threeMonth;
+      case rc.PackageType.twoMonth:
+        return PackageType.twoMonth;
+      case rc.PackageType.lifetime:
+        return PackageType.lifetime;
+      case rc.PackageType.custom:
+        return PackageType.custom;
+      default:
+        return PackageType.unknown;
+    }
+  }
+
   /// Converts a RevenueCat Package to a backend Package model.
-  static Package _convertPackage(rc.Package rcPackage) => Package(
-        identifier: rcPackage.identifier,
-        packageType: rcPackage.packageType.toString(),
-        storeProduct: _convertStoreProduct(rcPackage.storeProduct),
-      );
+  ///
+  /// The entitlement identifier is determined by looking up the product
+  /// identifier in [SubscriptionConstants].
+  ///
+  /// The packageType field contains a typed enum value representing
+  /// the subscription period (e.g., PackageType.monthly, PackageType.annual).
+  static Package _convertPackage(rc.Package rcPackage) {
+    final String productId = rcPackage.storeProduct.identifier;
+    final String? entitlementIdentifier = _getEntitlementForProduct(productId);
+
+    return Package(
+      identifier: rcPackage.identifier,
+      packageType: _convertPackageType(rcPackage.packageType),
+      storeProduct: _convertStoreProduct(rcPackage.storeProduct),
+      entitlementIdentifier: entitlementIdentifier,
+    );
+  }
+
+  /// Returns the entitlement key associated with a product identifier.
+  ///
+  /// This method uses [SubscriptionConstants.productToEntitlement] to map
+  /// product identifiers to entitlement keys.
+  ///
+  /// - [productId]: The product identifier from RevenueCat.
+  ///
+  /// Returns the entitlement key (e.g., "Premium") if found, or `null` if
+  /// the product is not mapped.
+  static String? _getEntitlementForProduct(String productId) => SubscriptionConstants.productToEntitlement[productId];
 
   /// Converts a RevenueCat Offering to a backend Offering model.
   static Offering _convertOffering(rc.Offering rcOffering) => Offering(
@@ -326,6 +446,7 @@ class SubscriptionsService {
       firstSeen: DateTime.parse(rcCustomerInfo.firstSeen),
       requestDate: DateTime.parse(rcCustomerInfo.requestDate),
       originalAppUserId: rcCustomerInfo.originalAppUserId,
+      managementURL: rcCustomerInfo.managementURL,
     );
   }
 }

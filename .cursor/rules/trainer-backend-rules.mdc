@@ -1,0 +1,792 @@
+---
+alwaysApply: true
+---
+
+# Trainer Backend - Cursor Rules
+
+You are an expert in Flutter/Dart development specializing in backend package creation with Supabase. You must strictly follow the code conventions and architecture defined in this package.
+
+## Documentation Language
+
+**ALL documentation comments (`///`) MUST be written in English.**
+
+```dart
+// ✅ CORRECT
+/// Creates a new program with all its sessions and exercises.
+///
+/// The [program] parameter must contain all necessary information.
+/// Returns a [Future] with the created [Program] object.
+static Future<Program> createFullProgram(Program program) async { }
+
+// ❌ INCORRECT
+/// Crée un nouveau programme avec toutes ses sessions et exercices.
+static Future<Program> createFullProgram(Program program) async { }
+```
+
+## Style de Code (Obligatoire)
+
+### Types et Syntaxe
+- **TOUJOURS** spécifier les types explicitement (`always_specify_types: true`)
+- **TOUJOURS** utiliser des guillemets simples pour les strings (`prefer_single_quotes: true`)
+- **TOUJOURS** ajouter des virgules finales (`require_trailing_commas: true`)
+- **TOUJOURS** utiliser des constructeurs const quand possible (`prefer_const_constructors: true`)
+- **PRÉFÉRER** les arrow functions pour les fonctions courtes (`prefer_expression_function_bodies: true`)
+- **TOUJOURS** utiliser des imports absolus avec `package:trainer_backend/` (`always_use_package_imports: true`)
+- **PRÉFÉRER** les getters pour les méthodes sans paramètre qui récupèrent des données
+
+### Getters vs Methods
+```dart
+// ✅ CORRECT - Getter for data retrieval without parameters
+static User? get currentUser => TrainerAPI.authManager.currentUser;
+static Stream<AppAuthState> get onAuthStateChange async* { }
+
+// ❌ INCORRECT - Method without parameters for simple data retrieval
+static User? getCurrentUser() => TrainerAPI.authManager.currentUser;
+static Stream<AppAuthState> getOnAuthStateChange() async* { }
+
+// ✅ CORRECT - Method with parameters or complex operations
+static Future<Program> getProgram({required int id}) async => await _client.from('programs').select();
+static Future<void> deleteAccount() async => await _client.rpc('delete_user_account');
+```
+
+### Imports
+```dart
+// ✅ CORRECT
+import 'package:trainer_backend/models/auth/profile.dart';
+import 'package:trainer_backend/services/auth.service.dart';
+
+// ❌ INCORRECT
+import '../models/auth/profile.dart';
+import 'auth.service.dart';
+```
+
+## Conventions de Nommage
+
+### Fichiers
+- **Services** : `*.service.dart` (ex: `auth.service.dart`, `programs.service.dart`)
+- **Models** : `*.dart` dans `/models` (ex: `profile.dart`, `program.dart`, `session.dart`)
+- **Enums** : `*.dart` dans `/models/*/enums/` (ex: `user_role.dart`, `session_type.dart`)
+- **States** : `*.dart` dans `/models/*/state/` (ex: `app_auth_state.dart`)
+- **Converters** : `*.dart` dans `/models/*/converters/` (ex: `duration_converter.dart`)
+- **Exports** : `*.export.dart` (ex: `models.export.dart`, `services.export.dart`)
+- **Configuration** : `*.configuration.dart` (ex: `trainer_backend.configuration.dart`)
+- **Clients** : `*.api.dart` (ex: `trainer.api.dart`)
+
+### Classes et Types
+- **Services** : `FeatureService` (ex: `AuthService`, `ProgramsService`)
+- **Models** : PascalCase descriptif (ex: `Profile`, `Program`, `SessionLog`)
+- **Enums** : PascalCase (ex: `UserRole`, `SessionType`, `SessionStyle`)
+- **States** : Préfixe `App` + État (ex: `AppAuthState`, `AppAuthInitial`, `AppAuthenticated`)
+
+## Architecture (OBLIGATOIRE)
+
+### Structure du Package
+```
+lib/
+├── clients/               # Clients API centralisés
+│   └── trainer.api.dart
+├── models/                # Modèles de données
+│   ├── auth/
+│   │   ├── profile.dart
+│   │   └── state/
+│   ├── training/
+│   │   ├── program.dart
+│   │   ├── session.dart
+│   │   └── exercise.dart
+│   ├── history/
+│   └── models.export.dart  # Export centralisé
+├── services/              # Services backend
+│   ├── auth.service.dart
+│   ├── programs.service.dart
+│   └── services.export.dart  # Export centralisé
+└── trainer_backend.dart   # Point d'entrée principal
+    trainer_backend.configuration.dart
+```
+
+### Exports Centralisés
+**TOUJOURS** créer des fichiers `*.export.dart` pour exporter plusieurs fichiers :
+
+```dart
+// models/models.export.dart
+export 'auth/profile.dart';
+export 'auth/state/app_auth_state.dart';
+export 'training/program.dart';
+export 'training/session.dart';
+export 'training/exercise.dart';
+export 'history/session_log.dart';
+
+// services/services.export.dart
+export 'auth.service.dart';
+export 'programs.service.dart';
+export 'sessions.service.dart';
+export 'history.service.dart';
+
+// trainer_backend.dart (point d'entrée principal)
+export 'models/models.export.dart';
+export 'services/services.export.dart';
+export 'trainer_backend.configuration.dart';
+```
+
+## Pattern de Service (STRICT)
+
+### Structure d'un Service
+
+```dart
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/models/training/program.dart';
+
+/// Documentation exhaustive de la responsabilité du service.
+///
+/// Ce service gère [description détaillée]. Il fournit des méthodes
+/// statiques pour [liste des opérations principales].
+class ProgramsService {
+  /// Constructeur privé pour empêcher l'instanciation.
+  const ProgramsService._();
+
+  /// Getter privé pour accéder au client Supabase.
+  static SupabaseClient get _client => TrainerAPI.client;
+
+  /// Crée un nouveau programme avec toutes ses sessions et exercices.
+  ///
+  /// Le paramètre [program] doit contenir toutes les informations nécessaires,
+  /// incluant la liste des sessions.
+  ///
+  /// Retourne un [Future] avec l'objet [Program] créé, incluant les IDs générés.
+  /// Lance une [PostgrestException] si l'appel RPC échoue.
+  static Future<Program> createFullProgram(Program program) async {
+    final Map<String, dynamic> programJson = program.toJson();
+
+    final dynamic newProgramData = await _client.rpc(
+      'create_full_program',
+      params: <String, dynamic>{'full_program_data': programJson},
+    );
+
+    return Program.fromJson(newProgramData as PostgrestMap);
+  }
+
+  /// Récupère une liste paginée de programmes pour l'utilisateur actuel.
+  ///
+  /// - [page]: Le numéro de page à récupérer.
+  /// - [pageSize]: Le nombre de programmes par page. Par défaut: 5.
+  ///
+  /// Retourne un [Future] avec une liste de [Program].
+  /// Retourne une liste vide si aucun programme n'est trouvé.
+  /// Lance une [PostgrestException] si l'appel RPC échoue.
+  static Future<List<Program>> fetchUserPrograms({
+    required int page,
+    int pageSize = 5,
+  }) async {
+    final dynamic response = await _client.rpc(
+      'get_user_programs',
+      params: <String, dynamic>{
+        'page_number': page,
+        'page_size': pageSize,
+      },
+    );
+
+    if (response == null) {
+      return <Program>[];
+    }
+
+    final List<dynamic> programsJson = response as List<dynamic>;
+
+    return programsJson
+        .map((dynamic p) => Program.fromJson(p as Map<String, dynamic>))
+        .toList();
+  }
+}
+```
+
+**Points clés OBLIGATOIRES** :
+1. **Constructeur privé** : `const ServiceName._();`
+2. **Méthodes statiques** uniquement
+3. **Documentation exhaustive** avec `///` pour chaque méthode publique
+4. **Accès Supabase** via `TrainerAPI.client` ou `TrainerAPI.authManager` uniquement
+5. **Gestion d'erreurs** : Documenter les exceptions possibles
+6. **Types de retour** explicites et documentés
+
+### TrainerAPI - Point d'Accès Unique
+
+**JAMAIS** utiliser `Supabase.instance.client` directement. **TOUJOURS** passer par `TrainerAPI` :
+
+```dart
+// ✅ CORRECT
+static SupabaseClient get _client => TrainerAPI.client;
+final user = TrainerAPI.authManager.currentUser;
+
+// ❌ INCORRECT
+final client = Supabase.instance.client;
+final user = Supabase.instance.client.auth.currentUser;
+```
+
+## Pattern de Model (STRICT)
+
+### Structure d'un Model
+
+```dart
+import 'package:copy_with_extension/copy_with_extension.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:trainer_backend/models/training/session.dart';
+
+part 'program.g.dart';
+
+/// Représente un programme d'entraînement, qui est une collection de sessions.
+@JsonSerializable(fieldRename: FieldRename.snake)
+@CopyWith()
+class Program {
+  /// Crée une instance de [Program].
+  const Program({
+    required this.id,
+    required this.userId,
+    required this.name,
+    this.description,
+    this.sessions = const <Session>[],
+    required this.isFavorite,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  /// Factory pour créer un [Program] pour insertion en base de données.
+  ///
+  /// Les champs [id] et [userId] sont initialisés avec des valeurs par défaut
+  /// car ils seront assignés par le backend.
+  factory Program.forCreation({
+    required String name,
+    String? description,
+    required List<Session> sessions,
+  }) =>
+      Program(
+        id: 0,
+        userId: '',
+        name: name,
+        isFavorite: false,
+        description: description,
+        sessions: sessions,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      );
+
+  /// Crée un [Program] depuis un objet JSON.
+  factory Program.fromJson(Map<String, dynamic> json) => _$ProgramFromJson(json);
+
+  /// L'identifiant unique du programme.
+  final int id;
+
+  /// L'ID de l'utilisateur propriétaire de ce programme.
+  final String userId;
+
+  /// Le nom du programme.
+  final String name;
+
+  /// Une description optionnelle du programme.
+  final String? description;
+
+  /// La liste des sessions qui composent ce programme.
+  final List<Session> sessions;
+
+  /// Indique si le programme est marqué comme favori par l'utilisateur.
+  /// Ce champ est exclu de la sérialisation JSON.
+  @JsonKey(includeToJson: false)
+  final bool isFavorite;
+
+  /// L'horodatage de création du programme.
+  final DateTime createdAt;
+
+  /// L'horodatage de la dernière mise à jour du programme.
+  final DateTime updatedAt;
+
+  /// Convertit ce [Program] en objet JSON.
+  Map<String, dynamic> toJson() => _$ProgramToJson(this);
+}
+```
+
+**Points clés OBLIGATOIRES** :
+1. **Annotations** : `@JsonSerializable` et `@CopyWith()`
+2. **Documentation** : Classe et chaque champ avec `///`
+3. **Factories** : 
+   - `fromJson` pour la désérialisation
+   - `forCreation` si nécessaire (pour les inserts)
+4. **Méthode toJson()** pour la sérialisation
+5. **Part directive** : `part 'model_name.g.dart';`
+6. **snake_case** pour les noms de champs JSON : `@JsonSerializable(fieldRename: FieldRename.snake)`
+
+### Gestion des Relations
+
+```dart
+// Si un model contient d'autres models
+@JsonSerializable(fieldRename: FieldRename.snake)
+class Program {
+  const Program({
+    required this.sessions,
+  });
+
+  final List<Session> sessions; // Relation 1-N
+}
+
+// Les sessions sont désérialisées automatiquement
+```
+
+### Champs Spéciaux
+
+```dart
+// Exclure un champ de la sérialisation
+@JsonKey(includeToJson: false)
+final bool isFavorite;
+
+// Nom de champ différent en JSON
+@JsonKey(name: 'full_name')
+final String fullName;
+
+// Convertisseur personnalisé
+@JsonKey(fromJson: _durationFromJson, toJson: _durationToJson)
+final Duration duration;
+```
+
+## Configuration (Singleton Pattern)
+
+```dart
+/// Définit les environnements disponibles pour le backend.
+enum TrainerBackendFlavor {
+  /// L'environnement de test, pour le développement et staging.
+  test,
+
+  /// L'environnement de production, pour l'application live.
+  prod,
+}
+
+/// Classe singleton pour gérer la configuration backend.
+///
+/// Cette classe charge la configuration correcte (URL Supabase et clé anon)
+/// depuis un fichier `.env` basé sur le [TrainerBackendFlavor] sélectionné.
+/// Elle doit être initialisée via [init] avant d'accéder à [instance].
+class TrainerBackendConfiguration {
+  /// Constructeur privé pour créer un singleton.
+  const TrainerBackendConfiguration._({
+    required this.flavor,
+    required this.baseUrl,
+    required this.anonKey,
+  });
+
+  /// La flavor d'environnement active.
+  final TrainerBackendFlavor flavor;
+
+  /// L'URL de base Supabase pour la flavor active.
+  final String baseUrl;
+
+  /// La clé anon Supabase pour la flavor active.
+  final String anonKey;
+
+  /// L'instance unique de cette configuration.
+  static TrainerBackendConfiguration? _instance;
+
+  /// Accès à l'instance singleton.
+  ///
+  /// Lance une [Exception] si [init] n'a pas été appelé au préalable.
+  static TrainerBackendConfiguration get instance {
+    if (_instance == null) {
+      throw Exception('No instance built for TrainerBackendConfiguration');
+    }
+    return _instance!;
+  }
+
+  /// Initialise la configuration backend et le client Supabase.
+  ///
+  /// Cette méthode doit être appelée une fois au démarrage de l'application.
+  static Future<void> init({
+    required TrainerBackendFlavor trainerBackendFlavor,
+  }) async {
+    // Chargement de la configuration...
+    await Supabase.initialize(
+      url: instance.baseUrl,
+      anonKey: instance.anonKey,
+    );
+  }
+}
+```
+
+## Gestion des Erreurs
+
+### Documentation des Erreurs
+
+```dart
+/// Lance une [AuthException] si la connexion échoue.
+static Future<void> signIn({
+  required String email,
+  required String password,
+}) async {
+  try {
+    await TrainerAPI.authManager.signInWithPassword(
+      email: email,
+      password: password,
+    );
+  } on AuthException {
+    rethrow;
+  }
+}
+
+/// Lance une [Exception] si l'opération échoue.
+static Future<void> deleteAccount() async {
+  try {
+    await TrainerAPI.client.rpc('delete_user_account');
+  } catch (e) {
+    throw Exception('Failed to delete account: $e');
+  }
+}
+```
+
+### Types d'Exceptions Courantes
+- `AuthException` : Erreurs d'authentification Supabase
+- `PostgrestException` : Erreurs de requêtes database/RPC
+- `Exception` : Erreurs génériques (toujours wrappées avec message)
+
+## Streams
+
+Pour les streams d'authentification ou autres événements :
+
+```dart
+/// Stream qui notifie les changements d'état d'authentification.
+///
+/// Ce stream écoute les événements d'authentification Supabase et les convertit
+/// en objets [AppAuthState] consommables par la couche application.
+///
+/// **Gestion des événements** :
+/// - [AuthChangeEvent.tokenRefreshed] : Émis automatiquement toutes les ~3600s
+/// - [AuthChangeEvent.signedIn] : Connexion de l'utilisateur
+/// - [AuthChangeEvent.signedOut] : Déconnexion de l'utilisateur
+static Stream<AppAuthState> get onAuthStateChange async* {
+  yield const AppAuthInitial();
+
+  await for (final AuthState data in TrainerAPI.authManager.onAuthStateChange) {
+    final AuthChangeEvent event = data.event;
+    final Session? session = data.session;
+
+    switch (event) {
+      case AuthChangeEvent.tokenRefreshed:
+        if (session != null) {
+          yield AppAuthenticated(session.user, isTokenRefresh: true);
+        }
+        break;
+      
+      case AuthChangeEvent.signedIn:
+        yield const AppAuthLoading();
+        if (session != null) {
+          yield AppAuthenticated(session.user, isTokenRefresh: false);
+        }
+        break;
+    }
+  }
+}
+```
+
+**Points clés** :
+- Documenter le comportement de chaque événement
+- Expliquer la fréquence des émissions
+- Clarifier les cas d'usage
+
+## RPCs (Remote Procedure Calls)
+
+### Appel RPC Simple
+
+```dart
+static Future<Model> callRpc() async {
+  final dynamic response = await TrainerAPI.client.rpc(
+    'function_name',
+    params: <String, dynamic>{'param1': value1, 'param2': value2},
+  );
+
+  if (response == null) {
+    throw Exception('No data returned from RPC.');
+  }
+
+  return Model.fromJson(response as Map<String, dynamic>);
+}
+```
+
+### Appel RPC Retournant une Liste
+
+```dart
+static Future<List<Model>> fetchList() async {
+  final dynamic response = await TrainerAPI.client.rpc(
+    'get_list',
+    params: <String, dynamic>{'page': page},
+  );
+
+  if (response == null) {
+    return <Model>[];
+  }
+
+  final List<dynamic> jsonList = response as List<dynamic>;
+
+  return jsonList
+      .map((dynamic item) => Model.fromJson(item as Map<String, dynamic>))
+      .toList();
+}
+```
+
+### Appel RPC sans Retour
+
+```dart
+static Future<void> performAction() async {
+  try {
+    await TrainerAPI.client.rpc('action_name');
+  } catch (e) {
+    throw Exception('Failed to perform action: $e');
+  }
+}
+```
+
+## Code Generation
+
+Après avoir créé ou modifié des models avec annotations :
+
+```bash
+cd trainer_backend
+dart run build_runner build --delete-conflicting-outputs
+```
+
+Fichiers concernés :
+- `@JsonSerializable` : Génère `*.g.dart` pour fromJson/toJson
+- `@CopyWith` : Génère `*.g.dart` pour copyWith()
+
+## Énumérations
+
+```dart
+import 'package:json_annotation/json_annotation.dart';
+
+/// Représente le rôle d'un utilisateur dans l'application.
+@JsonEnum(fieldRename: FieldRename.snake)
+enum UserRole {
+  /// Utilisateur standard avec permissions de base.
+  standard,
+
+  /// Utilisateur premium avec fonctionnalités avancées.
+  premium,
+
+  /// Administrateur avec accès complet.
+  admin,
+}
+```
+
+## Convertisseurs Personnalisés
+
+```dart
+import 'package:json_annotation/json_annotation.dart';
+
+/// Convertisseur pour sérialiser/désérialiser des [Duration].
+class DurationConverter implements JsonConverter<Duration, int> {
+  const DurationConverter();
+
+  @override
+  Duration fromJson(int json) => Duration(seconds: json);
+
+  @override
+  int toJson(Duration object) => object.inSeconds;
+}
+
+// Utilisation dans un model
+class Exercise {
+  @DurationConverter()
+  final Duration restTime;
+}
+```
+
+## Example Application Updates
+
+**CRITICAL: When adding or modifying any feature in trainer_backend, you MUST update the example application in `example/`.**
+
+### Rules for Example Updates
+1. **New Service** → Add corresponding screen/test in `example/lib/`
+2. **New Model** → Show usage in example screens
+3. **Modified Service Method** → Update existing example usage
+4. **New Feature** → Create dedicated test screen demonstrating all capabilities
+
+### Example Structure
+```
+example/
+├── lib/
+│   ├── main.dart                    # Entry point with routing
+│   ├── auth_test.screen.dart        # Tests AuthService methods
+│   ├── programs_test.screen.dart    # Tests ProgramsService methods
+│   ├── sessions_test.screen.dart    # Tests SessionsService methods
+│   └── history_test.screen.dart     # Tests HistoryService methods
+```
+
+### Example Screen Pattern
+```dart
+// example/lib/feature_test.screen.dart
+import 'package:flutter/material.dart';
+import 'package:trainer_backend/trainer_backend.dart';
+
+/// Test screen demonstrating [FeatureService] capabilities.
+class FeatureTestScreen extends StatefulWidget {
+  const FeatureTestScreen({super.key});
+
+  @override
+  State<FeatureTestScreen> createState() => _FeatureTestScreenState();
+}
+
+class _FeatureTestScreenState extends State<FeatureTestScreen> {
+  Future<void> _testCreateFeature() async {
+    try {
+      final Feature feature = await FeatureService.create(
+        Feature.forCreation(name: 'Test'),
+      );
+      print('Created: ${feature.id}');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Feature Test')),
+        body: ListView(
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _testCreateFeature,
+              child: const Text('Test Create'),
+            ),
+            // Add more test buttons for other methods
+          ],
+        ),
+      );
+}
+```
+
+**Why this is important:**
+- Validates that the service works correctly
+- Provides clear usage examples for consumers
+- Documents edge cases and error handling
+- Makes testing easier during development
+
+## Bonnes Pratiques
+
+✅ **TOUJOURS** :
+- Documenter exhaustivement avec `///` (in English)
+- Utiliser des constructeurs privés pour les services
+- Passer par TrainerAPI pour accéder à Supabase
+- Créer des fichiers *.export.dart
+- Gérer les cas `null` dans les réponses
+- Spécifier les types d'exception dans la documentation
+- Utiliser `@JsonSerializable(fieldRename: FieldRename.snake)`
+- Ajouter des factories `forCreation` si nécessaire
+- Documenter les paramètres et retours
+- Expliquer le comportement des streams
+- **Mettre à jour l'application example/ après chaque modification**
+
+✅ **PRÉFÉRER** :
+- Méthodes statiques pour les services
+- RPCs pour les opérations complexes
+- Factories nommés pour clarifier l'intention
+- Types explicites partout
+
+❌ **NE JAMAIS** :
+- Accéder directement à `Supabase.instance.client`
+- Créer des instances de services
+- Oublier la documentation
+- Oublier les annotations pour la génération de code
+- Mettre de la logique métier dans les models
+- Oublier de gérer les cas null
+- Utiliser des imports relatifs
+- Oublier le `part` directive
+
+## Checklist pour Nouveau Service
+
+1. ✅ Créer la classe avec constructeur privé `const ServiceName._();`
+2. ✅ Ajouter le getter privé `static SupabaseClient get _client => TrainerAPI.client;`
+3. ✅ Documenter la classe avec `///` (in English)
+4. ✅ Créer les méthodes statiques nécessaires
+5. ✅ Documenter chaque méthode publique avec paramètres, retours et exceptions (in English)
+6. ✅ Ajouter l'export dans `services.export.dart`
+7. ✅ **Créer un écran de test dans `example/lib/feature_test.screen.dart`**
+8. ✅ **Ajouter la route dans `example/lib/main.dart`**
+
+## Checklist pour Nouveau Model
+
+1. ✅ Créer la classe avec `@JsonSerializable(fieldRename: FieldRename.snake)`
+2. ✅ Ajouter `@CopyWith()`
+3. ✅ Ajouter `part 'model_name.g.dart';`
+4. ✅ Documenter la classe et tous les champs avec `///` (in English)
+5. ✅ Créer les factories `fromJson` et éventuellement `forCreation`
+6. ✅ Créer la méthode `toJson()`
+7. ✅ Lancer `dart run build_runner build --delete-conflicting-outputs`
+8. ✅ Ajouter l'export dans `models.export.dart`
+9. ✅ **Montrer l'utilisation du model dans l'application example/**
+
+## Exemple Complet : Nouveau Service
+
+```dart
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/models/feature/feature.dart';
+
+/// Service pour gérer les opérations liées aux features.
+///
+/// Ce service fournit des méthodes statiques pour créer, lire, mettre à jour
+/// et supprimer des features dans la base de données Supabase.
+class FeaturesService {
+  /// Constructeur privé pour empêcher l'instanciation.
+  const FeaturesService._();
+
+  /// Getter privé pour accéder au client Supabase.
+  static SupabaseClient get _client => TrainerAPI.client;
+
+  /// Crée une nouvelle feature.
+  ///
+  /// Le paramètre [feature] contient les données de la feature à créer.
+  ///
+  /// Retourne un [Future] avec la [Feature] créée, incluant son ID.
+  /// Lance une [PostgrestException] si l'appel RPC échoue.
+  static Future<Feature> createFeature(Feature feature) async {
+    final Map<String, dynamic> featureJson = feature.toJson();
+
+    final dynamic response = await _client.rpc(
+      'create_feature',
+      params: <String, dynamic>{'feature_data': featureJson},
+    );
+
+    if (response == null) {
+      throw Exception('Failed to create feature: No data returned.');
+    }
+
+    return Feature.fromJson(response as Map<String, dynamic>);
+  }
+
+  /// Récupère une feature par son ID.
+  ///
+  /// - [id]: L'identifiant de la feature à récupérer.
+  ///
+  /// Retourne un [Future] avec la [Feature] correspondante.
+  /// Lance une [PostgrestException] si la feature n'existe pas.
+  static Future<Feature> getFeature({required int id}) async {
+    final dynamic response = await _client
+        .from('features')
+        .select()
+        .eq('id', id)
+        .single();
+
+    return Feature.fromJson(response as Map<String, dynamic>);
+  }
+
+  /// Supprime une feature.
+  ///
+  /// - [id]: L'identifiant de la feature à supprimer.
+  ///
+  /// Retourne un [Future] qui se complète une fois la suppression effectuée.
+  /// Lance une [PostgrestException] si la suppression échoue.
+  static Future<void> deleteFeature({required int id}) async {
+    try {
+      await _client.rpc(
+        'delete_feature',
+        params: <String, dynamic>{'feature_id': id},
+      );
+    } catch (e) {
+      throw Exception('Failed to delete feature: $e');
+    }
+  }
+}
+```
+
+Ce service est maintenant prêt à être utilisé par la couche application !
+

@@ -104,7 +104,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
           for (final Package package in offering.availablePackages) {
             log(
               name: 'RevenueCat',
-              'Package "${package.identifier}": ${package.storeProduct.title} - ${package.storeProduct.priceString}',
+              'Package "${package.identifier}": ${package.storeProduct.title} - ${package.storeProduct.priceString} (Entitlement: ${package.entitlementIdentifier ?? 'N/A'})',
             );
           }
         }
@@ -244,6 +244,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                     (Package package) => <String, dynamic>{
                       'identifier': package.identifier,
                       'packageType': package.packageType,
+                      'entitlementIdentifier': package.entitlementIdentifier,
                       'product': <String, dynamic>{
                         'identifier': package.storeProduct.identifier,
                         'title': package.storeProduct.title,
@@ -465,8 +466,20 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                       child: Card(
                         child: ListTile(
                           title: Text(package.storeProduct.title),
-                          subtitle: Text(
-                            '${package.storeProduct.priceString} - ${package.identifier}',
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text('${package.storeProduct.priceString} - ${package.identifier}'),
+                              if (package.entitlementIdentifier != null)
+                                Text(
+                                  'Entitlement: ${package.entitlementIdentifier}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.blue.shade700,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                            ],
                           ),
                           trailing: _isLoadingPurchase
                               ? const SizedBox(

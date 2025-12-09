@@ -20,6 +20,8 @@ abstract class _$CustomerInfoCWProxy {
 
   CustomerInfo originalAppUserId(String originalAppUserId);
 
+  CustomerInfo managementURL(String? managementURL);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `CustomerInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -33,6 +35,7 @@ abstract class _$CustomerInfoCWProxy {
     DateTime firstSeen,
     DateTime requestDate,
     String originalAppUserId,
+    String? managementURL,
   });
 }
 
@@ -67,6 +70,10 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
       this(originalAppUserId: originalAppUserId);
 
   @override
+  CustomerInfo managementURL(String? managementURL) =>
+      this(managementURL: managementURL);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `CustomerInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -81,6 +88,7 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
     Object? firstSeen = const $CopyWithPlaceholder(),
     Object? requestDate = const $CopyWithPlaceholder(),
     Object? originalAppUserId = const $CopyWithPlaceholder(),
+    Object? managementURL = const $CopyWithPlaceholder(),
   }) {
     return CustomerInfo(
       entitlements: entitlements == const $CopyWithPlaceholder()
@@ -108,6 +116,10 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
           ? _value.originalAppUserId
           // ignore: cast_nullable_to_non_nullable
           : originalAppUserId as String,
+      managementURL: managementURL == const $CopyWithPlaceholder()
+          ? _value.managementURL
+          // ignore: cast_nullable_to_non_nullable
+          : managementURL as String?,
     );
   }
 }

@@ -9,9 +9,11 @@ part of 'package.dart';
 abstract class _$PackageCWProxy {
   Package identifier(String identifier);
 
-  Package packageType(String packageType);
+  Package packageType(PackageType packageType);
 
   Package storeProduct(StoreProduct storeProduct);
+
+  Package entitlementIdentifier(String? entitlementIdentifier);
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Package(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -21,8 +23,9 @@ abstract class _$PackageCWProxy {
   /// ````
   Package call({
     String identifier,
-    String packageType,
+    PackageType packageType,
     StoreProduct storeProduct,
+    String? entitlementIdentifier,
   });
 }
 
@@ -36,11 +39,16 @@ class _$PackageCWProxyImpl implements _$PackageCWProxy {
   Package identifier(String identifier) => this(identifier: identifier);
 
   @override
-  Package packageType(String packageType) => this(packageType: packageType);
+  Package packageType(PackageType packageType) =>
+      this(packageType: packageType);
 
   @override
   Package storeProduct(StoreProduct storeProduct) =>
       this(storeProduct: storeProduct);
+
+  @override
+  Package entitlementIdentifier(String? entitlementIdentifier) =>
+      this(entitlementIdentifier: entitlementIdentifier);
 
   @override
 
@@ -54,6 +62,7 @@ class _$PackageCWProxyImpl implements _$PackageCWProxy {
     Object? identifier = const $CopyWithPlaceholder(),
     Object? packageType = const $CopyWithPlaceholder(),
     Object? storeProduct = const $CopyWithPlaceholder(),
+    Object? entitlementIdentifier = const $CopyWithPlaceholder(),
   }) {
     return Package(
       identifier: identifier == const $CopyWithPlaceholder()
@@ -63,11 +72,16 @@ class _$PackageCWProxyImpl implements _$PackageCWProxy {
       packageType: packageType == const $CopyWithPlaceholder()
           ? _value.packageType
           // ignore: cast_nullable_to_non_nullable
-          : packageType as String,
+          : packageType as PackageType,
       storeProduct: storeProduct == const $CopyWithPlaceholder()
           ? _value.storeProduct
           // ignore: cast_nullable_to_non_nullable
           : storeProduct as StoreProduct,
+      entitlementIdentifier:
+          entitlementIdentifier == const $CopyWithPlaceholder()
+              ? _value.entitlementIdentifier
+              // ignore: cast_nullable_to_non_nullable
+              : entitlementIdentifier as String?,
     );
   }
 }

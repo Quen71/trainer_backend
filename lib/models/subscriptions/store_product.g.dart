@@ -19,6 +19,8 @@ abstract class _$StoreProductCWProxy {
 
   StoreProduct currencyCode(String currencyCode);
 
+  StoreProduct introductoryPrice(IntroductoryPrice? introductoryPrice);
+
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `StoreProduct(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
   /// Usage
@@ -32,6 +34,7 @@ abstract class _$StoreProductCWProxy {
     double price,
     String priceString,
     String currencyCode,
+    IntroductoryPrice? introductoryPrice,
   });
 }
 
@@ -63,6 +66,10 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
       this(currencyCode: currencyCode);
 
   @override
+  StoreProduct introductoryPrice(IntroductoryPrice? introductoryPrice) =>
+      this(introductoryPrice: introductoryPrice);
+
+  @override
 
   /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `StoreProduct(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
   ///
@@ -77,6 +84,7 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
     Object? price = const $CopyWithPlaceholder(),
     Object? priceString = const $CopyWithPlaceholder(),
     Object? currencyCode = const $CopyWithPlaceholder(),
+    Object? introductoryPrice = const $CopyWithPlaceholder(),
   }) {
     return StoreProduct(
       identifier: identifier == const $CopyWithPlaceholder()
@@ -103,6 +111,10 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
           ? _value.currencyCode
           // ignore: cast_nullable_to_non_nullable
           : currencyCode as String,
+      introductoryPrice: introductoryPrice == const $CopyWithPlaceholder()
+          ? _value.introductoryPrice
+          // ignore: cast_nullable_to_non_nullable
+          : introductoryPrice as IntroductoryPrice?,
     );
   }
 }
