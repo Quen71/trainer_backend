@@ -2,14 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:trainer_backend/models/subscriptions/customer_info.dart';
-import 'package:trainer_backend/models/subscriptions/entitlement_info.dart';
-import 'package:trainer_backend/models/subscriptions/feature_access.dart';
-import 'package:trainer_backend/models/subscriptions/offering.dart';
-import 'package:trainer_backend/models/subscriptions/offerings.dart';
-import 'package:trainer_backend/models/subscriptions/package.dart';
-import 'package:trainer_backend/models/subscriptions/subscription_summary.dart';
-import 'package:trainer_backend/services/subscriptions.service.dart';
+import 'package:trainer_backend/trainer_backend.dart';
 
 /// Test screen for demonstrating subscription-related features.
 ///
@@ -133,7 +126,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
     setState(() {
       _isLoadingPurchase = true;
       _errorMessage = null;
-      _customerInfo = null;
+      _subscriptionSummary = null;
     });
 
     try {
@@ -142,7 +135,7 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
         'Attempting to purchase package: ${package.identifier} - ${package.storeProduct.title}',
       );
 
-      final CustomerInfo customerInfo = await SubscriptionsService.purchasePackage(
+      final SubscriptionSummary subscriptionSummary = await SubscriptionsService.purchasePackage(
         package: package,
       );
 
@@ -152,11 +145,11 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
       );
       log(
         name: 'RevenueCat',
-        'Customer Info after purchase: ${const JsonEncoder.withIndent('  ').convert(_customerInfoToJson(customerInfo))}',
+        'Subscription Summary after purchase: ${const JsonEncoder.withIndent('  ').convert(subscriptionSummary.toJson())}',
       );
 
       setState(() {
-        _customerInfo = customerInfo;
+        _subscriptionSummary = subscriptionSummary;
         _isLoadingPurchase = false;
       });
     } catch (e) {
