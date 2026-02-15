@@ -8,7 +8,6 @@ import 'package:trainer_backend/services/subscriptions.service.dart';
 
 import '../fixtures/test_accounts.dart';
 import '../fixtures/test_programs.dart';
-import '../helpers/cleanup_helper.dart';
 import 'test_setup.dart';
 
 /// Integration tests for Basic Plan subscription limits.
@@ -26,21 +25,7 @@ void main() {
 
   group('Basic Plan Limits', () {
     setUp(() async {
-      // Sign in with Basic account only if not already signed in with correct user
-      final User? currentUser = supabase.auth.currentUser;
-      if (currentUser?.email != TestAccounts.basicUser.email) {
-        await supabase.auth.signInWithPassword(
-          email: TestAccounts.basicUser.email,
-          password: TestAccounts.basicUser.password,
-        );
-        // Add delay to respect rate limits after authentication
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-      }
-
-      await CleanupHelper.cleanupUserData(supabase, supabase.auth.currentUser!.id);
-
-      // Add small delay between tests to avoid rate limiting
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await TestSetup.signInAndCleanup(supabase, TestAccounts.basicUser);
     });
 
     tearDown(() async {
@@ -54,7 +39,7 @@ void main() {
       // Arrange & Act: Create 5 programs (Basic plan limit)
       for (int i = 1; i <= 5; i++) {
         final Program program = TestPrograms.createSimpleProgram(
-          name: 'Programme Basic $i',
+          name: 'Basic Program $i',
         );
 
         final Program createdProgram = await ProgramsService.createFullProgram(program);
@@ -70,14 +55,14 @@ void main() {
       // Arrange: Create 5 programs (Basic plan limit)
       for (int i = 1; i <= 5; i++) {
         final Program program = TestPrograms.createSimpleProgram(
-          name: 'Programme $i',
+          name: 'Program $i',
         );
         await ProgramsService.createFullProgram(program);
       }
 
-      // Act & Assert: Should throw exception: Tenter le 6ème programme
+      // Act & Assert: Attempt to create 6th program (should throw)
       final Program program6 = TestPrograms.createSimpleProgram(
-        name: 'Programme 6',
+        name: 'Program 6',
       );
 
       expect(
@@ -93,7 +78,7 @@ void main() {
     test('should create 10 sessions per program', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 sessions',
+        name: 'Program with 10 sessions',
         sessionCount: 10,
       );
 
@@ -105,17 +90,17 @@ void main() {
     });
 
     test('should throw SUBSCRIPTION_LIMIT_SESSIONS on 11th session', () async {
-      // Arrange: Créer un programme avec 10 sessions
+      // Arrange: Create program with 10 sessions
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 sessions',
+        name: 'Program with 10 sessions',
         sessionCount: 10,
       );
 
       final Program createdProgram = await ProgramsService.createFullProgram(program);
 
-      // Act & Assert: Should throw exception: Tenter d'ajouter une 11ème session
+      // Act & Assert: Attempt to add 11th session (should throw)
       final ClassicSession newSession = TestPrograms.createClassicSession(
-        name: 'Session 11',
+        name: 'Extra Session',
         orderInProgram: 11,
       );
 
@@ -135,7 +120,7 @@ void main() {
     test('should create session with 15 exercises', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme avec 15 exercices',
+        name: 'Program with 15 exercises',
         exerciseCount: 15,
       );
 
@@ -149,7 +134,7 @@ void main() {
     test('should throw SUBSCRIPTION_LIMIT_EXERCISES with 16 exercises', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme avec 16 exercices',
+        name: 'Program with 16 exercises',
         exerciseCount: 16,
       );
 
@@ -168,7 +153,7 @@ void main() {
     test('should create AMRAP session with 15 exercises', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme AMRAP avec 15 exercices',
+        name: 'AMRAP program with 15 exercises',
         exerciseCount: 15,
         sessionType: 'amrap',
       );
@@ -183,7 +168,7 @@ void main() {
     test('should throw error with 16 exercises in AMRAP session', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme AMRAP avec 16 exercices',
+        name: 'AMRAP program with 16 exercises',
         exerciseCount: 16,
         sessionType: 'amrap',
       );
@@ -203,7 +188,7 @@ void main() {
     test('should create EMOM session with 15 exercises', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme EMOM avec 15 exercices',
+        name: 'EMOM program with 15 exercises',
         exerciseCount: 15,
         sessionType: 'emom',
       );
@@ -218,7 +203,7 @@ void main() {
     test('should throw error with 16 exercises in EMOM session', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme EMOM avec 16 exercices',
+        name: 'EMOM program with 16 exercises',
         exerciseCount: 16,
         sessionType: 'emom',
       );
@@ -238,7 +223,7 @@ void main() {
     test('should create HIIT session with 15 exercises', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme HIIT avec 15 exercices',
+        name: 'HIIT program with 15 exercises',
         exerciseCount: 15,
         sessionType: 'hiit',
       );
@@ -253,7 +238,7 @@ void main() {
     test('should throw error with 16 exercises in HIIT session', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme HIIT avec 16 exercices',
+        name: 'HIIT program with 16 exercises',
         exerciseCount: 16,
         sessionType: 'hiit',
       );
@@ -273,7 +258,7 @@ void main() {
     test('should create 10 AMRAP sessions', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 AMRAP sessions',
+        name: 'Program with 10 AMRAP sessions',
         sessionCount: 10,
         sessionType: 'amrap',
       );
@@ -289,7 +274,7 @@ void main() {
     test('should throw error on 11th AMRAP session', () async {
       // Arrange: Create 10 AMRAP sessions
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 AMRAP sessions',
+        name: 'Program with 10 AMRAP sessions',
         sessionCount: 10,
         sessionType: 'amrap',
       );
@@ -318,7 +303,7 @@ void main() {
     test('should create 10 EMOM sessions', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 EMOM sessions',
+        name: 'Program with 10 EMOM sessions',
         sessionCount: 10,
         sessionType: 'emom',
       );
@@ -334,7 +319,7 @@ void main() {
     test('should throw error on 11th EMOM session', () async {
       // Arrange: Create 10 EMOM sessions
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 EMOM sessions',
+        name: 'Program with 10 EMOM sessions',
         sessionCount: 10,
         sessionType: 'emom',
       );
@@ -363,7 +348,7 @@ void main() {
     test('should create 10 HIIT sessions', () async {
       // Arrange
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 HIIT sessions',
+        name: 'Program with 10 HIIT sessions',
         sessionCount: 10,
         sessionType: 'hiit',
       );
@@ -379,7 +364,7 @@ void main() {
     test('should throw error on 11th HIIT session', () async {
       // Arrange: Create 10 HIIT sessions
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 10 HIIT sessions',
+        name: 'Program with 10 HIIT sessions',
         sessionCount: 10,
         sessionType: 'hiit',
       );
@@ -409,7 +394,7 @@ void main() {
     test('should create 10 mixed sessions (Classic + AMRAP + EMOM + HIIT)', () async {
       // Arrange: Create a program with 10 sessions of mixed types
       final Program program = Program.forCreation(
-        name: 'Programme mixte avec 10 sessions',
+        name: 'Mixed program with 10 sessions',
         sessions: <Session>[
           TestPrograms.createClassicSession(name: 'Classic 1', orderInProgram: 0),
           TestPrograms.createAmrapSession(name: 'AMRAP 1', orderInProgram: 1),
@@ -434,7 +419,7 @@ void main() {
     test('should throw error on 11th session in mixed program', () async {
       // Arrange: Create a program with 10 mixed sessions
       final Program program = Program.forCreation(
-        name: 'Programme mixte avec 10 sessions',
+        name: 'Mixed program with 10 sessions',
         sessions: <Session>[
           TestPrograms.createClassicSession(name: 'Classic 1', orderInProgram: 0),
           TestPrograms.createAmrapSession(name: 'AMRAP 1', orderInProgram: 1),
@@ -453,7 +438,7 @@ void main() {
 
       // Act & Assert: Attempt to add 11th session
       final ClassicSession newSession = TestPrograms.createClassicSession(
-        name: 'Session 11',
+        name: 'Extra Session',
         orderInProgram: 11,
       );
 
@@ -473,7 +458,7 @@ void main() {
     test('should enforce 15 exercises limit on each session type in mixed program', () async {
       // Arrange: Create a mixed program where each session has 15 exercises
       final Program program = Program.forCreation(
-        name: 'Programme mixte avec limites exercices',
+        name: 'Mixed program with exercise limits',
         sessions: <Session>[
           TestPrograms.createClassicSession(name: 'Classic', orderInProgram: 0, exerciseCount: 15),
           TestPrograms.createAmrapSession(name: 'AMRAP', orderInProgram: 1, exerciseCount: 15),
@@ -494,7 +479,7 @@ void main() {
 
       // Verify that creating a session with 16 exercises fails
       final Program programWithTooManyExercises = Program.forCreation(
-        name: 'Programme avec trop d\'exercices',
+        name: 'Program with too many exercises',
         sessions: <Session>[
           TestPrograms.createAmrapSession(name: 'AMRAP', orderInProgram: 0, exerciseCount: 16),
         ],

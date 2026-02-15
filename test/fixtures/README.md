@@ -1,43 +1,43 @@
-# Fixtures de Test
+# Test Fixtures
 
-Ce dossier contient les fixtures utilisées pour créer des données de test standardisées.
+This directory contains fixtures used to create standardized test data.
 
 ## test_programs.dart
 
-La classe `TestPrograms` fournit des méthodes utilitaires pour créer des programmes d'entraînement correctement formatés pour les tests.
+The `TestPrograms` class provides utility methods to create properly formatted training programs for tests.
 
-### Méthodes Principales
+### Main Methods
 
-#### Programmes Simples
+#### Simple Programs
 
 ```dart
-// Crée un programme simple avec une seule session Classic
+// Create a simple program with a single Classic session
 final program = TestPrograms.createSimpleProgram(
-  name: 'Mon Programme',
+  name: 'My Program',
   sessionName: 'Session 1',
   style: SessionStyle.weights,
   exerciseCount: 5,
 );
 ```
 
-#### Programmes avec Plusieurs Sessions
+#### Programs with Multiple Sessions
 
 ```dart
-// Crée un programme avec N sessions du même type
+// Create a program with N sessions of the same type
 final program = TestPrograms.createProgramWithMultipleSessions(
-  name: 'Programme Complet',
+  name: 'Complete Program',
   sessionCount: 5,
   exercisesPerSession: 3,
   style: SessionStyle.weights,
 );
 ```
 
-#### Programmes avec Types de Sessions Mixtes
+#### Programs with Mixed Session Types
 
 ```dart
-// Crée un programme avec différents types de sessions (Classic, AMRAP, EMOM, HIIT)
+// Create a program with different session types (Classic, AMRAP, EMOM, HIIT)
 final program = TestPrograms.createMixedTypeProgram(
-  name: 'Programme Mixte',
+  name: 'Mixed Program',
   includeClassic: true,
   includeAmrap: true,
   includeEmom: true,
@@ -46,65 +46,76 @@ final program = TestPrograms.createMixedTypeProgram(
 );
 ```
 
-### Test des Limites
-
-#### Test de Limite de Sessions
+#### Mixed Sessions Program (for Premium volume tests)
 
 ```dart
-// Crée un programme avec exactement N sessions pour tester les limites
+// Create a program with N sessions cycling through Classic, AMRAP, EMOM, HIIT
+final program = TestPrograms.createMixedSessionsProgram(
+  name: 'Premium Mixed',
+  sessionCount: 50,
+  exercisesPerSession: 1,
+);
+```
+
+### Limit Testing
+
+#### Session Limit Test
+
+```dart
+// Create a program with exactly N sessions to test limits
 final program = TestPrograms.createProgramForSessionLimitTest(
-  name: 'Test Limites',
+  name: 'Limit Test',
   sessionCount: 10,
   sessionType: 'classic', // 'classic', 'amrap', 'emom', 'hiit'
   exercisesPerSession: 1,
 );
 ```
 
-#### Test de Limite d'Exercices
+#### Exercise Limit Test
 
 ```dart
-// Crée un programme avec exactement N exercices pour tester les limites
+// Create a program with exactly N exercises to test limits
 final program = TestPrograms.createProgramForExerciseLimitTest(
-  name: 'Test Limites Exercices',
+  name: 'Exercise Limit Test',
   exerciseCount: 15,
   sessionType: 'classic',
 );
 ```
 
-### Création de Sessions Individuelles
+### Individual Session Creation
 
-Vous pouvez également créer des sessions individuelles pour les ajouter à des programmes existants :
+Create individual sessions to add to existing programs:
 
 ```dart
-// Session Classic
+// Classic session
 final classicSession = TestPrograms.createClassicSession(
-  name: 'Ma Session',
+  name: 'My Session',
   orderInProgram: 1,
   style: SessionStyle.weights,
   exerciseCount: 5,
 );
 
-// Session AMRAP
+// AMRAP session
 final amrapSession = TestPrograms.createAmrapSession(
-  name: 'Session AMRAP',
+  name: 'AMRAP Session',
   orderInProgram: 2,
   duration: Duration(minutes: 20),
   style: SessionStyle.bodyweight,
   exerciseCount: 3,
 );
 
-// Session EMOM
+// EMOM session
 final emomSession = TestPrograms.createEmomSession(
-  name: 'Session EMOM',
+  name: 'EMOM Session',
   orderInProgram: 3,
   roundNumber: 10,
   style: SessionStyle.bodyweight,
   exerciseCount: 4,
 );
 
-// Session HIIT
+// HIIT session
 final hiitSession = TestPrograms.createHiitSession(
-  name: 'Session HIIT',
+  name: 'HIIT Session',
   orderInProgram: 4,
   roundNumber: 8,
   style: SessionStyle.bodyweight,
@@ -114,37 +125,45 @@ final hiitSession = TestPrograms.createHiitSession(
 
 ## test_accounts.dart
 
-Contient les comptes de test pour différents types d'abonnements.
+Provides test accounts for different subscription types. Credentials are loaded from environment variables (`.env` file) to avoid committing secrets to git.
 
-### Utilisation
+### Required environment variables (in `unit-test.env`)
+
+- `TEST_FREE_EMAIL` / `TEST_FREE_PASSWORD`
+- `TEST_BASIC_EMAIL` / `TEST_BASIC_PASSWORD`
+- `TEST_PREMIUM_EMAIL` / `TEST_PREMIUM_PASSWORD`
+
+See `test/README.md` for setup instructions.
+
+### Usage
 
 ```dart
-// Connexion avec un compte Basic
+// Sign in with Basic account (credentials from .env)
 await supabase.auth.signInWithPassword(
   email: TestAccounts.basicUser.email,
   password: TestAccounts.basicUser.password,
 );
 
-// Connexion avec un compte Premium
+// Sign in with Premium account
 await supabase.auth.signInWithPassword(
   email: TestAccounts.premiumUser.email,
   password: TestAccounts.premiumUser.password,
 );
 ```
 
-## Bonnes Pratiques
+## Best Practices
 
-1. **Utiliser les fixtures** : Toujours utiliser les fixtures pour créer des données de test plutôt que de créer manuellement des objets. Cela garantit la cohérence et facilite la maintenance.
+1. **Use fixtures**: Always use fixtures to create test data rather than manually constructing objects. This ensures consistency and simplifies maintenance.
 
-2. **Nommer explicitement** : Donnez des noms explicites à vos programmes de test pour faciliter le débogage.
+2. **Explicit naming**: Give descriptive names to your test programs for easier debugging.
 
-3. **Paramètres configurables** : Utilisez les paramètres optionnels pour personnaliser les fixtures selon vos besoins de test.
+3. **Configurable parameters**: Use optional parameters to customize fixtures based on your test needs.
 
-4. **Tests de limites** : Utilisez les méthodes dédiées (`createProgramForSessionLimitTest`, `createProgramForExerciseLimitTest`) pour tester les limites d'abonnement.
+4. **Limit tests**: Use dedicated methods (`createProgramForSessionLimitTest`, `createProgramForExerciseLimitTest`) for subscription limit testing.
 
-## Exemples d'Utilisation
+## Usage Examples
 
-### Test de Création de Programme
+### Program Creation Test
 
 ```dart
 test('should create a program successfully', () async {
@@ -156,7 +175,7 @@ test('should create a program successfully', () async {
 });
 ```
 
-### Test de Limite de Sessions
+### Session Limit Test
 
 ```dart
 test('should enforce session limit', () async {
@@ -167,7 +186,7 @@ test('should enforce session limit', () async {
   
   await ProgramsService.createFullProgram(program);
   
-  // Tenter d'ajouter une session supplémentaire devrait échouer
+  // Attempting to add an extra session should fail
   final newSession = TestPrograms.createClassicSession(
     name: 'Extra Session',
     orderInProgram: 11,
@@ -183,12 +202,12 @@ test('should enforce session limit', () async {
 });
 ```
 
-### Test de Programme Mixte
+### Mixed Program Test
 
 ```dart
 test('should create mixed type program', () async {
   final program = TestPrograms.createMixedTypeProgram(
-    name: 'Programme Complet',
+    name: 'Complete Program',
     exercisesPerSession: 3,
   );
   

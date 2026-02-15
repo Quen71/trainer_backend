@@ -1,60 +1,63 @@
-# Tests d'Intégration - Limites d'Abonnement
+# Integration Tests - Subscription Limits
 
-Ce dossier contient les tests d'intégration pour le système de limites d'abonnement Supabase.
+This directory contains integration tests for the Supabase subscription limits system.
 
 ## Structure
 
 ```
 test/
 ├── fixtures/
-│   └── test_accounts.dart          # Comptes de test (Free/Basic/Premium)
+│   ├── test_accounts.dart          # Test accounts (Free/Basic/Premium)
+│   ├── test_programs.dart          # Test program fixtures
+│   └── README.md                   # Fixtures documentation
 ├── helpers/
-│   └── cleanup_helper.dart          # Helper pour nettoyer les données de test
+│   └── cleanup_helper.dart         # Helper for cleaning up test data
 ├── integration/
-│   ├── test_setup.dart              # Setup commun pour les tests
-│   ├── free_plan_limits_test.dart   # Tests des limites Free Plan
-│   ├── basic_plan_limits_test.dart  # Tests des limites Basic Plan
-│   ├── premium_plan_limits_test.dart # Tests des limites Premium Plan
-│   ├── usage_counters_test.dart     # Tests des compteurs d'utilisation
-│   └── limit_events_test.dart       # Tests des événements de limite
-└── README.md                        # Ce fichier
+│   ├── test_setup.dart             # Common setup for tests
+│   ├── free_plan_limits_test.dart  # Free Plan limit tests
+│   ├── basic_plan_limits_test.dart # Basic Plan limit tests
+│   ├── premium_plan_limits_test.dart # Premium Plan limit tests
+│   └── usage_counters_test.dart    # Usage counter tests
+└── README.md                       # This file
 ```
 
-## Prérequis
+## Prerequisites
 
-1. **Projet Supabase de test séparé** (recommandé)
-   - Créez un projet Supabase dédié aux tests
-   - Appliquez toutes les migrations nécessaires
-   - Configurez les entitlements (Free, Basic, Premium)
+1. **Separate Supabase test project** (recommended)
+   - Create a dedicated Supabase project for tests
+   - Apply all necessary migrations
+   - Configure entitlements (Free, Basic, Premium)
 
-2. **Configuration Supabase**
-   - Initialisez Supabase dans votre application avec les credentials de test
-   - Les credentials doivent être dans `.env.test` (gitignored)
+2. **Environment configuration**
+   - Create a `unit-test.env` file (gitignored) with Supabase credentials and test account credentials
 
-## Setup des Comptes de Test
+## Test Account Setup
 
-### 1. Créer les Comptes Utilisateurs
+### 1. Create User Accounts
 
-Créez les comptes suivants dans Supabase Auth :
+Create accounts in Supabase Auth using the **same emails and passwords** you configure in `unit-test.env`. Credentials are never committed to git.
 
-| Email | Mot de passe | Plan attendu |
-|-------|--------------|--------------|
-| `test-free@trainer.app` | `Trainer2025@` | Free |
-| `test-basic@trainer.app` | `Trainer2025@` | Basic |
-| `test.premium@trainer.test` | `TestPremium123!` | Premium |
+| Plan | unit-test.env variable | Expected plan |
+|------|--------------|---------------|
+| Free | `TEST_FREE_EMAIL` / `TEST_FREE_PASSWORD` | Free |
+| Basic | `TEST_BASIC_EMAIL` / `TEST_BASIC_PASSWORD` | Basic |
+| Premium | `TEST_PREMIUM_EMAIL` / `TEST_PREMIUM_PASSWORD` | Premium |
 
-### 2. Créer les Abonnements dans la Base de Données
+### 2. Create Subscriptions in the Database
 
-#### Compte Free (`test-free@trainer.app`)
-- Pas besoin d'abonnement explicite
-- Le système doit fallback automatiquement vers Free
+#### Free account
+Replace `YOUR_FREE_EMAIL` with the value of `TEST_FREE_EMAIL` from your `unit-test.env`.
+- No explicit subscription required
+- System falls back to Free automatically
 
-#### Compte Basic (`test-basic@trainer.app`)
+#### Basic account
+Replace `YOUR_BASIC_EMAIL` with the value of `TEST_BASIC_EMAIL` from your `unit-test.env`.
+
 ```sql
--- Récupérer l'UUID de l'utilisateur
-SELECT id FROM auth.users WHERE email = 'test.basic@trainer.test';
+-- Get user UUID (use your TEST_BASIC_EMAIL)
+SELECT id FROM auth.users WHERE email = 'YOUR_BASIC_EMAIL';
 
--- Créer l'abonnement Basic (remplacer USER_ID)
+-- Create Basic subscription (replace USER_ID)
 INSERT INTO subscriptions (user_id, entitlement_key, status, started_at, expires_at, is_trial)
 VALUES (
   'USER_ID',
@@ -66,12 +69,14 @@ VALUES (
 );
 ```
 
-#### Compte Premium (`test.premium@trainer.test`)
-```sql
--- Récupérer l'UUID de l'utilisateur
-SELECT id FROM auth.users WHERE email = 'test.premium@trainer.test';
+#### Premium account
+Replace `YOUR_PREMIUM_EMAIL` with the value of `TEST_PREMIUM_EMAIL` from your `unit-test.env`.
 
--- Créer l'abonnement Premium (remplacer USER_ID)
+```sql
+-- Get user UUID (use your TEST_PREMIUM_EMAIL)
+SELECT id FROM auth.users WHERE email = 'YOUR_PREMIUM_EMAIL';
+
+-- Create Premium subscription (replace USER_ID)
 INSERT INTO subscriptions (user_id, entitlement_key, status, started_at, expires_at, is_trial)
 VALUES (
   'USER_ID',
@@ -83,30 +88,28 @@ VALUES (
 );
 ```
 
-### 3. Vérifier les Entitlements
+### 3. Verify Entitlements
 
-Assurez-vous que les entitlements suivants existent dans la table `entitlements` :
+Ensure the following entitlements exist in the `entitlements` table:
 
 ```sql
 SELECT * FROM entitlements WHERE entitlement_key IN ('Free', 'Basic', 'Premium');
 ```
 
-Les limites attendues sont :
+Expected limits:
 
 | Entitlement | max_programs | max_sessions_per_program | max_exercises_per_session | history_days |
 |-------------|--------------|--------------------------|---------------------------|--------------|
 | Free | 1 | 2 | 6 | 7 |
 | Basic | 5 | 10 | 15 | 30 |
-| Premium | NULL (illimité) | 30 | 20 | 365 |
+| Premium | NULL (unlimited) | 30 | 20 | 365 |
 
-### 4. Script SQL Complet
+### 4. Complete SQL Script
 
-Voici un script SQL complet pour créer tous les comptes et abonnements :
+Run the following SQL script after creating users via Supabase Auth:
 
 ```sql
--- Note: Exécutez ce script dans l'ordre après avoir créé les utilisateurs via Supabase Auth
-
--- Fonction helper pour créer un abonnement
+-- Helper function to create a subscription
 CREATE OR REPLACE FUNCTION create_test_subscription(
   p_email TEXT,
   p_entitlement_key TEXT,
@@ -133,101 +136,122 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- Créer les abonnements
-SELECT create_test_subscription('test-basic@trainer.app', 'Basic', 'active', NOW() + INTERVAL '30 days');
-SELECT create_test_subscription('test.premium@trainer.test', 'Premium', 'active', NOW() + INTERVAL '30 days');
+-- Create subscriptions (use emails from your unit-test.env)
+SELECT create_test_subscription('YOUR_BASIC_EMAIL', 'Basic', 'active', NOW() + INTERVAL '30 days');
+SELECT create_test_subscription('YOUR_PREMIUM_EMAIL', 'Premium', 'active', NOW() + INTERVAL '30 days');
 
--- Nettoyer la fonction helper
+-- Clean up helper function
 DROP FUNCTION create_test_subscription(TEXT, TEXT, TEXT, TIMESTAMPTZ);
 ```
 
-## Exécution des Tests
+## Running Tests
 
-### Configuration de l'Environnement
+### Environment Configuration
 
-Créez un fichier `.env.test` à la racine du projet (gitignored) :
+Create a `unit-test.env` file at the project root with all required variables:
 
-```env
-SUPABASE_URL=https://your-test-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-```
+Required variables:
 
-### Exécuter les Tests
+| Variable | Description |
+|---------|-------------|
+| `TEST_BASE_URL` | Supabase project URL (test environment) |
+| `TEST_ANON_KEY` | Supabase anon key (test environment) |
+| `TEST_FREE_EMAIL` | Free plan test account email |
+| `TEST_FREE_PASSWORD` | Free plan test account password |
+| `TEST_BASIC_EMAIL` | Basic plan test account email |
+| `TEST_BASIC_PASSWORD` | Basic plan test account password |
+| `TEST_PREMIUM_EMAIL` | Premium plan test account email |
+| `TEST_PREMIUM_PASSWORD` | Premium plan test account password |
+
+The `unit-test.env` file is gitignored and must never be committed.
+
+### Execute Tests
 
 ```bash
-# Tous les tests d'intégration
+# All integration tests
 flutter test test/integration/
 
-# Tests d'un plan spécifique
+# Specific plan tests
 flutter test test/integration/free_plan_limits_test.dart
 flutter test test/integration/basic_plan_limits_test.dart
 flutter test test/integration/premium_plan_limits_test.dart
 
-# Tests des compteurs et événements
+# Usage counters
 flutter test test/integration/usage_counters_test.dart
-flutter test test/integration/limit_events_test.dart
 
-# Un test spécifique
+# Single test
 flutter test test/integration/free_plan_limits_test.dart --name "should create 1 program successfully"
 ```
 
-## Structure des Tests
+## Test Structure
 
-Les tests sont organisés en fichiers séparés par scénario :
+Tests are organized in separate files by scenario:
 
-1. **free_plan_limits_test.dart** : Tests des limites du plan Free (1 programme, 2 sessions, 6 exercices)
-2. **basic_plan_limits_test.dart** : Tests des limites du plan Basic (5 programmes, 10 sessions, 15 exercices)
-3. **premium_plan_limits_test.dart** : Tests des limites du plan Premium (illimité programmes, 30 sessions, 20 exercices)
-4. **usage_counters_test.dart** : Tests des compteurs d'utilisation
-5. **limit_events_test.dart** : Tests du logging des événements de limite
+1. **free_plan_limits_test.dart**: Free plan limits (1 program, 2 sessions, 6 exercises)
+2. **basic_plan_limits_test.dart**: Basic plan limits (5 programs, 10 sessions, 15 exercises)
+3. **premium_plan_limits_test.dart**: Premium plan limits (unlimited programs, 30 sessions, 20 exercises)
+4. **usage_counters_test.dart**: Usage counters
 
-Chaque fichier utilise le setup commun défini dans `test_setup.dart` pour éviter la duplication de code.
+Each file uses the common setup defined in `test_setup.dart` to avoid code duplication.
 
-## Nettoyage
+## Test Fixtures
 
-Chaque test nettoie automatiquement ses données après exécution via `CleanupHelper`. 
+Test fixtures provide reusable test data and utilities:
 
-Si vous devez nettoyer manuellement :
+- **test_accounts.dart**: Manages test user accounts (Free, Basic, Premium) with credentials from `unit-test.env`
+- **test_programs.dart**: Factory methods for creating standardized test programs with various configurations (simple programs, multiple sessions, mixed session types, limit tests, etc.)
+
+See `fixtures/README.md` for detailed documentation on using these fixtures in your tests.
+
+## Cleanup
+
+Each test automatically cleans up its data after execution via `CleanupHelper`.
+
+For manual cleanup:
 
 ```sql
--- Nettoyer les données d'un utilisateur spécifique
+-- Clean data for a specific user
 DELETE FROM programs WHERE user_id = 'USER_ID';
 DELETE FROM subscription_limit_events WHERE user_id = 'USER_ID';
 ```
 
-## Dépannage
+## Troubleshooting
 
-### Erreur : "User not found"
-- Vérifiez que les comptes ont été créés dans Supabase Auth
-- Vérifiez les emails dans `test_accounts.dart`
+### Error: "User not found"
+- Verify accounts were created in Supabase Auth
+- Verify `TEST_*_EMAIL` values in `unit-test.env` match the created accounts
 
-### Erreur : "Subscription not found"
-- Vérifiez que les abonnements ont été créés dans la table `subscriptions`
-- Vérifiez que les `entitlement_key` correspondent (Free, Basic, Premium)
+### Error: "Missing TEST_* in unit-test.env"
+- Ensure `unit-test.env` exists at the project root with all required variables
+- Ensure all `TEST_*` variables are defined (see Environment Configuration above)
 
-### Erreur : "Entitlement not found"
-- Vérifiez que les entitlements existent dans la table `entitlements`
-- Vérifiez que les limites sont correctement configurées
+### Error: "Subscription not found"
+- Verify subscriptions were created in the `subscriptions` table
+- Ensure `entitlement_key` values match (Free, Basic, Premium)
 
-### Tests qui échouent de manière inattendue
-- Vérifiez que les migrations Supabase sont à jour
-- Vérifiez que les fonctions RPC sont correctement déployées
-- Vérifiez les logs Supabase pour les erreurs de base de données
+### Error: "Entitlement not found"
+- Verify entitlements exist in the `entitlements` table
+- Check that limits are correctly configured
 
-## Codes d'Erreur PostgreSQL
+### Unexpected test failures
+- Verify Supabase migrations are up to date
+- Check that RPC functions are correctly deployed
+- Check Supabase logs for database errors
 
-Les tests vérifient les codes d'erreur suivants dans les messages PostgreSQL :
+## PostgreSQL Error Codes
 
-- `LIMIT_EXCEEDED:MAX_PROGRAMS:X/Y` - Limite de programmes atteinte
-- `LIMIT_EXCEEDED:MAX_SESSIONS:X/Y` - Limite de sessions par programme atteinte
-- `LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION:X/Y` - Limite d'exercices par séance atteinte
+Tests verify the following error codes in PostgreSQL messages:
 
-Ces codes sont dans le message de `PostgrestException`, pas dans un champ séparé.
+- `LIMIT_EXCEEDED:MAX_PROGRAMS:X/Y` - Program limit reached
+- `LIMIT_EXCEEDED:MAX_SESSIONS:X/Y` - Sessions per program limit reached
+- `LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION:X/Y` - Exercises per session limit reached
 
-## Notes Importantes
+These codes are in the `PostgrestException` message, not in a separate field.
 
-- ⚠️ **Ne jamais utiliser ces comptes en production**
-- ⚠️ **Utiliser un projet Supabase séparé pour les tests**
-- ⚠️ **Les tests modifient la base de données - ne pas exécuter sur la prod**
-- ✅ **Les tests sont idempotents grâce au cleanup automatique**
-- ✅ **Chaque test est indépendant et peut être exécuté isolément**
+## Important Notes
+
+- ⚠️ **Never use these accounts in production**
+- ⚠️ **Use a separate Supabase project for tests**
+- ⚠️ **Tests modify the database - do not run on production**
+- ✅ **Tests are idempotent thanks to automatic cleanup**
+- ✅ **Each test is independent and can be run in isolation**

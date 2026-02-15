@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Helper class for cleaning up test data after each test.
@@ -25,9 +26,8 @@ class CleanupHelper {
       // Delete monitoring events
       await supabase.from('subscription_limit_events').delete().eq('user_id', userId);
     } catch (e) {
-      // Ignore cleanup errors (may be called even if no data exists)
-      // Log for debug if necessary
-      print('Warning: Cleanup error for user $userId: $e');
+      // Ignore cleanup errors (may be called even if no data exists).
+      debugPrint('Warning: Cleanup error for user $userId: $e');
     }
   }
 

@@ -8,7 +8,6 @@ import 'package:trainer_backend/services/subscriptions.service.dart';
 
 import '../fixtures/test_accounts.dart';
 import '../fixtures/test_programs.dart';
-import '../helpers/cleanup_helper.dart';
 import 'test_setup.dart';
 
 /// Integration tests for Free Plan subscription limits.
@@ -26,21 +25,7 @@ void main() {
 
   group('Free Plan Limits', () {
     setUp(() async {
-      // Sign in with Free account only if not already signed in with correct user
-      final User? currentUser = supabase.auth.currentUser;
-      if (currentUser?.email != TestAccounts.freeUser.email) {
-        await supabase.auth.signInWithPassword(
-          email: TestAccounts.freeUser.email,
-          password: TestAccounts.freeUser.password,
-        );
-        // Add delay to respect rate limits after authentication
-        await Future<void>.delayed(const Duration(milliseconds: 500));
-      }
-
-      await CleanupHelper.cleanupUserData(supabase, supabase.auth.currentUser!.id);
-
-      // Add small delay between tests to avoid rate limiting
-      await Future<void>.delayed(const Duration(milliseconds: 200));
+      await TestSetup.signInAndCleanup(supabase, TestAccounts.freeUser);
     });
 
     tearDown(() async {
@@ -53,7 +38,7 @@ void main() {
     test('should create 1 program successfully', () async {
       // Arrange
       final Program program = TestPrograms.createSimpleProgram(
-        name: 'Programme Test Free',
+        name: 'Free Test Program',
       );
 
       // Act
@@ -61,7 +46,7 @@ void main() {
 
       // Assert
       expect(createdProgram.id, greaterThan(0));
-      expect(createdProgram.name, equals('Programme Test Free'));
+      expect(createdProgram.name, equals('Free Test Program'));
       expect(createdProgram.sessions.length, equals(1));
 
       // Verify the counter
@@ -72,14 +57,14 @@ void main() {
     test('should throw SUBSCRIPTION_LIMIT_PROGRAMS on 2nd program', () async {
       // Arrange: Create the first program
       final Program program1 = TestPrograms.createSimpleProgram(
-        name: 'Programme 1',
+        name: 'Program 1',
       );
 
       await ProgramsService.createFullProgram(program1);
 
       // Act & Assert: Should throw exception: Attempt to create a 2nd program
       final Program program2 = TestPrograms.createSimpleProgram(
-        name: 'Programme 2',
+        name: 'Program 2',
       );
 
       expect(
@@ -95,7 +80,7 @@ void main() {
     test('should create 2 sessions per program', () async {
       // Arrange: Create a program with 2 sessions (Free plan limit)
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 2 sessions',
+        name: 'Program with 2 sessions',
         sessionCount: 2,
       );
 
@@ -109,7 +94,7 @@ void main() {
     test('should throw SUBSCRIPTION_LIMIT_SESSIONS on 3rd session', () async {
       // Arrange: Create a program with 2 sessions (Free plan limit)
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 2 sessions',
+        name: 'Program with 2 sessions',
         sessionCount: 2,
       );
 
@@ -137,7 +122,7 @@ void main() {
     test('should create session with 6 exercises', () async {
       // Arrange: Create a session with 6 exercises (Free plan limit)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme avec 6 exercices',
+        name: 'Program with 6 exercises',
         exerciseCount: 6,
       );
 
@@ -151,7 +136,7 @@ void main() {
     test('should throw SUBSCRIPTION_LIMIT_EXERCISES with 7 exercises', () async {
       // Arrange: Create a session with 7 exercises (exceeds Free plan limit of 6)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme avec 7 exercices',
+        name: 'Program with 7 exercises',
         exerciseCount: 7,
       );
 
@@ -170,7 +155,7 @@ void main() {
     test('should create AMRAP session with 6 exercises', () async {
       // Arrange: Create an AMRAP session with 6 exercises (Free plan limit)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme AMRAP avec 6 exercices',
+        name: 'AMRAP program with 6 exercises',
         exerciseCount: 6,
         sessionType: 'amrap',
       );
@@ -185,7 +170,7 @@ void main() {
     test('should throw error with 7 exercises in AMRAP session', () async {
       // Arrange: Create an AMRAP session with 7 exercises (exceeds Free plan limit of 6)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme AMRAP avec 7 exercices',
+        name: 'AMRAP program with 7 exercises',
         exerciseCount: 7,
         sessionType: 'amrap',
       );
@@ -205,7 +190,7 @@ void main() {
     test('should create EMOM session with 6 exercises', () async {
       // Arrange: Create an EMOM session with 6 exercises (Free plan limit)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme EMOM avec 6 exercices',
+        name: 'EMOM program with 6 exercises',
         exerciseCount: 6,
         sessionType: 'emom',
       );
@@ -220,7 +205,7 @@ void main() {
     test('should throw error with 7 exercises in EMOM session', () async {
       // Arrange: Create an EMOM session with 7 exercises (exceeds Free plan limit of 6)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme EMOM avec 7 exercices',
+        name: 'EMOM program with 7 exercises',
         exerciseCount: 7,
         sessionType: 'emom',
       );
@@ -240,7 +225,7 @@ void main() {
     test('should create HIIT session with 6 exercises', () async {
       // Arrange: Create a HIIT session with 6 exercises (Free plan limit)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme HIIT avec 6 exercices',
+        name: 'HIIT program with 6 exercises',
         exerciseCount: 6,
         sessionType: 'hiit',
       );
@@ -255,7 +240,7 @@ void main() {
     test('should throw error with 7 exercises in HIIT session', () async {
       // Arrange: Create a HIIT session with 7 exercises (exceeds Free plan limit of 6)
       final Program program = TestPrograms.createProgramForExerciseLimitTest(
-        name: 'Programme HIIT avec 7 exercices',
+        name: 'HIIT program with 7 exercises',
         exerciseCount: 7,
         sessionType: 'hiit',
       );
@@ -275,7 +260,7 @@ void main() {
     test('should create 2 AMRAP sessions', () async {
       // Arrange: Create 2 AMRAP sessions (Free plan limit)
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 2 AMRAP sessions',
+        name: 'Program with 2 AMRAP sessions',
         sessionCount: 2,
         sessionType: 'amrap',
       );
@@ -291,7 +276,7 @@ void main() {
     test('should throw error on 3rd AMRAP session', () async {
       // Arrange: Create 2 AMRAP sessions
       final Program program = TestPrograms.createProgramForSessionLimitTest(
-        name: 'Programme avec 2 AMRAP sessions',
+        name: 'Program with 2 AMRAP sessions',
         sessionCount: 2,
         sessionType: 'amrap',
       );
@@ -321,7 +306,7 @@ void main() {
     test('should create 1 Classic + 1 EMOM session (mixed)', () async {
       // Arrange: Create a mixed program with 1 Classic and 1 EMOM session
       final Program program = Program.forCreation(
-        name: 'Programme mixte Classic + EMOM',
+        name: 'Mixed Classic + EMOM program',
         sessions: <Session>[
           TestPrograms.createClassicSession(name: 'Classic 1', orderInProgram: 0),
           TestPrograms.createEmomSession(name: 'EMOM 1', orderInProgram: 1),
@@ -340,7 +325,7 @@ void main() {
     test('should throw error on 3rd session in mixed program', () async {
       // Arrange: Create a mixed program with 2 sessions
       final Program program = Program.forCreation(
-        name: 'Programme mixte avec 2 sessions',
+        name: 'Mixed program with 2 sessions',
         sessions: <Session>[
           TestPrograms.createClassicSession(name: 'Classic 1', orderInProgram: 0),
           TestPrograms.createHiitSession(name: 'HIIT 1', orderInProgram: 1),

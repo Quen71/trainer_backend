@@ -1,33 +1,54 @@
+import 'dart:io';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 /// Test account fixtures for integration tests.
 ///
+/// Credentials are loaded from environment variables (unit-test.env file).
 /// These accounts must be created manually in Supabase before running tests.
 /// See test/README.md for setup instructions.
+///
+/// IMPORTANT: TestSetup.initializeSupabase() must be called before accessing
+/// these accounts to ensure unit-test.env is loaded into dotenv.
 class TestAccounts {
   TestAccounts._();
 
+  static String _env(String key) {
+    // Reads from dotenv.env which is populated from unit-test.env
+    // via TestSetup.initializeSupabase()
+    final String value = dotenv.env[key] ?? Platform.environment[key] ?? '';
+    if (value.isEmpty) {
+      throw Exception(
+        'Missing $key. Ensure TestSetup.initializeSupabase() was called to load unit-test.env. '
+        'If the file is missing, create unit-test.env at the project root. See test/README.md.',
+      );
+    }
+    return value;
+  }
+
   /// User account with Free subscription (limits: 1 program, 2 sessions, 6 exercises).
-  static const TestAccount freeUser = TestAccount(
-    email: 'test-free@trainer.app',
-    password: 'Trainer2025@',
-    userId: '', // Will be filled after sign-in
-    plan: 'Free',
-  );
+  static TestAccount get freeUser => TestAccount(
+        email: _env('TEST_FREE_EMAIL'),
+        password: _env('TEST_FREE_PASSWORD'),
+        userId: '',
+        plan: 'Free',
+      );
 
   /// User account with Basic subscription (limits: 5 programs, 10 sessions, 15 exercises).
-  static const TestAccount basicUser = TestAccount(
-    email: 'test-basic@trainer.app',
-    password: 'Trainer2025@',
-    userId: '',
-    plan: 'Basic',
-  );
+  static TestAccount get basicUser => TestAccount(
+        email: _env('TEST_BASIC_EMAIL'),
+        password: _env('TEST_BASIC_PASSWORD'),
+        userId: '',
+        plan: 'Basic',
+      );
 
   /// User account with Premium subscription (limits: unlimited programs, 30 sessions, 20 exercises).
-  static const TestAccount premiumUser = TestAccount(
-    email: 'test-premium@trainer.app',
-    password: 'Trainer2025@',
-    userId: '',
-    plan: 'Premium',
-  );
+  static TestAccount get premiumUser => TestAccount(
+        email: _env('TEST_PREMIUM_EMAIL'),
+        password: _env('TEST_PREMIUM_PASSWORD'),
+        userId: '',
+        plan: 'Premium',
+      );
 }
 
 /// Represents a test account with its credentials and metadata.

@@ -15,12 +15,12 @@ class TestPrograms {
   /// Creates a basic program with a single classic session containing one exercise.
   ///
   /// **Parameters:**
-  /// - [name]: The name of the program. Defaults to 'Programme Test'.
+  /// - [name]: The name of the program. Defaults to 'Test Program'.
   /// - [sessionName]: The name of the session. Defaults to 'Session 1'.
   /// - [style]: The session style. Defaults to [SessionStyle.weights].
   /// - [exerciseCount]: The number of exercises in the session. Defaults to 1.
   static Program createSimpleProgram({
-    String name = 'Programme Test',
+    String name = 'Test Program',
     String sessionName = 'Session 1',
     SessionStyle style = SessionStyle.weights,
     int exerciseCount = 1,
@@ -85,7 +85,7 @@ class TestPrograms {
   /// - [includeHiit]: Whether to include a HIIT session. Defaults to true.
   /// - [exercisesPerSession]: The number of exercises per session. Defaults to 2.
   static Program createMixedTypeProgram({
-    String name = 'Programme Mixte',
+    String name = 'Mixed Program',
     bool includeClassic = true,
     bool includeAmrap = true,
     bool includeEmom = true,
@@ -172,6 +172,37 @@ class TestPrograms {
     );
   }
 
+  /// Creates a program with mixed session types (Classic, AMRAP, EMOM, HIIT) cycling.
+  ///
+  /// Useful for testing Premium volume limits with diverse session types.
+  ///
+  /// **Parameters:**
+  /// - [name]: The name of the program.
+  /// - [sessionCount]: The exact number of sessions to create.
+  /// - [exercisesPerSession]: The number of exercises per session. Defaults to 1.
+  static Program createMixedSessionsProgram({
+    required String name,
+    required int sessionCount,
+    int exercisesPerSession = 1,
+  }) {
+    const List<String> sessionTypes = <String>['classic', 'amrap', 'emom', 'hiit'];
+    return Program.forCreation(
+      name: name,
+      sessions: List<Session>.generate(
+        sessionCount,
+        (int index) {
+          final String sessionType = sessionTypes[index % 4];
+          return _createSessionByType(
+            sessionType: sessionType,
+            orderInProgram: index,
+            name: 'Session ${index + 1}',
+            exerciseCount: exercisesPerSession,
+          );
+        },
+      ),
+    );
+  }
+
   /// Creates a program designed to test session limits.
   ///
   /// **Parameters:**
@@ -217,7 +248,7 @@ class TestPrograms {
         _createSessionByType(
           sessionType: sessionType,
           orderInProgram: 0,
-          name: 'Session Test',
+          name: 'Test Session',
           exerciseCount: exerciseCount,
         ),
       ],
