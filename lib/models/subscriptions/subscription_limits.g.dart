@@ -15,7 +15,7 @@ abstract class _$SubscriptionLimitsCWProxy {
 
   SubscriptionLimits historyDays(int? historyDays);
 
-  SubscriptionLimits maxExercises(int? maxExercises);
+  SubscriptionLimits maxExercisesPerSession(int? maxExercisesPerSession);
 
   SubscriptionLimits canExportData(bool canExportData);
 
@@ -34,7 +34,7 @@ abstract class _$SubscriptionLimitsCWProxy {
     int? maxPrograms,
     int? maxSessionsPerProgram,
     int? historyDays,
-    int? maxExercises,
+    int? maxExercisesPerSession,
     bool canExportData,
     bool canSharePrograms,
     Map<String, dynamic> metadata,
@@ -64,8 +64,8 @@ class _$SubscriptionLimitsCWProxyImpl implements _$SubscriptionLimitsCWProxy {
       this(historyDays: historyDays);
 
   @override
-  SubscriptionLimits maxExercises(int? maxExercises) =>
-      this(maxExercises: maxExercises);
+  SubscriptionLimits maxExercisesPerSession(int? maxExercisesPerSession) =>
+      this(maxExercisesPerSession: maxExercisesPerSession);
 
   @override
   SubscriptionLimits canExportData(bool canExportData) =>
@@ -92,7 +92,7 @@ class _$SubscriptionLimitsCWProxyImpl implements _$SubscriptionLimitsCWProxy {
     Object? maxPrograms = const $CopyWithPlaceholder(),
     Object? maxSessionsPerProgram = const $CopyWithPlaceholder(),
     Object? historyDays = const $CopyWithPlaceholder(),
-    Object? maxExercises = const $CopyWithPlaceholder(),
+    Object? maxExercisesPerSession = const $CopyWithPlaceholder(),
     Object? canExportData = const $CopyWithPlaceholder(),
     Object? canSharePrograms = const $CopyWithPlaceholder(),
     Object? metadata = const $CopyWithPlaceholder(),
@@ -115,10 +115,11 @@ class _$SubscriptionLimitsCWProxyImpl implements _$SubscriptionLimitsCWProxy {
           ? _value.historyDays
           // ignore: cast_nullable_to_non_nullable
           : historyDays as int?,
-      maxExercises: maxExercises == const $CopyWithPlaceholder()
-          ? _value.maxExercises
-          // ignore: cast_nullable_to_non_nullable
-          : maxExercises as int?,
+      maxExercisesPerSession:
+          maxExercisesPerSession == const $CopyWithPlaceholder()
+              ? _value.maxExercisesPerSession
+              // ignore: cast_nullable_to_non_nullable
+              : maxExercisesPerSession as int?,
       canExportData: canExportData == const $CopyWithPlaceholder()
           ? _value.canExportData
           // ignore: cast_nullable_to_non_nullable
@@ -153,7 +154,8 @@ SubscriptionLimits _$SubscriptionLimitsFromJson(Map<String, dynamic> json) =>
       maxSessionsPerProgram:
           (json['max_sessions_per_program'] as num?)?.toInt(),
       historyDays: (json['history_days'] as num?)?.toInt(),
-      maxExercises: (json['max_exercises'] as num?)?.toInt(),
+      maxExercisesPerSession:
+          (json['max_exercises_per_session'] as num?)?.toInt(),
       canExportData: json['can_export_data'] as bool? ?? false,
       canSharePrograms: json['can_share_programs'] as bool? ?? false,
       metadata: json['metadata'] as Map<String, dynamic>? ??
@@ -166,7 +168,7 @@ Map<String, dynamic> _$SubscriptionLimitsToJson(SubscriptionLimits instance) =>
       'max_programs': instance.maxPrograms,
       'max_sessions_per_program': instance.maxSessionsPerProgram,
       'history_days': instance.historyDays,
-      'max_exercises': instance.maxExercises,
+      'max_exercises_per_session': instance.maxExercisesPerSession,
       'can_export_data': instance.canExportData,
       'can_share_programs': instance.canSharePrograms,
       'metadata': instance.metadata,

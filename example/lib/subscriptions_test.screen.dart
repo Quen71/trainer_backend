@@ -17,10 +17,12 @@ class SubscriptionsTestScreen extends StatefulWidget {
 
 class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
   SubscriptionSummary? _subscriptionSummary;
+  SubscriptionLimitsWithUsage? _limitsWithUsage;
   FeatureAccess? _featureAccessResult;
   Offerings? _offerings;
   CustomerInfo? _customerInfo;
   bool _isLoadingSummary = false;
+  bool _isLoadingLimitsWithUsage = false;
   bool _isLoadingAccess = false;
   bool _isLoadingOfferings = false;
   bool _isLoadingPurchase = false;
@@ -36,7 +38,12 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
     });
 
     try {
-      final SubscriptionSummary? summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+
+      log(
+        name: 'Subscriptions',
+        'Subscription Summary retrieved (always returns at least Free): ${const JsonEncoder.withIndent('  ').convert(summary.toJson())}',
+      );
 
       setState(() {
         _subscriptionSummary = summary;
@@ -46,6 +53,33 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
       setState(() {
         _errorMessage = 'Error: $e';
         _isLoadingSummary = false;
+      });
+    }
+  }
+
+  Future<void> _testGetLimitsWithUsage() async {
+    setState(() {
+      _isLoadingLimitsWithUsage = true;
+      _errorMessage = null;
+      _limitsWithUsage = null;
+    });
+
+    try {
+      final SubscriptionLimitsWithUsage limitsWithUsage = await SubscriptionsService.getUserLimitsWithUsage();
+
+      log(
+        name: 'Subscriptions',
+        'Limits with Usage retrieved: ${const JsonEncoder.withIndent('  ').convert(limitsWithUsage.toJson())}',
+      );
+
+      setState(() {
+        _limitsWithUsage = limitsWithUsage;
+        _isLoadingLimitsWithUsage = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Error: $e';
+        _isLoadingLimitsWithUsage = false;
       });
     }
   }
@@ -305,7 +339,18 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                         width: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Get Subscription Summary'),
+                    : const Text('Get Subscription Summary (with Free fallback)'),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: _isLoadingLimitsWithUsage ? null : _testGetLimitsWithUsage,
+                child: _isLoadingLimitsWithUsage
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Text('Get Limits with Usage'),
               ),
               const SizedBox(height: 10),
               const Text(
@@ -358,9 +403,63 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                     color: Colors.grey.shade100,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: Text(
-                    const JsonEncoder.withIndent('  ').convert(_subscriptionSummary!.toJson()),
-                    style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Status: ${_subscriptionSummary!.status.name}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      if (_subscriptionSummary!.status == SubscriptionStatus.free)
+                        const Text(
+                          'Note: Free plan fallback (no active subscription)',
+                          style: TextStyle(
+                            fontStyle: FontStyle.italic,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      const SizedBox(height: 10),
+                      Text(
+                        const JsonEncoder.withIndent('  ').convert(_subscriptionSummary!.toJson()),
+                        style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+              if (_limitsWithUsage != null) ...<Widget>[
+                const SizedBox(height: 20),
+                const Text(
+                  'Limits with Usage:',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'Programs: ${_limitsWithUsage!.usage.programsCount} / ${_limitsWithUsage!.limits.maxPrograms ?? 'unlimited'}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Max Exercises Per Session: ${_limitsWithUsage!.limits.maxExercisesPerSession ?? 'unlimited'}',
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        const JsonEncoder.withIndent('  ').convert(_limitsWithUsage!.toJson()),
+                        style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                      ),
+                    ],
                   ),
                 ),
               ],

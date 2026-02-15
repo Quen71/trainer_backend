@@ -1,0 +1,448 @@
+-- Migration: Fix exercises per session limit verification in RPC functions
+-- Description: Ensures all RPC functions correctly use max_exercises_per_session
+--              instead of the old max_exercises column (which was renamed).
+--
+-- BUG FIX: The functions were trying to access v_limits->'limits'->>'max_exercises'
+--          which doesn't exist anymore (renamed to max_exercises_per_session).
+--          This caused the limit checks to always return NULL and never trigger.
+--
+-- IMPACT: Critical - users could exceed their subscription limits without restriction
+--
+-- ROLLBACK INSTRUCTIONS:
+-- To rollback this migration:
+-- 1. Restore functions from migration 20260124210000_update_rpc_functions_for_exercises_per_session.sql
+
+-- ============================================================================
+-- STEP 1: Fix create_full_program
+-- ============================================================================
+CREATE OR REPLACE FUNCTION public.create_full_program(full_program_data jsonb)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    new_program_id INT;
+    session_data jsonb;
+    new_session_id INT;
+    exercise_data jsonb;
+    new_exercise_id INT;
+    new_session_exercise_id INT;
+    v_user_id UUID := auth.uid();
+    v_limits jsonb;
+    v_sessions_count INT;
+    v_max_sessions_per_program INT;
+    v_max_exercises_per_session INT;  -- FIX: Correctly named variable
+    v_exercises_in_session INT;
+BEGIN
+    -- Validate: program must have at least one session
+    IF full_program_data ? 'sessions' IS FALSE
+       OR jsonb_typeof(full_program_data->'sessions') <> 'array'
+       OR jsonb_array_length(full_program_data->'sessions') = 0 THEN
+        RAISE EXCEPTION 'A program must have at least one session';
+    END IF;
+
+    -- Validate: each session must have at least one exercise
+    IF EXISTS (
+        SELECT 1
+        FROM jsonb_array_elements(full_program_data->'sessions') s
+        WHERE s ? 'exercises' IS FALSE
+          OR jsonb_typeof(s->'exercises') <> 'array'
+          OR jsonb_array_length(s->'exercises') = 0
+    ) THEN
+        RAISE EXCEPTION 'A session must have at least one exercise';
+    END IF;
+
+    -- Check subscription limits BEFORE any insert
+    v_limits := public.check_user_can_create_resource(v_user_id, 'programs');
+    
+    -- Get max_sessions_per_program limit
+    v_max_sessions_per_program := (v_limits->'limits'->>'max_sessions_per_program')::int;
+    v_sessions_count := jsonb_array_length(full_program_data->'sessions');
+
+    -- Check if number of sessions exceeds limit
+    IF v_max_sessions_per_program IS NOT NULL AND v_sessions_count > v_max_sessions_per_program THEN
+        RAISE EXCEPTION 'LIMIT_EXCEEDED:MAX_SESSIONS:%s/%s Ce programme dépasse la limite de %s séances par programme. Demandé: %s',
+            v_sessions_count, v_max_sessions_per_program, v_max_sessions_per_program, v_sessions_count;
+    END IF;
+
+    -- FIX: Get max_exercises_per_session limit (was incorrectly trying to access max_exercises)
+    v_max_exercises_per_session := (v_limits->'limits'->>'max_exercises_per_session')::int;
+
+    -- DEBUG: Log the limit value to verify it's being retrieved correctly
+    IF v_max_exercises_per_session IS NULL THEN
+        RAISE WARNING 'max_exercises_per_session is NULL for user %. Limits: %', v_user_id, v_limits;
+    END IF;
+
+    -- FIX: Check exercises limit per session (not total)
+    FOR session_data IN SELECT * FROM jsonb_array_elements(full_program_data->'sessions')
+    LOOP
+        v_exercises_in_session := jsonb_array_length(session_data->'exercises');
+        
+        -- FIX: Check if this session exceeds the exercises per session limit
+        -- Changed from > to > to correctly reject when count exceeds limit
+        IF v_max_exercises_per_session IS NOT NULL AND v_exercises_in_session > v_max_exercises_per_session THEN
+            RAISE EXCEPTION 'LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION:%s/%s La séance "%s" dépasse la limite de %s exercices par séance. Demandé: %s',
+                v_exercises_in_session, v_max_exercises_per_session, 
+                COALESCE(session_data->>'name', 'Sans nom'), 
+                v_max_exercises_per_session, v_exercises_in_session;
+        END IF;
+    END LOOP;
+
+    -- Insert the program (after all validations)
+    INSERT INTO programs (user_id, name, description)
+    VALUES (
+        v_user_id,
+        full_program_data->>'name',
+        full_program_data->>'description'
+    )
+    RETURNING id INTO new_program_id;
+
+    -- Loop through sessions
+    FOR session_data IN SELECT * FROM jsonb_array_elements(full_program_data->'sessions')
+    LOOP
+        -- Insert the session
+        INSERT INTO sessions (program_id, name, "order_in_program", type, style, parameters)
+        VALUES (
+            new_program_id,
+            session_data->>'name',
+            (session_data->>'order_in_program')::INT,
+            (session_data->>'type')::session_type,
+            (session_data->>'style')::session_style,
+            CASE
+                WHEN (session_data->>'type')::session_type = 'AMRAP' THEN
+                    jsonb_build_object('duration', (session_data->>'duration')::bigint)
+                WHEN (session_data->>'type')::session_type IN ('EMOM', 'HIIT') THEN
+                    jsonb_build_object('round_number', (session_data->>'round_number')::int)
+                ELSE '{}'::jsonb
+            END
+        )
+        RETURNING id INTO new_session_id;
+
+        -- Loop through exercises
+        FOR exercise_data IN SELECT * FROM jsonb_array_elements(session_data->'exercises')
+        LOOP
+            -- Find or create the exercise FOR THE CURRENT USER
+            INSERT INTO exercises (user_id, name)
+            VALUES (v_user_id, exercise_data->>'name')
+            ON CONFLICT (user_id, name) DO NOTHING;
+
+            SELECT id INTO new_exercise_id FROM exercises WHERE user_id = v_user_id AND name = exercise_data->>'name';
+
+            -- Insert into session_exercises
+            INSERT INTO session_exercises (session_id, exercise_id, "order_in_session", parameters)
+            VALUES (
+                new_session_id,
+                new_exercise_id,
+                (exercise_data->>'order_in_session')::INT,
+                (exercise_data->'parameters')::jsonb
+            )
+            RETURNING id INTO new_session_exercise_id;
+
+            -- Always create an initial progression record
+            INSERT INTO exercise_progressions (user_id, session_exercise_id, next_objective_parameters)
+            VALUES (
+                v_user_id,
+                new_session_exercise_id,
+                COALESCE(
+                    (exercise_data->'progression'->0->'next_objective_parameters')::jsonb,
+                    (exercise_data->'parameters')::jsonb
+                )
+            );
+        END LOOP;
+    END LOOP;
+
+    -- Return the complete program data using the helper function
+    RETURN (
+        SELECT get_full_program_by_id(new_program_id)
+    );
+END;
+$$;
+
+-- ============================================================================
+-- STEP 2: Fix add_session_to_program
+-- ============================================================================
+CREATE OR REPLACE FUNCTION public.add_session_to_program(p_program_id integer, session_data jsonb)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    new_session_id INT;
+    exercise_data jsonb;
+    new_exercise_id INT;
+    new_session_exercise_id INT;
+    new_order_in_program INT;
+    v_user_id UUID := auth.uid();
+    v_limits jsonb;
+    v_max_exercises_per_session INT;  -- FIX: Correctly named variable
+    v_exercises_count INT;
+BEGIN
+    -- Verify ownership of the program
+    IF NOT EXISTS (
+        SELECT 1 FROM programs
+        WHERE id = p_program_id AND user_id = v_user_id
+    ) THEN
+        RAISE EXCEPTION 'Program not found or access denied';
+    END IF;
+
+    -- Check subscription limits BEFORE insert
+    v_limits := public.check_user_can_create_resource(v_user_id, 'sessions_per_program', p_program_id);
+
+    -- FIX: Check exercises limit per session if exercises are being added
+    IF session_data ? 'exercises' AND jsonb_typeof(session_data->'exercises') = 'array' THEN
+        v_max_exercises_per_session := (v_limits->'limits'->>'max_exercises_per_session')::int;
+        v_exercises_count := jsonb_array_length(session_data->'exercises');
+        
+        -- FIX: Check if number of exercises exceeds limit per session
+        IF v_max_exercises_per_session IS NOT NULL AND v_exercises_count > v_max_exercises_per_session THEN
+            RAISE EXCEPTION 'LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION:%s/%s Cette séance dépasse la limite de %s exercices par séance. Demandé: %s',
+                v_exercises_count, v_max_exercises_per_session, v_max_exercises_per_session, v_exercises_count;
+        END IF;
+    END IF;
+
+    -- Determine the order for the new session
+    SELECT COALESCE(MAX(order_in_program), 0) + 1
+    INTO new_order_in_program
+    FROM sessions
+    WHERE program_id = p_program_id;
+
+    -- Insert the session
+    INSERT INTO sessions (program_id, name, order_in_program, type, style, parameters)
+    VALUES (
+        p_program_id,
+        session_data->>'name',
+        new_order_in_program,
+        (session_data->>'type')::session_type,
+        (session_data->>'style')::session_style,
+        CASE
+            WHEN (session_data->>'type')::session_type = 'AMRAP' THEN
+                jsonb_build_object('duration', (session_data->>'duration')::bigint)
+            WHEN (session_data->>'type')::session_type IN ('EMOM', 'HIIT') THEN
+                jsonb_build_object('round_number', (session_data->>'round_number')::int)
+            ELSE '{}'::jsonb
+        END
+    )
+    RETURNING id INTO new_session_id;
+
+    -- Loop through exercises for the new session
+    FOR exercise_data IN SELECT * FROM jsonb_array_elements(session_data->'exercises')
+    LOOP
+        -- Find or create the exercise for the current user
+        INSERT INTO exercises (user_id, name)
+        VALUES (v_user_id, exercise_data->>'name')
+        ON CONFLICT (user_id, name) DO NOTHING;
+
+        SELECT id INTO new_exercise_id FROM exercises WHERE user_id = v_user_id AND name = exercise_data->>'name';
+
+        -- Insert into session_exercises
+        INSERT INTO session_exercises (session_id, exercise_id, order_in_session, parameters)
+        VALUES (
+            new_session_id,
+            new_exercise_id,
+            (exercise_data->>'order_in_session')::INT,
+            (exercise_data->'parameters')::jsonb
+        )
+        RETURNING id INTO new_session_exercise_id;
+
+        -- Create initial progression record
+        INSERT INTO exercise_progressions (user_id, session_exercise_id, next_objective_parameters)
+        VALUES (
+            v_user_id,
+            new_session_exercise_id,
+            COALESCE(
+                (exercise_data->'progression'->0->'next_objective_parameters')::jsonb,
+                (exercise_data->'parameters')::jsonb
+            )
+        );
+    END LOOP;
+
+    -- Return the complete program data using the helper function
+    RETURN (
+        SELECT get_full_program_by_id(p_program_id)
+    );
+END;
+$$;
+
+-- ============================================================================
+-- STEP 3: Fix update_full_session
+-- ============================================================================
+CREATE OR REPLACE FUNCTION public.update_full_session(p_session_data jsonb)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, pg_temp
+AS $$
+DECLARE
+    v_session_id INT;
+    v_auth_user_id UUID := auth.uid();
+    v_program_id INT;
+    exercise_data jsonb;
+    v_session_exercise_id INT;
+    v_exercise_id INT;
+    v_exercise_name TEXT;
+    v_existing_exercise_ids INT[];
+    v_ids_to_keep INT[] := '{}'::int[];
+    v_limits jsonb;
+    v_max_exercises_per_session INT;  -- FIX: Correctly named variable
+    v_exercises_count INT;
+BEGIN
+    -- Extract session ID and verify ownership, get program_id
+    v_session_id := (p_session_data->>'id')::int;
+    IF v_session_id IS NULL THEN
+        RAISE EXCEPTION 'Session ID is missing from the payload.';
+    END IF;
+
+    SELECT s.program_id INTO v_program_id
+    FROM public.sessions s
+    JOIN public.programs p ON s.program_id = p.id
+    WHERE s.id = v_session_id AND p.user_id = v_auth_user_id;
+
+    IF v_program_id IS NULL THEN
+        RAISE EXCEPTION 'Session not found or access denied.';
+    END IF;
+
+    -- Validate that the session is not empty
+    IF jsonb_array_length(p_session_data->'exercises') = 0 THEN
+        RAISE EXCEPTION 'A session must contain at least one exercise.';
+    END IF;
+
+    -- FIX: Check exercises limit per session if exercises are being updated
+    IF p_session_data ? 'exercises' AND jsonb_typeof(p_session_data->'exercises') = 'array' THEN
+        -- Get limits
+        SELECT public.get_user_limits_with_usage(v_auth_user_id) INTO v_limits;
+        v_max_exercises_per_session := (v_limits->'limits'->>'max_exercises_per_session')::int;
+        v_exercises_count := jsonb_array_length(p_session_data->'exercises');
+
+        -- FIX: Check if number of exercises exceeds limit per session
+        IF v_max_exercises_per_session IS NOT NULL AND v_exercises_count > v_max_exercises_per_session THEN
+            RAISE EXCEPTION 'LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION:%s/%s Cette séance dépasse la limite de %s exercices par séance. Demandé: %s',
+                v_exercises_count, v_max_exercises_per_session, v_max_exercises_per_session, v_exercises_count;
+        END IF;
+    END IF;
+
+    -- Update session name and parameters
+    UPDATE public.sessions
+    SET
+        name = p_session_data->>'name',
+        parameters = CASE
+            WHEN (p_session_data->>'type')::session_type = 'AMRAP' THEN jsonb_build_object('duration', (p_session_data->>'duration')::bigint)
+            WHEN (p_session_data->>'type')::session_type IN ('EMOM', 'HIIT') THEN jsonb_build_object('round_number', (p_session_data->>'round_number')::int)
+            ELSE '{}'::jsonb
+        END
+    WHERE id = v_session_id;
+
+    -- Get current exercise IDs for deletion tracking
+    SELECT array_agg(id) INTO v_existing_exercise_ids
+    FROM public.session_exercises
+    WHERE session_id = v_session_id;
+
+    -- Loop through input exercises for UPSERT and reordering
+    FOR exercise_data IN SELECT * FROM jsonb_array_elements(p_session_data->'exercises')
+    LOOP
+        IF exercise_data->'parameters' IS NULL THEN
+            RAISE EXCEPTION 'Exercise "%" is missing required "parameters".', exercise_data->>'name';
+        END IF;
+
+        v_exercise_name := exercise_data->>'name';
+        SELECT id INTO v_exercise_id
+        FROM public.exercises
+        WHERE user_id = v_auth_user_id AND name = v_exercise_name;
+
+        IF v_exercise_id IS NULL THEN
+            INSERT INTO public.exercises (user_id, name)
+            VALUES (v_auth_user_id, v_exercise_name)
+            RETURNING id INTO v_exercise_id;
+        END IF;
+
+        v_session_exercise_id := (exercise_data->>'id')::int;
+
+        IF v_session_exercise_id IS NULL OR v_session_exercise_id = 0 THEN
+            INSERT INTO public.session_exercises (session_id, exercise_id, order_in_session, parameters)
+            VALUES (v_session_id, v_exercise_id, (exercise_data->>'order_in_session')::int, (exercise_data->'parameters')::jsonb)
+            RETURNING id INTO v_session_exercise_id;
+
+            INSERT INTO public.exercise_progressions (user_id, session_exercise_id, next_objective_parameters)
+            VALUES (v_auth_user_id, v_session_exercise_id, COALESCE((exercise_data->'progression'->0->'next_objective_parameters')::jsonb, (exercise_data->'parameters')::jsonb));
+        ELSE
+            UPDATE public.session_exercises
+            SET order_in_session = (exercise_data->>'order_in_session')::int,
+                parameters = (exercise_data->'parameters')::jsonb
+            WHERE id = v_session_exercise_id AND session_id = v_session_id;
+
+            UPDATE public.exercise_progressions
+            SET next_objective_parameters = COALESCE((exercise_data->'progression'->0->'next_objective_parameters')::jsonb, (exercise_data->'parameters')::jsonb)
+            WHERE session_exercise_id = v_session_exercise_id;
+        END IF;
+
+        v_ids_to_keep := array_append(v_ids_to_keep, v_session_exercise_id);
+    END LOOP;
+
+    -- Delete removed exercises
+    DELETE FROM public.session_exercises
+    WHERE session_id = v_session_id AND id = ANY(COALESCE(v_existing_exercise_ids, '{}'::int[])) AND id NOT IN (SELECT unnest(v_ids_to_keep));
+
+    -- Return response matching SessionApiResponse (program_id and session)
+    RETURN jsonb_build_object(
+        'program_id', v_program_id,
+        'session', (
+            SELECT jsonb_build_object(
+                'id', s.id,
+                'name', s.name,
+                'order_in_program', s.order_in_program,
+                'type', s.type,
+                'style', s.style,
+                'exercises', (
+                    SELECT jsonb_agg(
+                        jsonb_build_object(
+                            'id', se.id,
+                            'exercise_id', se.exercise_id,
+                            'order_in_session', se.order_in_session,
+                            'exercise', jsonb_build_object('name', e.name),
+                            'parameters', se.parameters,
+                            'progression', (
+                                SELECT jsonb_agg(ep.*)
+                                FROM public.exercise_progressions ep
+                                WHERE ep.session_exercise_id = se.id
+                            )
+                        ) ORDER BY se.order_in_session
+                    )
+                    FROM public.session_exercises se
+                    JOIN public.exercises e ON se.exercise_id = e.id
+                    WHERE se.session_id = s.id
+                )
+            ) ||
+            CASE
+                WHEN s.type = 'AMRAP' THEN jsonb_build_object('duration', s.parameters->'duration')
+                WHEN s.type IN ('EMOM', 'HIIT') THEN jsonb_build_object('round_number', s.parameters->'round_number')
+                ELSE '{}'::jsonb
+            END
+            FROM public.sessions s
+            WHERE s.id = v_session_id
+        )
+    );
+END;
+$$;
+
+-- ============================================================================
+-- STEP 4: Grant permissions and update comments
+-- ============================================================================
+GRANT EXECUTE ON FUNCTION public.create_full_program(jsonb) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.add_session_to_program(integer, jsonb) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.update_full_session(jsonb) TO authenticated;
+
+COMMENT ON FUNCTION public.create_full_program(jsonb) IS 
+'Creates a new program with all sessions and exercises.
+Includes subscription limit checks before any insert to prevent exceeding limits.
+FIX 2026-02-07: Correctly uses max_exercises_per_session instead of max_exercises.';
+
+COMMENT ON FUNCTION public.add_session_to_program(integer, jsonb) IS 
+'Adds a new session to an existing program.
+Includes subscription limit checks for max_sessions_per_program and max_exercises_per_session.
+FIX 2026-02-07: Correctly uses max_exercises_per_session instead of max_exercises.';
+
+COMMENT ON FUNCTION public.update_full_session(jsonb) IS 
+'Updates an existing session with new exercises and parameters.
+Includes subscription limit checks for max_exercises_per_session.
+FIX 2026-02-07: Correctly uses max_exercises_per_session instead of max_exercises.';

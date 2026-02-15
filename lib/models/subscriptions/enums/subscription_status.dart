@@ -20,4 +20,7 @@ enum SubscriptionStatus {
 
   /// The subscription has expired and the user no longer has access.
   expired,
+
+  /// The user is on the free plan with no active subscription.
+  free,
 }

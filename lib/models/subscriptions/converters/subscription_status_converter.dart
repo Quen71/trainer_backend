@@ -24,6 +24,8 @@ class SubscriptionStatusConverter implements JsonConverter<SubscriptionStatus, S
         return SubscriptionStatus.cancelled;
       case 'expired':
         return SubscriptionStatus.expired;
+      case 'free':
+        return SubscriptionStatus.free;
       default:
         return SubscriptionStatus.expired;
     }
@@ -44,6 +46,8 @@ class SubscriptionStatusConverter implements JsonConverter<SubscriptionStatus, S
         return 'cancelled';
       case SubscriptionStatus.expired:
         return 'expired';
+      case SubscriptionStatus.free:
+        return 'free';
     }
   }
 }

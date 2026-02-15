@@ -15,10 +15,10 @@ part 'subscription_summary.g.dart';
 class SubscriptionSummary {
   /// Creates an instance of [SubscriptionSummary].
   const SubscriptionSummary({
-    required this.id,
+    this.id,
     required this.userId,
     required this.status,
-    required this.startedAt,
+    this.startedAt,
     this.expiresAt,
     required this.isTrial,
     required this.entitlement,
@@ -30,7 +30,8 @@ class SubscriptionSummary {
   factory SubscriptionSummary.fromJson(Map<String, dynamic> json) => _$SubscriptionSummaryFromJson(json);
 
   /// The unique identifier for the subscription.
-  final String id;
+  /// Can be null for free plan users who don't have an active subscription.
+  final String? id;
 
   /// The ID of the user who owns this subscription.
   @JsonKey(name: 'user_id')
@@ -41,8 +42,9 @@ class SubscriptionSummary {
   final SubscriptionStatus status;
 
   /// The timestamp when the subscription started.
+  /// Can be null for free plan users who don't have an active subscription.
   @JsonKey(name: 'started_at')
-  final DateTime startedAt;
+  final DateTime? startedAt;
 
   /// The timestamp when the subscription expires.
   /// Can be null for lifetime subscriptions or subscriptions without expiration.
@@ -112,7 +114,7 @@ class SubscriptionSummaryLimits {
     this.maxPrograms,
     this.maxSessionsPerProgram,
     this.historyDays,
-    this.maxExercises,
+    this.maxExercisesPerSession,
     this.canExportData = false,
     this.canSharePrograms = false,
     this.metadata = const <String, dynamic>{},
@@ -133,9 +135,9 @@ class SubscriptionSummaryLimits {
   @JsonKey(name: 'history_days')
   final int? historyDays;
 
-  /// Maximum number of exercises the user can have.
-  @JsonKey(name: 'max_exercises')
-  final int? maxExercises;
+  /// Maximum number of exercises per session.
+  @JsonKey(name: 'max_exercises_per_session')
+  final int? maxExercisesPerSession;
 
   /// Whether the user can export their data.
   @JsonKey(name: 'can_export_data')

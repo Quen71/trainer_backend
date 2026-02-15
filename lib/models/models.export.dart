@@ -22,6 +22,7 @@ export 'subscriptions/store_product.dart';
 export 'subscriptions/subscription.dart';
 export 'subscriptions/subscription_event.dart';
 export 'subscriptions/subscription_limits.dart';
+export 'subscriptions/subscription_limits_with_usage.dart';
 export 'subscriptions/subscription_summary.dart';
 export 'training/converters/duration_converter.dart';
 export 'training/enums/session_style.dart';

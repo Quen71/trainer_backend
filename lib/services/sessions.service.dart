@@ -21,6 +21,12 @@ class SessionsService {
   /// Returns a [Future] with a [SessionApiResponse], which contains the
   /// updated session and any newly created exercises with their server-assigned IDs.
   /// Throws a [PostgrestException] if the RPC call fails.
+  ///
+  /// **Subscription Limit Exceptions:**
+  /// The RPC may raise exceptions with the following error codes if subscription limits are exceeded:
+  /// - `LIMIT_EXCEEDED:MAX_EXERCISES:X/Y` - Maximum number of exercises exceeded (only for new exercises)
+  /// - `SUBSCRIPTION_INACTIVE` - User's subscription is not active
+  /// - `SUBSCRIPTION_EXPIRED` - User's subscription has expired
   static Future<SessionApiResponse> updateFullSession(Session session) async {
     final Map<String, dynamic> sessionJson = session.toJson();
 

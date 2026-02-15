@@ -7,13 +7,13 @@ part of 'subscription_summary.dart';
 // **************************************************************************
 
 abstract class _$SubscriptionSummaryCWProxy {
-  SubscriptionSummary id(String id);
+  SubscriptionSummary id(String? id);
 
   SubscriptionSummary userId(String userId);
 
   SubscriptionSummary status(SubscriptionStatus status);
 
-  SubscriptionSummary startedAt(DateTime startedAt);
+  SubscriptionSummary startedAt(DateTime? startedAt);
 
   SubscriptionSummary expiresAt(DateTime? expiresAt);
 
@@ -32,10 +32,10 @@ abstract class _$SubscriptionSummaryCWProxy {
   /// SubscriptionSummary(...).copyWith(id: 12, name: "My name")
   /// ````
   SubscriptionSummary call({
-    String id,
+    String? id,
     String userId,
     SubscriptionStatus status,
-    DateTime startedAt,
+    DateTime? startedAt,
     DateTime? expiresAt,
     bool isTrial,
     SubscriptionSummaryEntitlement entitlement,
@@ -51,7 +51,7 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
   final SubscriptionSummary _value;
 
   @override
-  SubscriptionSummary id(String id) => this(id: id);
+  SubscriptionSummary id(String? id) => this(id: id);
 
   @override
   SubscriptionSummary userId(String userId) => this(userId: userId);
@@ -60,7 +60,7 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
   SubscriptionSummary status(SubscriptionStatus status) => this(status: status);
 
   @override
-  SubscriptionSummary startedAt(DateTime startedAt) =>
+  SubscriptionSummary startedAt(DateTime? startedAt) =>
       this(startedAt: startedAt);
 
   @override
@@ -105,7 +105,7 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
       id: id == const $CopyWithPlaceholder()
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
-          : id as String,
+          : id as String?,
       userId: userId == const $CopyWithPlaceholder()
           ? _value.userId
           // ignore: cast_nullable_to_non_nullable
@@ -117,7 +117,7 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
       startedAt: startedAt == const $CopyWithPlaceholder()
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
-          : startedAt as DateTime,
+          : startedAt as DateTime?,
       expiresAt: expiresAt == const $CopyWithPlaceholder()
           ? _value.expiresAt
           // ignore: cast_nullable_to_non_nullable
@@ -231,7 +231,7 @@ abstract class _$SubscriptionSummaryLimitsCWProxy {
 
   SubscriptionSummaryLimits historyDays(int? historyDays);
 
-  SubscriptionSummaryLimits maxExercises(int? maxExercises);
+  SubscriptionSummaryLimits maxExercisesPerSession(int? maxExercisesPerSession);
 
   SubscriptionSummaryLimits canExportData(bool canExportData);
 
@@ -249,7 +249,7 @@ abstract class _$SubscriptionSummaryLimitsCWProxy {
     int? maxPrograms,
     int? maxSessionsPerProgram,
     int? historyDays,
-    int? maxExercises,
+    int? maxExercisesPerSession,
     bool canExportData,
     bool canSharePrograms,
     Map<String, dynamic> metadata,
@@ -276,8 +276,9 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
       this(historyDays: historyDays);
 
   @override
-  SubscriptionSummaryLimits maxExercises(int? maxExercises) =>
-      this(maxExercises: maxExercises);
+  SubscriptionSummaryLimits maxExercisesPerSession(
+          int? maxExercisesPerSession) =>
+      this(maxExercisesPerSession: maxExercisesPerSession);
 
   @override
   SubscriptionSummaryLimits canExportData(bool canExportData) =>
@@ -303,7 +304,7 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
     Object? maxPrograms = const $CopyWithPlaceholder(),
     Object? maxSessionsPerProgram = const $CopyWithPlaceholder(),
     Object? historyDays = const $CopyWithPlaceholder(),
-    Object? maxExercises = const $CopyWithPlaceholder(),
+    Object? maxExercisesPerSession = const $CopyWithPlaceholder(),
     Object? canExportData = const $CopyWithPlaceholder(),
     Object? canSharePrograms = const $CopyWithPlaceholder(),
     Object? metadata = const $CopyWithPlaceholder(),
@@ -322,10 +323,11 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
           ? _value.historyDays
           // ignore: cast_nullable_to_non_nullable
           : historyDays as int?,
-      maxExercises: maxExercises == const $CopyWithPlaceholder()
-          ? _value.maxExercises
-          // ignore: cast_nullable_to_non_nullable
-          : maxExercises as int?,
+      maxExercisesPerSession:
+          maxExercisesPerSession == const $CopyWithPlaceholder()
+              ? _value.maxExercisesPerSession
+              // ignore: cast_nullable_to_non_nullable
+              : maxExercisesPerSession as int?,
       canExportData: canExportData == const $CopyWithPlaceholder()
           ? _value.canExportData
           // ignore: cast_nullable_to_non_nullable
@@ -355,11 +357,13 @@ extension $SubscriptionSummaryLimitsCopyWith on SubscriptionSummaryLimits {
 
 SubscriptionSummary _$SubscriptionSummaryFromJson(Map<String, dynamic> json) =>
     SubscriptionSummary(
-      id: json['id'] as String,
+      id: json['id'] as String?,
       userId: json['user_id'] as String,
       status: const SubscriptionStatusConverter()
           .fromJson(json['status'] as String),
-      startedAt: DateTime.parse(json['started_at'] as String),
+      startedAt: json['started_at'] == null
+          ? null
+          : DateTime.parse(json['started_at'] as String),
       expiresAt: json['expires_at'] == null
           ? null
           : DateTime.parse(json['expires_at'] as String),
@@ -379,7 +383,7 @@ Map<String, dynamic> _$SubscriptionSummaryToJson(
       'id': instance.id,
       'user_id': instance.userId,
       'status': const SubscriptionStatusConverter().toJson(instance.status),
-      'started_at': instance.startedAt.toIso8601String(),
+      'started_at': instance.startedAt?.toIso8601String(),
       'expires_at': instance.expiresAt?.toIso8601String(),
       'is_trial': instance.isTrial,
       'entitlement': instance.entitlement,
@@ -410,7 +414,8 @@ SubscriptionSummaryLimits _$SubscriptionSummaryLimitsFromJson(
       maxSessionsPerProgram:
           (json['max_sessions_per_program'] as num?)?.toInt(),
       historyDays: (json['history_days'] as num?)?.toInt(),
-      maxExercises: (json['max_exercises'] as num?)?.toInt(),
+      maxExercisesPerSession:
+          (json['max_exercises_per_session'] as num?)?.toInt(),
       canExportData: json['can_export_data'] as bool? ?? false,
       canSharePrograms: json['can_share_programs'] as bool? ?? false,
       metadata: json['metadata'] as Map<String, dynamic>? ??
@@ -423,7 +428,7 @@ Map<String, dynamic> _$SubscriptionSummaryLimitsToJson(
       'max_programs': instance.maxPrograms,
       'max_sessions_per_program': instance.maxSessionsPerProgram,
       'history_days': instance.historyDays,
-      'max_exercises': instance.maxExercises,
+      'max_exercises_per_session': instance.maxExercisesPerSession,
       'can_export_data': instance.canExportData,
       'can_share_programs': instance.canSharePrograms,
       'metadata': instance.metadata,

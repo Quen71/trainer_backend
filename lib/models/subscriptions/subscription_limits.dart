@@ -16,7 +16,7 @@ class SubscriptionLimits {
     this.maxPrograms,
     this.maxSessionsPerProgram,
     this.historyDays,
-    this.maxExercises,
+    this.maxExercisesPerSession,
     this.canExportData = false,
     this.canSharePrograms = false,
     this.metadata = const <String, dynamic>{},
@@ -41,9 +41,9 @@ class SubscriptionLimits {
   @JsonKey(name: 'history_days')
   final int? historyDays;
 
-  /// Maximum number of exercises the user can have.
-  @JsonKey(name: 'max_exercises')
-  final int? maxExercises;
+  /// Maximum number of exercises per session.
+  @JsonKey(name: 'max_exercises_per_session')
+  final int? maxExercisesPerSession;
 
   /// Whether the user can export their data.
   @JsonKey(name: 'can_export_data')

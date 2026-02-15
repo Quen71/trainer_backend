@@ -6,6 +6,7 @@ import 'package:trainer_backend/models/subscriptions/customer_info.dart';
 import 'package:trainer_backend/models/subscriptions/feature_access.dart';
 import 'package:trainer_backend/models/subscriptions/offerings.dart';
 import 'package:trainer_backend/models/subscriptions/package.dart';
+import 'package:trainer_backend/models/subscriptions/subscription_limits_with_usage.dart';
 import 'package:trainer_backend/models/subscriptions/subscription_summary.dart';
 import 'package:trainer_backend/utils/revenuecat.utils.dart';
 import 'package:trainer_backend/utils/subscription_summary.utils.dart';
@@ -56,22 +57,18 @@ class SubscriptionsService {
   /// Retrieves the active subscription summary for the current user.
   ///
   /// This method returns the user's active subscription along with
-  /// entitlement and limits information. Only active, trialing, or
-  /// in-grace subscriptions are returned.
+  /// entitlement and limits information. If no active subscription exists,
+  /// it automatically falls back to the Free entitlement with default limits.
   ///
   /// Returns a [Future] with a [SubscriptionSummary] containing subscription details,
   /// entitlement information, product information, and limits.
-  /// Returns `null` if no active subscription is found.
+  /// Never returns null - always returns at least the Free entitlement.
   /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<SubscriptionSummary?> getUserSubscriptionSummary() async {
+  static Future<SubscriptionSummary> getUserSubscriptionSummary() async {
     final dynamic response = await _client.rpc(
       'get_user_subscription_summary',
       params: <String, dynamic>{'p_user_id': null},
     );
-
-    if (response == null) {
-      return null;
-    }
 
     return SubscriptionSummary.fromJson(response as Map<String, dynamic>);
   }
@@ -287,6 +284,27 @@ class SubscriptionsService {
     } on rc.PurchasesError catch (e) {
       throw Exception('Failed to get management URL: ${e.message}');
     }
+  }
+
+  /// Retrieves subscription limits with current usage counts for the current user.
+  ///
+  /// This method returns subscription summary information plus current usage statistics
+  /// including the number of programs, exercises, and sessions per program.
+  /// If no active subscription exists, it automatically falls back to the Free entitlement.
+  ///
+  /// Returns a [Future] with a [SubscriptionLimitsWithUsage] containing:
+  /// - Subscription summary (status, entitlement, limits)
+  /// - Current usage counts (programs, exercises, sessions per program)
+  ///
+  /// Never returns null - always returns at least the Free entitlement with usage data.
+  /// Throws a [PostgrestException] if the RPC call fails.
+  static Future<SubscriptionLimitsWithUsage> getUserLimitsWithUsage() async {
+    final dynamic response = await _client.rpc(
+      'get_user_limits_with_usage',
+      params: <String, dynamic>{'p_user_id': null},
+    );
+
+    return SubscriptionLimitsWithUsage.fromJson(response as Map<String, dynamic>);
   }
 
   /// Checks if RevenueCat SDK has been initialized.
