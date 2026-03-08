@@ -26,6 +26,14 @@ class ProgramsService {
   /// the following constraints and will raise an error if violated:
   /// - A program must have at least one session.
   /// - Each session must have at least one exercise.
+  ///
+  /// **Subscription Limit Exceptions:**
+  /// The RPC may raise exceptions with the following error codes if subscription limits are exceeded:
+  /// - `LIMIT_EXCEEDED:MAX_PROGRAMS:X/Y` - Maximum number of programs reached
+  /// - `LIMIT_EXCEEDED:MAX_SESSIONS:X/Y` - Maximum number of sessions per program exceeded
+  /// - `LIMIT_EXCEEDED:MAX_EXERCISES:X/Y` - Maximum number of exercises exceeded
+  /// - `SUBSCRIPTION_INACTIVE` - User's subscription is not active
+  /// - `SUBSCRIPTION_EXPIRED` - User's subscription has expired
   static Future<Program> createFullProgram(Program program) async {
     final Map<String, dynamic> programJson = program.toJson();
 
@@ -100,6 +108,13 @@ class ProgramsService {
   ///
   /// Returns a [Future] with the updated [Program] object containing the new session.
   /// Throws a [PostgrestException] if the RPC call fails.
+  ///
+  /// **Subscription Limit Exceptions:**
+  /// The RPC may raise exceptions with the following error codes if subscription limits are exceeded:
+  /// - `LIMIT_EXCEEDED:MAX_SESSIONS:X/Y` - Maximum number of sessions per program exceeded
+  /// - `LIMIT_EXCEEDED:MAX_EXERCISES:X/Y` - Maximum number of exercises exceeded
+  /// - `SUBSCRIPTION_INACTIVE` - User's subscription is not active
+  /// - `SUBSCRIPTION_EXPIRED` - User's subscription has expired
   static Future<Program> addSessionToProgram({
     required int programId,
     required Session session,

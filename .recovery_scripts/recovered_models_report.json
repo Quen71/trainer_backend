@@ -1,0 +1,296 @@
+[
+  {
+    "path": "api/create_session_log_response.dart",
+    "date": "2025-09-16 13:50:57",
+    "timestamp": 1758023457.875,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/session_log.dart';\nimport 'package:trainer_backend/models/training/session.dart';\n\npart 'create_session_log_response.g.dart';\n\n/// Represents the response object from the `create_session_log` remote procedure call.\n///\n/// This class encapsulates the two objects returned by the RPC: the newly created\n/// [SessionLog] and a \"preview\" version of the original [Session] with its\n/// `objectiveParame..."
+  },
+  {
+    "path": "api/session_api_response.dart",
+    "date": "2025-07-26 16:09:43",
+    "timestamp": 1753538983.519,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/session.dart';\n\npart 'session_api_response.g.dart';\n\n/// Represents the API response for session-related operations.\n///\n/// This class is used to structure the data returned from the backend after\n/// operations like updating a session. It contains the updated [Session]\n/// and the ID of the parent program.\n@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)\nclass SessionAp..."
+  },
+  {
+    "path": "auth/athlete.model.dart",
+    "date": "2025-07-04 19:36:48",
+    "timestamp": 1751650608.627,
+    "source": "Unknown",
+    "content_preview": "import 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/auth/enums/user_role.enum.dart';\n\npart 'athlete.model.g.dart';\n\n@JsonSerializable()\nclass AthleteModel {\n  const AthleteModel({\n    required this.id,\n    required this.username,\n    required this.role,\n  });\n\n  factory AthleteModel.fromJson(Map<String, dynamic> json) => _$AthleteModelFromJson(json);\n\n  final String id;\n  @JsonKey(name: 'user_name')\n  final String username;\n  final UserRoleEnum role;\n\n  ..."
+  },
+  {
+    "path": "auth/enums/user_role.dart",
+    "date": "2025-07-26 16:12:27",
+    "timestamp": 1753539147.71,
+    "source": "Unknown",
+    "content_preview": "/// Defines the roles a user can have within the application.\nenum UserRole {\n  /// A standard user with basic permissions.\n  standard,\n\n  /// A coach with elevated permissions.\n  coach,\n}\n"
+  },
+  {
+    "path": "auth/enums/user_role.enum.dart",
+    "date": "2025-07-04 19:30:50",
+    "timestamp": 1751650250.82,
+    "source": "Unknown",
+    "content_preview": "enum UserRoleEnum {\n  standard,\n  coach;\n\n  const UserRoleEnum();\n}\n"
+  },
+  {
+    "path": "auth/profile.dart",
+    "date": "2025-07-26 16:10:00",
+    "timestamp": 1753539000.285,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/auth/enums/user_role.dart';\n\npart 'profile.g.dart';\n\n/// Represents a user's profile in the application.\n///\n/// This model holds all the information related to a user's account,\n/// such as username, full name, role, and timestamps.\n@JsonSerializable()\n@CopyWith()\nclass Profile {\n  /// Creates an instance of [Profile].\n  const Profile({\n   ..."
+  },
+  {
+    "path": "auth/profile.dart",
+    "date": "2025-08-01 19:45:52",
+    "timestamp": 1754070352.401,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/auth/enums/user_role.dart';\nimport 'package:trainer_backend/models/history/session_log.dart';\nimport 'package:trainer_backend/models/training/program.dart';\n\npart 'profile.g.dart';\n\n/// Represents a user's profile in the application.\n///\n/// This model holds all the information related to a user's account,\n/// such as username, full name, ro..."
+  },
+  {
+    "path": "auth/state/app_auth_state.dart",
+    "date": "2025-08-10 17:59:04",
+    "timestamp": 1754841544.719,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:supabase_flutter/supabase_flutter.dart';\n\n/// A sealed class representing the various states of user authentication\n/// within the application.\n///\n/// This class provides a structured way to handle different authentication\n/// scenarios, such as when a user is signed in, signed out, or when an\n/// authentication operation is in progress or has failed.\nsealed class AppAuthState {\n  const AppAuthState();\n}\n\n/// The initial state of authentication, before any authentication process..."
+  },
+  {
+    "path": "history/exercise_log.dart",
+    "date": "2025-09-11 19:23:59",
+    "timestamp": 1757611439.195,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/converters/duration_converter.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'exercise_log.g.dart';\n\n/// Represents a single set performed within a [ClassicExerciseLog].\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass SetLog {\n  /// Creates an instance of [SetLog].\n  const ..."
+  },
+  {
+    "path": "history/exercise_log.dart",
+    "date": "2025-07-28 19:22:39",
+    "timestamp": 1753723359.451,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/converters/duration_converter.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'exercise_log.g.dart';\n\n/// Represents a single set performed within a [ClassicExerciseLog].\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass SetLog {\n  /// Creates an instance of [SetLog].\n  const ..."
+  },
+  {
+    "path": "history/exercise_log.dart",
+    "date": "2025-07-26 16:14:05",
+    "timestamp": 1753539245.866,
+    "source": "Undo Accept Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/converters/duration_converter.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'exercise_log.g.dart';\n\n/// Represents a single set performed within a [ClassicExerciseLog].\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass SetLog {\n  /// Creates an instance of [SetLog].\n  const ..."
+  },
+  {
+    "path": "history/performance.dart",
+    "date": "2025-07-20 17:27:19",
+    "timestamp": 1753025239.104,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "history/round_log.dart",
+    "date": "2025-07-26 16:11:02",
+    "timestamp": 1753539062.884,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/exercise_log.dart';\n\npart 'round_log.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  explicitToJson: true,\n  genericArgumentFactories: true,\n)\n@CopyWith()\nclass RoundLog<T extends ExerciseLog> {\n  /// Creates an instance of [RoundLog].\n  const RoundLog({\n    required this.id,\n    required this.roundNumber,\n    requir..."
+  },
+  {
+    "path": "history/round_log.dart",
+    "date": "2025-09-12 20:03:42",
+    "timestamp": 1757700222.961,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/exercise_log.dart';\n\npart 'round_log.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  explicitToJson: true,\n  genericArgumentFactories: true,\n)\n@CopyWith()\nclass RoundLog<T extends ExerciseLog> {\n  /// Creates an instance of [RoundLog].\n  const RoundLog({\n    required this.id,\n    required this.roundNumber,\n    requir..."
+  },
+  {
+    "path": "history/session_log.dart",
+    "date": "2025-07-26 16:10:48",
+    "timestamp": 1753539048.12,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/exercise_log.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session_log.g.dart';\n\n/// A sealed class representing a log of a completed training session.\n///\n/// This class serves as a base for different types of session logs,\n/// ..."
+  },
+  {
+    "path": "history/session_log.dart",
+    "date": "2025-09-21 17:43:09",
+    "timestamp": 1758469389.776,
+    "source": "Undo Chain Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/exercise_log.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session_log.g.dart';\n\n/// A sealed class representing a log of a completed training session.\n///\n/// This class serves as a base for different types of session logs,\n/// ..."
+  },
+  {
+    "path": "history/session_log.dart",
+    "date": "2025-07-30 19:47:40",
+    "timestamp": 1753897660.195,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/exercise_log.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session_log.g.dart';\n\n/// A sealed class representing a log of a completed training session.\n///\n/// This class serves as a base for different types of session logs,\n/// ..."
+  },
+  {
+    "path": "history/set_log.dart",
+    "date": "2025-07-20 17:31:11",
+    "timestamp": 1753025471.381,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "models.export.dart",
+    "date": "2025-08-03 16:46:06",
+    "timestamp": 1754232366.198,
+    "source": "Undo Create Diff",
+    "content_preview": "export 'api/session_api_response.dart';\nexport 'auth/enums/user_role.dart';\nexport 'auth/profile.dart';\nexport 'auth/state/app_auth_state.dart';\nexport 'history/exercise_log.dart';\nexport 'history/round_log.dart';\nexport 'history/session_log.dart';\nexport 'training/converters/duration_converter.dart';\nexport 'training/enums/session_style.dart';\nexport 'training/enums/session_type.dart';\nexport 'training/exercise.dart';\nexport 'training/parameters/exercise_parameters.dart';\nexport 'training/progr..."
+  },
+  {
+    "path": "models.export.dart",
+    "date": "2025-07-26 16:25:47",
+    "timestamp": 1753539947.935,
+    "source": "Organize Imports",
+    "content_preview": "export 'api/session_api_response.dart';\nexport 'auth/enums/user_role.dart';\nexport 'auth/profile.dart';\nexport 'history/exercise_log.dart';\nexport 'history/round_log.dart';\nexport 'history/session_log.dart';\nexport 'training/converters/duration_converter.dart';\nexport 'training/enums/session_style.dart';\nexport 'training/enums/session_type.dart';\nexport 'training/exercise.dart';\nexport 'training/parameters/exercise_parameters.dart';\nexport 'training/program.dart';\nexport 'training/session.dart';..."
+  },
+  {
+    "path": "program.dart",
+    "date": "2025-07-06 19:04:04",
+    "timestamp": 1751821444.911,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "session.dart",
+    "date": "2025-07-05 16:30:06",
+    "timestamp": 1751725806.876,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "session_style.dart",
+    "date": "2025-07-05 16:30:04",
+    "timestamp": 1751725804.699,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "session_type.dart",
+    "date": "2025-07-05 16:30:01",
+    "timestamp": 1751725801.896,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/converters/duration_converter.dart",
+    "date": "2025-07-26 16:13:44",
+    "timestamp": 1753539224.63,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:json_annotation/json_annotation.dart';\n\n/// A [JsonConverter] for handling the conversion between [Duration] and [int].\n///\n/// Supabase stores interval types as integers representing microseconds.\n/// This converter facilitates the automatic conversion during JSON\n/// serialization and deserialization.\nclass DurationConverter implements JsonConverter<Duration, int> {\n  /// Creates an instance of [DurationConverter].\n  const DurationConverter();\n\n  @override\n  Duration fromJson(i..."
+  },
+  {
+    "path": "training/enums/session_style.dart",
+    "date": "2025-10-01 18:21:25",
+    "timestamp": 1759335685.425,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session_style.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  createFactory: false,\n  createToJson: false,\n)\nsealed class SessionLog {\n  const SessionLog({\n    required this.id,\n    required this.sessionId,\n    required ..."
+  },
+  {
+    "path": "training/enums/session_style.dart",
+    "date": "2025-07-26 16:14:01",
+    "timestamp": 1753539241.664,
+    "source": "Undo Create Diff",
+    "content_preview": "/// Defines the style or focus of a training session.\nenum SessionStyle {\n  /// A session focused on bodyweight exercises.\n  bodyweight,\n\n  /// A session focused on training with weights.\n  weights,\n\n  /// A session focused on stretching and mobility work.\n  stretchingMobility;\n\n  /// Converts the enum to its JSON string representation.\n  String toJson() {\n    switch (this) {\n      case SessionStyle.bodyweight:\n        return 'bodyweight';\n      case SessionStyle.weights:\n        return 'weights..."
+  },
+  {
+    "path": "training/enums/session_type.dart",
+    "date": "2025-07-26 16:14:16",
+    "timestamp": 1753539256.616,
+    "source": "Undo Create Diff",
+    "content_preview": "/// Defines the protocol or format of a training session.\nenum SessionType {\n  /// A traditional session format, typically based on sets, reps, and rest.\n  classic,\n\n  /// 'Every Minute On the Minute' - a form of interval training.\n  emom,\n\n  /// 'High-Intensity Interval Training' - alternating between intense bursts and rest.\n  hiit,\n\n  /// 'As Many Rounds As Possible' - completing as many rounds as possible in a given time.\n  amrap;\n\n  /// Converts the enum to its JSON string representation (u..."
+  },
+  {
+    "path": "training/enums/session_type.dart",
+    "date": "2025-10-01 18:22:01",
+    "timestamp": 1759335721.635,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session_type.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  createFactory: false,\n  createToJson: false,\n)\nsealed class SessionLog {\n  const SessionLog({\n    required this.id,\n    required this.sessionId,\n    required t..."
+  },
+  {
+    "path": "training/exercise.dart",
+    "date": "2025-07-26 16:13:00",
+    "timestamp": 1753539180.542,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\nimport 'package:trainer_backend/models/training/parameters/exercise_parameters.dart';\n\npart 'exercise.g.dart';\n\n/// A helper function for `json_serializable` to read the exercise name\n/// from a nested 'exercise' object in the JSON payload.\nObject? _readName(Map<dynamic, dynamic> json, String key) => (json[..."
+  },
+  {
+    "path": "training/parameters/exercise_parameters.dart",
+    "date": "2025-10-01 18:22:17",
+    "timestamp": 1759335737.993,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'exercise_parameters.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  createFactory: false,\n  createToJson: false,\n)\nsealed class SessionLog {\n  const SessionLog({\n    required this.id,\n    required this.sessionId,\n    req..."
+  },
+  {
+    "path": "training/parameters/exercise_parameters.dart",
+    "date": "2025-07-26 16:13:25",
+    "timestamp": 1753539205.308,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/converters/duration_converter.dart';\n\npart 'exercise_parameters.g.dart';\n\n// --- Exercise Parameters ---\n\n/// Represents a single set within a 'Classic' style exercise.\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass ClassicExerciseSet {\n  /// Creates an instance of [ClassicExerciseSet].\n  const ClassicExerciseSe..."
+  },
+  {
+    "path": "training/parameters/session_parameters.dart",
+    "date": "2025-07-07 19:16:19",
+    "timestamp": 1751908579.22,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/program.dart",
+    "date": "2025-08-15 17:10:46",
+    "timestamp": 1755270646.354,
+    "source": "Unknown",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/session.dart';\n\npart 'program.g.dart';\n\n/// Represents a training program, which is a collection of training sessions.\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass Program {\n  /// Creates an instance of [Program].\n  const Program({\n    required this.id,\n    required this.userId,\n    required this.name,\n    thi..."
+  },
+  {
+    "path": "training/program.dart",
+    "date": "2025-07-26 16:11:49",
+    "timestamp": 1753539109.955,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/session.dart';\n\npart 'program.g.dart';\n\n/// Represents a training program, which is a collection of training sessions.\n@JsonSerializable(fieldRename: FieldRename.snake)\n@CopyWith()\nclass Program {\n  /// Creates an instance of [Program].\n  const Program({\n    required this.id,\n    required this.userId,\n    required this.name,\n    thi..."
+  },
+  {
+    "path": "training/session.dart",
+    "date": "2025-07-26 16:12:20",
+    "timestamp": 1753539140.625,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/training/converters/duration_converter.dart';\nimport 'package:trainer_backend/models/training/enums/session_style.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\nimport 'package:trainer_backend/models/training/exercise.dart';\n\npart 'session.g.dart';\n\n/// A sealed class representing a single training session w..."
+  },
+  {
+    "path": "training/session.dart",
+    "date": "2025-10-01 18:22:23",
+    "timestamp": 1759335743.836,
+    "source": "Undo Create Diff",
+    "content_preview": "import 'package:copy_with_extension/copy_with_extension.dart';\nimport 'package:json_annotation/json_annotation.dart';\nimport 'package:trainer_backend/models/history/round_log.dart';\nimport 'package:trainer_backend/models/training/enums/session_type.dart';\n\npart 'session.g.dart';\n\n@JsonSerializable(\n  fieldRename: FieldRename.snake,\n  createFactory: false,\n  createToJson: false,\n)\nsealed class SessionLog {\n  const SessionLog({\n    required this.id,\n    required this.sessionId,\n    required this.s..."
+  },
+  {
+    "path": "training/session_exercise.dart",
+    "date": "2025-07-06 19:29:23",
+    "timestamp": 1751822963.076,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/session_exercise_parameters.dart",
+    "date": "2025-07-06 19:29:31",
+    "timestamp": 1751822971.621,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/session_parameters.dart",
+    "date": "2025-07-06 19:29:27",
+    "timestamp": 1751822967.344,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/session_style.dart",
+    "date": "2025-07-06 19:29:42",
+    "timestamp": 1751822982.04,
+    "source": "Unknown",
+    "content_preview": "\n"
+  },
+  {
+    "path": "training/session_type.dart",
+    "date": "2025-07-06 19:29:36",
+    "timestamp": 1751822976.128,
+    "source": "Unknown",
+    "content_preview": "\n"
+  }
+]

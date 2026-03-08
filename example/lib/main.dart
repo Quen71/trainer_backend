@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:trainer_backend/models/models.export.dart';
 import 'package:trainer_backend/services/auth.service.dart';
+import 'package:trainer_backend/services/subscriptions.service.dart';
 import 'package:trainer_backend/trainer_backend.configuration.dart';
 import 'package:trainer_backend_example/auth_test.screen.dart';
 import 'package:trainer_backend_example/home_test.screen.dart';
@@ -33,6 +34,22 @@ class MyApp extends StatelessWidget {
           builder: (BuildContext context, AsyncSnapshot<AppAuthState> snapshot) {
             switch (snapshot.data) {
               case AppAuthenticated():
+                // Initialize RevenueCat SDK after authentication
+                final String? userId = AuthService.currentUser?.id;
+                if (userId != null && userId.isNotEmpty) {
+                  try {
+                    SubscriptionsService.configureRevenueCat(
+                      apiKey: 'test_BGEVjwYIZHblYEkAgZCBHLiHeax',
+                      userId: userId,
+                    ).then((_) {
+                      log(name: 'RevenueCat', 'SDK initialized successfully');
+                    }).catchError((Object error) {
+                      log(name: 'RevenueCat', 'Failed to initialize: $error');
+                    });
+                  } catch (e) {
+                    log(name: 'RevenueCat', 'Error initializing: $e');
+                  }
+                }
                 return const HomeTestScreen();
               case AppAuthPasswordRecovery():
               case AppUnauthenticated():

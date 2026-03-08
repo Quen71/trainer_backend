@@ -1,0 +1,398 @@
+---
+alwaysApply: false
+---
+# Trainer Backend - Cursor Rules
+
+Expert Flutter/Dart backend package with Supabase. Follow conventions strictly.
+
+## 🌍 Documentation
+**ALL doc comments (`///`) MUST be in English.**
+
+## 📐 Code Style (Non-négociable)
+
+### Types & Syntaxe
+- **ALWAYS** specify types (`always_specify_types: true`)
+- **ALWAYS** single quotes (`prefer_single_quotes: true`)
+- **ALWAYS** trailing commas (`require_trailing_commas: true`)
+- **ALWAYS** const constructors when possible
+- **PREFER** arrow functions for short methods
+- **ALWAYS** package imports: `package:trainer_backend/...`
+- **PREFER** getters over methods for parameterless data retrieval
+
+```dart
+// ✅ Getters
+static User? get currentUser => TrainerAPI.authManager.currentUser;
+
+// ❌ Methods without params
+static User? getCurrentUser() => TrainerAPI.authManager.currentUser;
+```
+
+### Imports
+```dart
+// ✅ Absolute
+import 'package:trainer_backend/models/auth/profile.dart';
+
+// ❌ Relative
+import '../models/auth/profile.dart';
+```
+
+## 📦 Naming Conventions
+
+### Files
+- Services: `*.service.dart`
+- Models: `*.dart` in `/models`
+- Enums: `*.dart` in `/models/*/enums/`
+- States: `*.dart` in `/models/*/state/`
+- Converters: `*.dart` in `/models/*/converters/`
+- Exports: `*.export.dart`
+- Configuration: `*.configuration.dart`
+- Clients: `*.api.dart`
+
+### Classes
+- Services: `FeatureService`
+- Models: PascalCase (e.g., `Profile`, `Program`)
+- Enums: PascalCase (e.g., `UserRole`, `SessionType`)
+- States: `App` prefix (e.g., `AppAuthState`, `AppAuthenticated`)
+
+## 🏗️ Architecture (STRICT)
+
+### Package Structure
+```
+lib/
+├── clients/               # TrainerAPI client
+│   └── trainer.api.dart
+├── models/                # Data models
+│   ├── auth/
+│   ├── training/
+│   ├── history/
+│   └── models.export.dart
+├── services/              # Backend services
+│   ├── auth.service.dart
+│   ├── programs.service.dart
+│   └── services.export.dart
+└── trainer_backend.dart   # Main entry point
+    trainer_backend.configuration.dart
+```
+
+### Centralized Exports (MANDATORY)
+**ALWAYS** create `*.export.dart` files:
+
+```dart
+// models/models.export.dart
+export 'auth/profile.dart';
+export 'training/program.dart';
+
+// services/services.export.dart
+export 'auth.service.dart';
+export 'programs.service.dart';
+
+// trainer_backend.dart
+export 'models/models.export.dart';
+export 'services/services.export.dart';
+```
+
+## 🎯 Service Pattern (STRICT)
+
+### Structure
+```dart
+/// Manages all operations related to programs.
+///
+/// Provides static methods for creating, reading, updating programs.
+class ProgramsService {
+  /// Private constructor to prevent instantiation.
+  const ProgramsService._();
+
+  /// Private getter to access Supabase client.
+  static SupabaseClient get _client => TrainerAPI.client;
+
+  /// Creates a new program with all sessions and exercises.
+  ///
+  /// The [program] parameter must contain all necessary information.
+  ///
+  /// Returns a [Future] with the created [Program] including generated IDs.
+  /// Throws [PostgrestException] if RPC call fails.
+  static Future<Program> createFullProgram(Program program) async {
+    final Map<String, dynamic> programJson = program.toJson();
+    final dynamic response = await _client.rpc(
+      'create_full_program',
+      params: <String, dynamic>{'full_program_data': programJson},
+    );
+    return Program.fromJson(response as PostgrestMap);
+  }
+
+  /// Fetches paginated programs for current user.
+  ///
+  /// - [page]: Page number to retrieve.
+  /// - [pageSize]: Programs per page. Default: 5.
+  ///
+  /// Returns empty list if no programs found.
+  /// Throws [PostgrestException] if RPC fails.
+  static Future<List<Program>> fetchUserPrograms({
+    required int page,
+    int pageSize = 5,
+  }) async {
+    final dynamic response = await _client.rpc(
+      'get_user_programs',
+      params: <String, dynamic>{
+        'page_number': page,
+        'page_size': pageSize,
+      },
+    );
+    
+    if (response == null) return <Program>[];
+    
+    return (response as List<dynamic>)
+        .map((dynamic p) => Program.fromJson(p as Map<String, dynamic>))
+        .toList();
+  }
+}
+```
+
+**MANDATORY Points:**
+1. Private constructor: `const ServiceName._();`
+2. Static methods only
+3. Exhaustive `///` documentation (English) for every public method
+4. Access Supabase via `TrainerAPI.client` or `TrainerAPI.authManager` ONLY
+5. Document possible exceptions
+6. Explicit return types
+
+### TrainerAPI - Single Access Point
+
+**NEVER** use `Supabase.instance.client` directly. **ALWAYS** use `TrainerAPI`:
+
+```dart
+// ✅ Correct
+static SupabaseClient get _client => TrainerAPI.client;
+final user = TrainerAPI.authManager.currentUser;
+
+// ❌ Incorrect
+final client = Supabase.instance.client;
+```
+
+## 📋 Model Pattern (STRICT)
+
+### Structure
+```dart
+part 'program.g.dart';
+
+/// Represents a training program containing multiple sessions.
+@JsonSerializable(fieldRename: FieldRename.snake)
+@CopyWith()
+class Program {
+  /// Creates a [Program] instance.
+  const Program({
+    this.id,
+    required this.name,
+    this.description,
+    this.sessions = const <Session>[],
+    required this.createdAt,
+  });
+
+  /// Unique identifier. Null for new programs.
+  final int? id;
+
+  /// Program name.
+  final String name;
+
+  /// Optional description.
+  final String? description;
+
+  /// List of sessions in this program.
+  final List<Session> sessions;
+
+  /// Creation timestamp.
+  final DateTime createdAt;
+
+  /// Creates from JSON (Supabase response).
+  factory Program.fromJson(Map<String, dynamic> json) =>
+      _$ProgramFromJson(json);
+
+  /// Converts to JSON for Supabase.
+  Map<String, dynamic> toJson() => _$ProgramToJson(this);
+
+  /// Factory for creating new programs (without ID).
+  factory Program.forCreation({
+    required String name,
+    String? description,
+    List<Session> sessions = const <Session>[],
+  }) =>
+      Program(
+        name: name,
+        description: description,
+        sessions: sessions,
+        createdAt: DateTime.now(),
+      );
+}
+```
+
+**MANDATORY:**
+- `@JsonSerializable(fieldRename: FieldRename.snake)`
+- `@CopyWith()` for immutability
+- `part 'model.g.dart';` directive
+- `const` constructor
+- `final` fields
+- Document all fields with `///` (English)
+- `fromJson` factory
+- `toJson` method
+- `forCreation` factory if needed (for models without IDs)
+
+## 🔢 Enums
+
+```dart
+/// Represents user role in the application.
+@JsonEnum(fieldRename: FieldRename.snake)
+enum UserRole {
+  /// Standard user with basic permissions.
+  standard,
+
+  /// Premium user with advanced features.
+  premium,
+
+  /// Administrator with full access.
+  admin,
+}
+```
+
+**MANDATORY:**
+- `@JsonEnum(fieldRename: FieldRename.snake)`
+- Document each value with `///` (English)
+
+## 🔄 Custom Converters
+
+```dart
+/// Converter for serializing/deserializing [Duration].
+class DurationConverter implements JsonConverter<Duration, int> {
+  const DurationConverter();
+
+  @override
+  Duration fromJson(int json) => Duration(seconds: json);
+
+  @override
+  int toJson(Duration object) => object.inSeconds;
+}
+
+// Usage in model
+class Exercise {
+  @DurationConverter()
+  final Duration restTime;
+}
+```
+
+## 📱 Example App Updates (CRITICAL)
+
+**MANDATORY: When adding/modifying ANY feature in trainer_backend, you MUST update `example/`.**
+
+### Rules
+1. **New Service** → Add test screen in `example/lib/`
+2. **New Model** → Show usage in example screens
+3. **Modified Method** → Update existing example
+4. **New Feature** → Create dedicated test screen
+
+### Example Structure
+```
+example/
+├── lib/
+│   ├── main.dart                   # Routing
+│   ├── auth_test.screen.dart       # Tests AuthService
+│   ├── programs_test.screen.dart   # Tests ProgramsService
+│   └── sessions_test.screen.dart   # Tests SessionsService
+```
+
+### Example Screen Pattern
+```dart
+/// Test screen demonstrating [FeatureService] capabilities.
+class FeatureTestScreen extends StatefulWidget {
+  const FeatureTestScreen({super.key});
+
+  @override
+  State<FeatureTestScreen> createState() => _FeatureTestScreenState();
+}
+
+class _FeatureTestScreenState extends State<FeatureTestScreen> {
+  Future<void> _testCreateFeature() async {
+    try {
+      final Feature feature = await FeatureService.create(
+        Feature.forCreation(name: 'Test'),
+      );
+      print('Created: ${feature.id}');
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Feature Test')),
+        body: ListView(
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: _testCreateFeature,
+              child: const Text('Test Create'),
+            ),
+          ],
+        ),
+      );
+}
+```
+
+**Why:** Validates functionality, provides usage examples, documents edge cases.
+
+## 🔧 Code Generation
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
+For: `@JsonSerializable`, `@CopyWith`, `@riverpod`
+
+## ✅ Best Practices
+
+**ALWAYS:**
+- Document exhaustively with `///` (English)
+- Private constructors for services
+- Access Supabase via TrainerAPI
+- Create `*.export.dart` files
+- Handle `null` cases in responses
+- Specify exception types in docs
+- Use `@JsonSerializable(fieldRename: FieldRename.snake)`
+- Add `forCreation` factories when needed
+- **Update example/ after any modification**
+
+**PREFER:**
+- Static methods for services
+- RPCs for complex operations
+- Named factories for clarity
+- Explicit types everywhere
+
+**NEVER:**
+- Access `Supabase.instance.client` directly
+- Instantiate services
+- Skip documentation
+- Forget code generation annotations
+- Put business logic in models
+- Skip null handling
+- Use relative imports
+- Forget `part` directive
+- **Skip updating example/ after changes**
+
+## 📝 Checklists
+
+### New Service
+1. ✅ Create class with `const ServiceName._();`
+2. ✅ Add `static SupabaseClient get _client => TrainerAPI.client;`
+3. ✅ Document class with `///` (English)
+4. ✅ Create static methods
+5. ✅ Document methods: params, returns, exceptions (English)
+6. ✅ Export in `services.export.dart`
+7. ✅ **Create test screen in `example/lib/feature_test.screen.dart`**
+8. ✅ **Add route in `example/lib/main.dart`**
+
+### New Model
+1. ✅ Add `@JsonSerializable(fieldRename: FieldRename.snake)`
+2. ✅ Add `@CopyWith()`
+3. ✅ Add `part 'model.g.dart';`
+4. ✅ Document class and fields with `///` (English)
+5. ✅ Create `fromJson` factory
+6. ✅ Create `toJson` method
+7. ✅ Add `forCreation` factory if needed
+8. ✅ Run `dart run build_runner build --delete-conflicting-outputs`
+9. ✅ Export in `models.export.dart`
+10. ✅ **Show usage in example/**

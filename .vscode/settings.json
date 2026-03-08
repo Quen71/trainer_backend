@@ -8,6 +8,7 @@
     "dotenv",
     "Emom",
     "Hiit",
+    "revenuecat",
     "supabase"
   ],
   "deno.enablePaths": [
