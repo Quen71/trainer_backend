@@ -102,21 +102,26 @@ All functionalities are exposed through static methods on service classes.
 
 ### Authentication (`AuthService`)
 
-Listen to authentication state changes to react to sign-ins and sign-outs.
+Listen to authentication state changes. The stream emits `AppAuthState` objects (sealed class):
 
 ```dart
-AuthService.onAuthStateChange.listen((authState) {
-  final event = authState.event;
-  final session = authState.session;
-  if (event == AuthChangeEvent.signedIn) {
-    // handle user sign in
-  } else if (event == AuthChangeEvent.signedOut) {
-    // handle user sign out
+AuthService.onAuthStateChange.listen((state) {
+  if (state is AppAuthenticated) {
+    if (!state.isTokenRefresh) {
+      // Real sign-in: fetch user data, show welcome screen
+    }
+    // Token refresh (isTokenRefresh == true): keep current state, no action needed
+  } else if (state is AppUnauthenticated) {
+    // Signed out or account deleted: redirect to login
+  } else if (state is AppAuthPasswordRecovery) {
+    // User initiated a password reset
+  } else if (state is AppAuthLoading) {
+    // Transitioning between states
   }
 });
 ```
 
-Sign up a new user:
+Sign up and confirm via OTP:
 
 ```dart
 try {
@@ -125,82 +130,135 @@ try {
     password: 'securepassword123',
     username: 'testuser',
   );
-  // On success, you may need to confirm the signup via OTP.
+
+  // Then confirm with the OTP sent by email
+  await AuthService.confirmSignUp(email: 'test@example.com', token: '123456');
 } on AuthException catch (e) {
   // Handle error
 }
 ```
 
+Other available methods:
+
+| Method | Description |
+|---|---|
+| `signIn(email, password)` | Email/password sign-in |
+| `signInWithGoogle()` | Google OAuth sign-in |
+| `signInWithApple()` | Apple OAuth sign-in |
+| `signOut()` | Sign out the current user |
+| `deleteAccount()` | Permanently delete the user account |
+| `resendConfirmationCode(email)` | Resend the OTP confirmation code |
+| `sendPasswordResetCode(email)` | Send a password reset OTP |
+| `verifyPasswordResetCode(email, token)` | Verify the password reset OTP |
+| `updatePassword(newPassword)` | Update the current user's password |
+| `getProfileWithInitialData(limit)` | Fetch user profile with initial programs and session logs |
+| `currentUser` | Getter for the currently signed-in `User?` |
+
 ### Programs (`ProgramsService`)
 
-Fetch a list of the user's training programs.
+Full lifecycle management for training programs (CRUD, sessions, favorites).
 
 ```dart
-try {
-  final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0, pageSize: 10);
-  // Display programs in your UI
-} catch (e) {
-  // Handle error
-}
-```
+// Fetch paginated programs
+final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0, pageSize: 10);
 
-Create a new, complete program.
+// Create a complete program with sessions and exercises
+final Program created = await ProgramsService.createFullProgram(newProgram);
 
-```dart
-// First, build your Program object with its Sessions and Exercises.
-final newProgram = Program.forCreation(
-  name: 'My New Program',
-  sessions: [
-    //... your session objects
-  ],
+// Update program metadata and session order
+final Program updated = await ProgramsService.updateFullProgram(program);
+
+// Add a session to an existing program
+final Program withNewSession = await ProgramsService.addSessionToProgram(
+  programId: 42,
+  session: newSession,
 );
 
-try {
-  final Program createdProgram = await ProgramsService.createFullProgram(newProgram);
-  // Use the returned program, now with IDs from the database.
-} catch (e) {
-  // Handle error
-}
+// Delete a session (returns the updated program)
+final Program afterDelete = await ProgramsService.deleteSession(sessionId);
+
+// Delete a program entirely (returns the deleted program ID)
+final int deletedId = await ProgramsService.deleteProgram(programId);
+
+// Favorites
+final Program faved = await ProgramsService.addProgramToFavorites(programId);
+final Program unfaved = await ProgramsService.removeProgramFromFavorites(programId);
 ```
 
-### History (`HistoryService`)
-
-Log a completed session.
-
-```dart
-// Build your SessionLog object from the user's performance data.
-final sessionLog = ClassicSessionLog.forCreation(
-  sessionId: 123,
-  startedAt: DateTime.now().subtract(const Duration(minutes: 45)),
-  endedAt: DateTime.now(),
-  rounds: [
-    //... your round and exercise logs
-  ],
-);
-
-try {
-  final SessionLog createdLog = await HistoryService.createSessionLog(sessionLog);
-  // Log was successfully saved.
-} catch (e) {
-  // Handle error
-}
-```
+> **Subscription limits**: `createFullProgram` and `addSessionToProgram` may throw `PostgrestException` with codes like `LIMIT_EXCEEDED:MAX_PROGRAMS:X/Y`, `LIMIT_EXCEEDED:MAX_SESSIONS:X/Y`, `LIMIT_EXCEEDED:MAX_EXERCISES:X/Y`, `SUBSCRIPTION_INACTIVE`, or `SUBSCRIPTION_EXPIRED`.
 
 ### Sessions (`SessionsService`)
 
-Update a full session, for instance after a user modifies it in the UI. This is useful for reordering exercises, changing parameters, or adding new ones.
+Update a full session (exercises, parameters, ordering):
 
 ```dart
-// Assume `updatedSession` is a Session object with modified data.
-try {
-  final SessionApiResponse response = await SessionsService.updateFullSession(updatedSession);
-  // The session was successfully updated.
-  // The `response` contains the updated session, including any new IDs
-  // for newly added exercises.
-  final Session authoritativeSession = response.session;
-} catch (e) {
-  // Handle error
+final SessionApiResponse response = await SessionsService.updateFullSession(updatedSession);
+final Session authoritativeSession = response.session;
+```
+
+> **Subscription limits**: `updateFullSession` may throw `PostgrestException` with codes `LIMIT_EXCEEDED:MAX_EXERCISES:X/Y`, `SUBSCRIPTION_INACTIVE`, or `SUBSCRIPTION_EXPIRED` when adding new exercises.
+
+### History (`HistoryService`)
+
+Log a completed session and retrieve past logs:
+
+```dart
+// Log a session
+final CreateSessionLogResponse response = await HistoryService.createSessionLog(sessionLog);
+// response contains the created log and an updated session preview
+
+// Fetch paginated session logs
+final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(page: 0, pageSize: 10);
+```
+
+### Subscriptions (`SubscriptionsService`)
+
+Complete subscription management combining **Supabase** (limits, entitlements, usage) and **RevenueCat** (purchases, offerings, customer info).
+
+#### Setup
+
+RevenueCat must be configured once after user authentication:
+
+```dart
+await SubscriptionsService.configureRevenueCat(
+  apiKey: 'your_revenuecat_api_key', // test_, appl_, or goog_ prefix
+  userId: AuthService.currentUser!.id,
+);
+```
+
+#### Subscription info (Supabase)
+
+```dart
+// Get the active subscription summary (falls back to Free if none)
+final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+
+// Check if the user can access a specific feature
+final FeatureAccess access = await SubscriptionsService.checkFeatureAccess(featureKey: 'premium_feature');
+if (access.hasAccess) {
+  // Grant access
 }
+
+// Get limits with current usage counts (programs, exercises, sessions)
+final SubscriptionLimitsWithUsage usage = await SubscriptionsService.getUserLimitsWithUsage();
+```
+
+#### Purchases (RevenueCat)
+
+```dart
+// Fetch available offerings and packages
+final Offerings? offerings = await SubscriptionsService.getOfferings();
+
+// Purchase a package (returns a SubscriptionSummary for immediate UI update)
+final SubscriptionSummary result = await SubscriptionsService.purchasePackage(package: selectedPackage);
+
+// Restore previous purchases
+final CustomerInfo restored = await SubscriptionsService.restorePurchases();
+
+// Get current customer info
+final CustomerInfo info = await SubscriptionsService.getCustomerInfo();
+
+// Get the platform subscription management URL (App Store / Play Store)
+final String? managementUrl = await SubscriptionsService.getManagementURL();
 ```
 
 ## Data Models
@@ -210,8 +268,49 @@ The package includes a comprehensive set of data models to represent all backend
 - **`Session`**: A single workout day, composed of `Exercise` objects. Exists as a sealed class (`ClassicSession`, `AmrapSession`, etc.).
 - **`Exercise`**: A specific exercise within a session, with `templateParameters` and optional `objectiveParameters` for progression.
 - **`SessionLog`**: A record of a completed workout, containing `RoundLog` and `ExerciseLog` data.
+- **`SubscriptionSummary`**: Active subscription with entitlement, product info, and limits.
+- **`FeatureAccess`**: Result of a feature access check (`hasAccess`, `featureKey`, `limits`).
+- **`SubscriptionLimitsWithUsage`**: Subscription limits combined with current usage counts.
+- **`CustomerInfo`**: RevenueCat customer data (entitlements, active subscriptions).
+- **`Offerings`** / **`Package`**: RevenueCat offerings and purchasable packages.
 
 All models are strongly-typed and include `fromJson`/`toJson` methods for easy serialization.
+
+## Adding a New Subscription Product
+
+When a new subscription product is added in the App Store Connect, Google Play Console, or RevenueCat dashboard, the following file **must** be updated in this package:
+
+### `lib/constants/subscription.constants.dart`
+
+This file contains `SubscriptionConstants.productToEntitlement`, a static map that associates each **RevenueCat product identifier** to its **entitlement key** (`Premium`, `Basic`, etc.).
+
+```dart
+static const Map<String, String> productToEntitlement = <String, String>{
+  // Test Store & App Store (iOS)
+  'premium_monthly_subscription': 'Premium',
+  'premium_annual_subscription': 'Premium',
+  'basic_monthly_subscription': 'Basic',
+  'basic_annual_subscription': 'Basic',
+
+  // Play Store (Android)
+  'premium_monthly:pm': 'Premium',
+  'premium_annual:pa': 'Premium',
+  'basic_monthly:bm': 'Basic',
+  'basic_annual:ba': 'Basic',
+};
+```
+
+### Step-by-step process
+
+1. **Create the product** in the relevant store console (App Store Connect and/or Google Play Console).
+2. **Create or attach the product** in the RevenueCat dashboard, linking it to the appropriate entitlement (`Premium`, `Basic`, etc.).
+3. **Add a new entry** in `productToEntitlement` using the exact product identifier from RevenueCat as the key and the entitlement lookup key as the value.
+4. **Note on identifiers**:
+   - iOS / Test Store products use flat identifiers (e.g., `premium_monthly_subscription`).
+   - Android (Play Store) products use the `product:basePlan` format (e.g., `premium_monthly:pm`).
+5. **Publish** a new version of the package so the consuming app picks up the mapping.
+
+> **Why is this needed?** RevenueCat's `getOfferings()` returns packages without entitlement information. This local mapping is used by the SDK to enrich each package with its `entitlementIdentifier`, which is required before calling `purchasePackage()`.
 
 ## Additional Information
 
