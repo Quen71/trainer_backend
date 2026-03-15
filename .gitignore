@@ -21,6 +21,8 @@ migrate_working_dir/
 # is commented out by default.
 #.vscode/
 
+# FVM
+
 # Flutter/Dart/Pub related
 # Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
 /pubspec.lock
@@ -32,3 +34,6 @@ build/
 
 # Environment
 *.env
+
+# FVM Version Cache
+.fvm/

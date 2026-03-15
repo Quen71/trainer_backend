@@ -39,7 +39,9 @@ class MyApp extends StatelessWidget {
                 if (userId != null && userId.isNotEmpty) {
                   try {
                     SubscriptionsService.configureRevenueCat(
-                      apiKey: 'test_BGEVjwYIZHblYEkAgZCBHLiHeax',
+                      // apiKey: 'appl_vqLRQXywqzbNdKdQzNMTLQbFWoi',
+                      apiKey: 'goog_vessnrpBHCSiEhLQyheoNUzoQyd',
+                      // apiKey: 'test_BGEVjwYIZHblYEkAgZCBHLiHeax',
                       userId: userId,
                     ).then((_) {
                       log(name: 'RevenueCat', 'SDK initialized successfully');

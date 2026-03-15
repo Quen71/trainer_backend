@@ -29,5 +29,6 @@
     "fs",
     "http",
     "net"
-  ]
+  ],
+  "dart.flutterSdkPath": ".fvm/versions/3.35.2"
 }

@@ -13,20 +13,21 @@ class SubscriptionConstants {
   /// Play Store) and their corresponding entitlements. When adding new
   /// products or entitlements, update this map accordingly.
   static const Map<String, String> productToEntitlement = <String, String>{
-    // Test Store products - Premium
+    // Test Store & App Store (iOS) products - Premium
+    // (App Store uses the same store identifiers as the Test Store)
     'premium_monthly_subscription': 'Premium',
     'premium_annual_subscription': 'Premium',
 
-    // Test Store products - Basic
+    // Test Store & App Store (iOS) products - Basic
     'basic_monthly_subscription': 'Basic',
     'basic_annual_subscription': 'Basic',
 
-    // App Store products
-    'fr.trainer.test.Monthly': 'Premium',
-    'fr.trainer.test.Annual': 'Premium',
-
-    // Play Store products
+    // Play Store (Android) products - Premium
     'premium_monthly:pm': 'Premium',
-    'premium_annualy:pa': 'Premium',
+    'premium_annual:pa': 'Premium',
+
+    // Play Store (Android) products - Basic
+    'basic_monthly:bm': 'Basic',
+    'basic_annual:ba': 'Basic',
   };
 }
