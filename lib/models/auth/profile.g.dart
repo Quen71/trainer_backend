@@ -23,12 +23,13 @@ abstract class _$ProfileCWProxy {
 
   Profile sessionLogs(List<SessionLog> sessionLogs);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Profile(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Profile(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Profile(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Profile call({
     String id,
     String username,
@@ -41,45 +42,47 @@ abstract class _$ProfileCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfProfile.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfProfile.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfProfile.copyWith(...)` or call `instanceOfProfile.copyWith.fieldName(value)` for a single field.
 class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
   const _$ProfileCWProxyImpl(this._value);
 
   final Profile _value;
 
   @override
-  Profile id(String id) => this(id: id);
+  Profile id(String id) => call(id: id);
 
   @override
-  Profile username(String username) => this(username: username);
+  Profile username(String username) => call(username: username);
 
   @override
-  Profile createdAt(DateTime createdAt) => this(createdAt: createdAt);
+  Profile createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-  Profile updatedAt(DateTime updatedAt) => this(updatedAt: updatedAt);
+  Profile updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-  Profile fullName(String? fullName) => this(fullName: fullName);
+  Profile fullName(String? fullName) => call(fullName: fullName);
 
   @override
-  Profile role(UserRole role) => this(role: role);
+  Profile role(UserRole role) => call(role: role);
 
   @override
-  Profile programs(List<Program> programs) => this(programs: programs);
+  Profile programs(List<Program> programs) => call(programs: programs);
 
   @override
   Profile sessionLogs(List<SessionLog> sessionLogs) =>
-      this(sessionLogs: sessionLogs);
+      call(sessionLogs: sessionLogs);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Profile(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Profile(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Profile(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Profile call({
     Object? id = const $CopyWithPlaceholder(),
     Object? username = const $CopyWithPlaceholder(),
@@ -91,19 +94,19 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
     Object? sessionLogs = const $CopyWithPlaceholder(),
   }) {
     return Profile(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      username: username == const $CopyWithPlaceholder()
+      username: username == const $CopyWithPlaceholder() || username == null
           ? _value.username
           // ignore: cast_nullable_to_non_nullable
           : username as String,
-      createdAt: createdAt == const $CopyWithPlaceholder()
+      createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
           : createdAt as DateTime,
-      updatedAt: updatedAt == const $CopyWithPlaceholder()
+      updatedAt: updatedAt == const $CopyWithPlaceholder() || updatedAt == null
           ? _value.updatedAt
           // ignore: cast_nullable_to_non_nullable
           : updatedAt as DateTime,
@@ -111,24 +114,26 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
           ? _value.fullName
           // ignore: cast_nullable_to_non_nullable
           : fullName as String?,
-      role: role == const $CopyWithPlaceholder()
+      role: role == const $CopyWithPlaceholder() || role == null
           ? _value.role
           // ignore: cast_nullable_to_non_nullable
           : role as UserRole,
-      programs: programs == const $CopyWithPlaceholder()
+      programs: programs == const $CopyWithPlaceholder() || programs == null
           ? _value.programs
           // ignore: cast_nullable_to_non_nullable
           : programs as List<Program>,
-      sessionLogs: sessionLogs == const $CopyWithPlaceholder()
-          ? _value.sessionLogs
-          // ignore: cast_nullable_to_non_nullable
-          : sessionLogs as List<SessionLog>,
+      sessionLogs:
+          sessionLogs == const $CopyWithPlaceholder() || sessionLogs == null
+              ? _value.sessionLogs
+              // ignore: cast_nullable_to_non_nullable
+              : sessionLogs as List<SessionLog>,
     );
   }
 }
 
 extension $ProfileCopyWith on Profile {
-  /// Returns a callable class that can be used as follows: `instanceOfProfile.copyWith(...)` or like so:`instanceOfProfile.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfProfile.copyWith(...)` or `instanceOfProfile.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ProfileCWProxy get copyWith => _$ProfileCWProxyImpl(this);
 }

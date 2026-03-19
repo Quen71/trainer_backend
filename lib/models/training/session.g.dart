@@ -17,12 +17,13 @@ abstract class _$ClassicSessionCWProxy {
 
   ClassicSession exercises(List<ClassicExercise> exercises);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicSession call({
     int id,
     String name,
@@ -32,37 +33,39 @@ abstract class _$ClassicSessionCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfClassicSession.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfClassicSession.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfClassicSession.copyWith(...)` or call `instanceOfClassicSession.copyWith.fieldName(value)` for a single field.
 class _$ClassicSessionCWProxyImpl implements _$ClassicSessionCWProxy {
   const _$ClassicSessionCWProxyImpl(this._value);
 
   final ClassicSession _value;
 
   @override
-  ClassicSession id(int id) => this(id: id);
+  ClassicSession id(int id) => call(id: id);
 
   @override
-  ClassicSession name(String name) => this(name: name);
+  ClassicSession name(String name) => call(name: name);
 
   @override
   ClassicSession orderInProgram(int orderInProgram) =>
-      this(orderInProgram: orderInProgram);
+      call(orderInProgram: orderInProgram);
 
   @override
-  ClassicSession style(SessionStyle style) => this(style: style);
+  ClassicSession style(SessionStyle style) => call(style: style);
 
   @override
   ClassicSession exercises(List<ClassicExercise> exercises) =>
-      this(exercises: exercises);
+      call(exercises: exercises);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicSession call({
     Object? id = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
@@ -71,23 +74,24 @@ class _$ClassicSessionCWProxyImpl implements _$ClassicSessionCWProxy {
     Object? exercises = const $CopyWithPlaceholder(),
   }) {
     return ClassicSession(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder()
+      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+              orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
           : orderInProgram as int,
-      style: style == const $CopyWithPlaceholder()
+      style: style == const $CopyWithPlaceholder() || style == null
           ? _value.style
           // ignore: cast_nullable_to_non_nullable
           : style as SessionStyle,
-      exercises: exercises == const $CopyWithPlaceholder()
+      exercises: exercises == const $CopyWithPlaceholder() || exercises == null
           ? _value.exercises
           // ignore: cast_nullable_to_non_nullable
           : exercises as List<ClassicExercise>,
@@ -96,7 +100,8 @@ class _$ClassicSessionCWProxyImpl implements _$ClassicSessionCWProxy {
 }
 
 extension $ClassicSessionCopyWith on ClassicSession {
-  /// Returns a callable class that can be used as follows: `instanceOfClassicSession.copyWith(...)` or like so:`instanceOfClassicSession.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfClassicSession.copyWith(...)` or `instanceOfClassicSession.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ClassicSessionCWProxy get copyWith => _$ClassicSessionCWProxyImpl(this);
 }
@@ -114,12 +119,13 @@ abstract class _$AmrapSessionCWProxy {
 
   AmrapSession duration(Duration duration);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapSession call({
     int id,
     String name,
@@ -130,40 +136,42 @@ abstract class _$AmrapSessionCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfAmrapSession.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfAmrapSession.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfAmrapSession.copyWith(...)` or call `instanceOfAmrapSession.copyWith.fieldName(value)` for a single field.
 class _$AmrapSessionCWProxyImpl implements _$AmrapSessionCWProxy {
   const _$AmrapSessionCWProxyImpl(this._value);
 
   final AmrapSession _value;
 
   @override
-  AmrapSession id(int id) => this(id: id);
+  AmrapSession id(int id) => call(id: id);
 
   @override
-  AmrapSession name(String name) => this(name: name);
+  AmrapSession name(String name) => call(name: name);
 
   @override
   AmrapSession orderInProgram(int orderInProgram) =>
-      this(orderInProgram: orderInProgram);
+      call(orderInProgram: orderInProgram);
 
   @override
-  AmrapSession style(SessionStyle style) => this(style: style);
+  AmrapSession style(SessionStyle style) => call(style: style);
 
   @override
   AmrapSession exercises(List<AmrapExercise> exercises) =>
-      this(exercises: exercises);
+      call(exercises: exercises);
 
   @override
-  AmrapSession duration(Duration duration) => this(duration: duration);
+  AmrapSession duration(Duration duration) => call(duration: duration);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapSession call({
     Object? id = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
@@ -173,27 +181,28 @@ class _$AmrapSessionCWProxyImpl implements _$AmrapSessionCWProxy {
     Object? duration = const $CopyWithPlaceholder(),
   }) {
     return AmrapSession(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder()
+      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+              orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
           : orderInProgram as int,
-      style: style == const $CopyWithPlaceholder()
+      style: style == const $CopyWithPlaceholder() || style == null
           ? _value.style
           // ignore: cast_nullable_to_non_nullable
           : style as SessionStyle,
-      exercises: exercises == const $CopyWithPlaceholder()
+      exercises: exercises == const $CopyWithPlaceholder() || exercises == null
           ? _value.exercises
           // ignore: cast_nullable_to_non_nullable
           : exercises as List<AmrapExercise>,
-      duration: duration == const $CopyWithPlaceholder()
+      duration: duration == const $CopyWithPlaceholder() || duration == null
           ? _value.duration
           // ignore: cast_nullable_to_non_nullable
           : duration as Duration,
@@ -202,7 +211,8 @@ class _$AmrapSessionCWProxyImpl implements _$AmrapSessionCWProxy {
 }
 
 extension $AmrapSessionCopyWith on AmrapSession {
-  /// Returns a callable class that can be used as follows: `instanceOfAmrapSession.copyWith(...)` or like so:`instanceOfAmrapSession.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfAmrapSession.copyWith(...)` or `instanceOfAmrapSession.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$AmrapSessionCWProxy get copyWith => _$AmrapSessionCWProxyImpl(this);
 }
@@ -220,12 +230,13 @@ abstract class _$EmomSessionCWProxy {
 
   EmomSession roundNumber(int roundNumber);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomSession call({
     int id,
     String name,
@@ -236,40 +247,42 @@ abstract class _$EmomSessionCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfEmomSession.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfEmomSession.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfEmomSession.copyWith(...)` or call `instanceOfEmomSession.copyWith.fieldName(value)` for a single field.
 class _$EmomSessionCWProxyImpl implements _$EmomSessionCWProxy {
   const _$EmomSessionCWProxyImpl(this._value);
 
   final EmomSession _value;
 
   @override
-  EmomSession id(int id) => this(id: id);
+  EmomSession id(int id) => call(id: id);
 
   @override
-  EmomSession name(String name) => this(name: name);
+  EmomSession name(String name) => call(name: name);
 
   @override
   EmomSession orderInProgram(int orderInProgram) =>
-      this(orderInProgram: orderInProgram);
+      call(orderInProgram: orderInProgram);
 
   @override
-  EmomSession style(SessionStyle style) => this(style: style);
+  EmomSession style(SessionStyle style) => call(style: style);
 
   @override
   EmomSession exercises(List<EmomExercise> exercises) =>
-      this(exercises: exercises);
+      call(exercises: exercises);
 
   @override
-  EmomSession roundNumber(int roundNumber) => this(roundNumber: roundNumber);
+  EmomSession roundNumber(int roundNumber) => call(roundNumber: roundNumber);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomSession call({
     Object? id = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
@@ -279,36 +292,39 @@ class _$EmomSessionCWProxyImpl implements _$EmomSessionCWProxy {
     Object? roundNumber = const $CopyWithPlaceholder(),
   }) {
     return EmomSession(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder()
+      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+              orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
           : orderInProgram as int,
-      style: style == const $CopyWithPlaceholder()
+      style: style == const $CopyWithPlaceholder() || style == null
           ? _value.style
           // ignore: cast_nullable_to_non_nullable
           : style as SessionStyle,
-      exercises: exercises == const $CopyWithPlaceholder()
+      exercises: exercises == const $CopyWithPlaceholder() || exercises == null
           ? _value.exercises
           // ignore: cast_nullable_to_non_nullable
           : exercises as List<EmomExercise>,
-      roundNumber: roundNumber == const $CopyWithPlaceholder()
-          ? _value.roundNumber
-          // ignore: cast_nullable_to_non_nullable
-          : roundNumber as int,
+      roundNumber:
+          roundNumber == const $CopyWithPlaceholder() || roundNumber == null
+              ? _value.roundNumber
+              // ignore: cast_nullable_to_non_nullable
+              : roundNumber as int,
     );
   }
 }
 
 extension $EmomSessionCopyWith on EmomSession {
-  /// Returns a callable class that can be used as follows: `instanceOfEmomSession.copyWith(...)` or like so:`instanceOfEmomSession.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfEmomSession.copyWith(...)` or `instanceOfEmomSession.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$EmomSessionCWProxy get copyWith => _$EmomSessionCWProxyImpl(this);
 }
@@ -326,12 +342,13 @@ abstract class _$HiitSessionCWProxy {
 
   HiitSession roundNumber(int roundNumber);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitSession call({
     int id,
     String name,
@@ -342,40 +359,42 @@ abstract class _$HiitSessionCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfHiitSession.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfHiitSession.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfHiitSession.copyWith(...)` or call `instanceOfHiitSession.copyWith.fieldName(value)` for a single field.
 class _$HiitSessionCWProxyImpl implements _$HiitSessionCWProxy {
   const _$HiitSessionCWProxyImpl(this._value);
 
   final HiitSession _value;
 
   @override
-  HiitSession id(int id) => this(id: id);
+  HiitSession id(int id) => call(id: id);
 
   @override
-  HiitSession name(String name) => this(name: name);
+  HiitSession name(String name) => call(name: name);
 
   @override
   HiitSession orderInProgram(int orderInProgram) =>
-      this(orderInProgram: orderInProgram);
+      call(orderInProgram: orderInProgram);
 
   @override
-  HiitSession style(SessionStyle style) => this(style: style);
+  HiitSession style(SessionStyle style) => call(style: style);
 
   @override
   HiitSession exercises(List<HiitExercise> exercises) =>
-      this(exercises: exercises);
+      call(exercises: exercises);
 
   @override
-  HiitSession roundNumber(int roundNumber) => this(roundNumber: roundNumber);
+  HiitSession roundNumber(int roundNumber) => call(roundNumber: roundNumber);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitSession(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSession(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitSession(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitSession call({
     Object? id = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
@@ -385,36 +404,39 @@ class _$HiitSessionCWProxyImpl implements _$HiitSessionCWProxy {
     Object? roundNumber = const $CopyWithPlaceholder(),
   }) {
     return HiitSession(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder()
+      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+              orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
           : orderInProgram as int,
-      style: style == const $CopyWithPlaceholder()
+      style: style == const $CopyWithPlaceholder() || style == null
           ? _value.style
           // ignore: cast_nullable_to_non_nullable
           : style as SessionStyle,
-      exercises: exercises == const $CopyWithPlaceholder()
+      exercises: exercises == const $CopyWithPlaceholder() || exercises == null
           ? _value.exercises
           // ignore: cast_nullable_to_non_nullable
           : exercises as List<HiitExercise>,
-      roundNumber: roundNumber == const $CopyWithPlaceholder()
-          ? _value.roundNumber
-          // ignore: cast_nullable_to_non_nullable
-          : roundNumber as int,
+      roundNumber:
+          roundNumber == const $CopyWithPlaceholder() || roundNumber == null
+              ? _value.roundNumber
+              // ignore: cast_nullable_to_non_nullable
+              : roundNumber as int,
     );
   }
 }
 
 extension $HiitSessionCopyWith on HiitSession {
-  /// Returns a callable class that can be used as follows: `instanceOfHiitSession.copyWith(...)` or like so:`instanceOfHiitSession.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfHiitSession.copyWith(...)` or `instanceOfHiitSession.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$HiitSessionCWProxy get copyWith => _$HiitSessionCWProxyImpl(this);
 }

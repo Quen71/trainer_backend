@@ -23,12 +23,13 @@ abstract class _$SubscriptionEventCWProxy {
 
   SubscriptionEvent createdAt(DateTime createdAt);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionEvent(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionEvent(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionEvent(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionEvent call({
     String id,
     String? subscriptionId,
@@ -41,47 +42,49 @@ abstract class _$SubscriptionEventCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionEvent.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionEvent.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionEvent.copyWith(...)` or call `instanceOfSubscriptionEvent.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
   const _$SubscriptionEventCWProxyImpl(this._value);
 
   final SubscriptionEvent _value;
 
   @override
-  SubscriptionEvent id(String id) => this(id: id);
+  SubscriptionEvent id(String id) => call(id: id);
 
   @override
   SubscriptionEvent subscriptionId(String? subscriptionId) =>
-      this(subscriptionId: subscriptionId);
+      call(subscriptionId: subscriptionId);
 
   @override
-  SubscriptionEvent userId(String userId) => this(userId: userId);
+  SubscriptionEvent userId(String userId) => call(userId: userId);
 
   @override
-  SubscriptionEvent eventType(String eventType) => this(eventType: eventType);
+  SubscriptionEvent eventType(String eventType) => call(eventType: eventType);
 
   @override
   SubscriptionEvent vendorEventId(String? vendorEventId) =>
-      this(vendorEventId: vendorEventId);
+      call(vendorEventId: vendorEventId);
 
   @override
-  SubscriptionEvent eventTime(DateTime eventTime) => this(eventTime: eventTime);
+  SubscriptionEvent eventTime(DateTime eventTime) => call(eventTime: eventTime);
 
   @override
   SubscriptionEvent eventPayload(Map<String, dynamic> eventPayload) =>
-      this(eventPayload: eventPayload);
+      call(eventPayload: eventPayload);
 
   @override
-  SubscriptionEvent createdAt(DateTime createdAt) => this(createdAt: createdAt);
+  SubscriptionEvent createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionEvent(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionEvent(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionEvent(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionEvent call({
     Object? id = const $CopyWithPlaceholder(),
     Object? subscriptionId = const $CopyWithPlaceholder(),
@@ -93,7 +96,7 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
     Object? createdAt = const $CopyWithPlaceholder(),
   }) {
     return SubscriptionEvent(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
@@ -101,11 +104,11 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
           ? _value.subscriptionId
           // ignore: cast_nullable_to_non_nullable
           : subscriptionId as String?,
-      userId: userId == const $CopyWithPlaceholder()
+      userId: userId == const $CopyWithPlaceholder() || userId == null
           ? _value.userId
           // ignore: cast_nullable_to_non_nullable
           : userId as String,
-      eventType: eventType == const $CopyWithPlaceholder()
+      eventType: eventType == const $CopyWithPlaceholder() || eventType == null
           ? _value.eventType
           // ignore: cast_nullable_to_non_nullable
           : eventType as String,
@@ -113,15 +116,16 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
           ? _value.vendorEventId
           // ignore: cast_nullable_to_non_nullable
           : vendorEventId as String?,
-      eventTime: eventTime == const $CopyWithPlaceholder()
+      eventTime: eventTime == const $CopyWithPlaceholder() || eventTime == null
           ? _value.eventTime
           // ignore: cast_nullable_to_non_nullable
           : eventTime as DateTime,
-      eventPayload: eventPayload == const $CopyWithPlaceholder()
-          ? _value.eventPayload
-          // ignore: cast_nullable_to_non_nullable
-          : eventPayload as Map<String, dynamic>,
-      createdAt: createdAt == const $CopyWithPlaceholder()
+      eventPayload:
+          eventPayload == const $CopyWithPlaceholder() || eventPayload == null
+              ? _value.eventPayload
+              // ignore: cast_nullable_to_non_nullable
+              : eventPayload as Map<String, dynamic>,
+      createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
           : createdAt as DateTime,
@@ -130,7 +134,8 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
 }
 
 extension $SubscriptionEventCopyWith on SubscriptionEvent {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionEvent.copyWith(...)` or like so:`instanceOfSubscriptionEvent.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionEvent.copyWith(...)` or `instanceOfSubscriptionEvent.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionEventCWProxy get copyWith =>
       _$SubscriptionEventCWProxyImpl(this);

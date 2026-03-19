@@ -15,12 +15,13 @@ abstract class _$ProductSummaryCWProxy {
 
   ProductSummary periodInterval(String? periodInterval);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ProductSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ProductSummary(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ProductSummary(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ProductSummary call({
     String id,
     String productId,
@@ -29,33 +30,35 @@ abstract class _$ProductSummaryCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfProductSummary.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfProductSummary.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfProductSummary.copyWith(...)` or call `instanceOfProductSummary.copyWith.fieldName(value)` for a single field.
 class _$ProductSummaryCWProxyImpl implements _$ProductSummaryCWProxy {
   const _$ProductSummaryCWProxyImpl(this._value);
 
   final ProductSummary _value;
 
   @override
-  ProductSummary id(String id) => this(id: id);
+  ProductSummary id(String id) => call(id: id);
 
   @override
-  ProductSummary productId(String productId) => this(productId: productId);
+  ProductSummary productId(String productId) => call(productId: productId);
 
   @override
-  ProductSummary vendor(String vendor) => this(vendor: vendor);
+  ProductSummary vendor(String vendor) => call(vendor: vendor);
 
   @override
   ProductSummary periodInterval(String? periodInterval) =>
-      this(periodInterval: periodInterval);
+      call(periodInterval: periodInterval);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ProductSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ProductSummary(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ProductSummary(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ProductSummary call({
     Object? id = const $CopyWithPlaceholder(),
     Object? productId = const $CopyWithPlaceholder(),
@@ -63,15 +66,15 @@ class _$ProductSummaryCWProxyImpl implements _$ProductSummaryCWProxy {
     Object? periodInterval = const $CopyWithPlaceholder(),
   }) {
     return ProductSummary(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      productId: productId == const $CopyWithPlaceholder()
+      productId: productId == const $CopyWithPlaceholder() || productId == null
           ? _value.productId
           // ignore: cast_nullable_to_non_nullable
           : productId as String,
-      vendor: vendor == const $CopyWithPlaceholder()
+      vendor: vendor == const $CopyWithPlaceholder() || vendor == null
           ? _value.vendor
           // ignore: cast_nullable_to_non_nullable
           : vendor as String,
@@ -84,7 +87,8 @@ class _$ProductSummaryCWProxyImpl implements _$ProductSummaryCWProxy {
 }
 
 extension $ProductSummaryCopyWith on ProductSummary {
-  /// Returns a callable class that can be used as follows: `instanceOfProductSummary.copyWith(...)` or like so:`instanceOfProductSummary.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfProductSummary.copyWith(...)` or `instanceOfProductSummary.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ProductSummaryCWProxy get copyWith => _$ProductSummaryCWProxyImpl(this);
 }

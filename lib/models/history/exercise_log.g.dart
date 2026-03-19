@@ -15,12 +15,13 @@ abstract class _$SetLogCWProxy {
 
   SetLog restDuration(Duration restDuration);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SetLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SetLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SetLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SetLog call({
     int number,
     double weight,
@@ -29,33 +30,35 @@ abstract class _$SetLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSetLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSetLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSetLog.copyWith(...)` or call `instanceOfSetLog.copyWith.fieldName(value)` for a single field.
 class _$SetLogCWProxyImpl implements _$SetLogCWProxy {
   const _$SetLogCWProxyImpl(this._value);
 
   final SetLog _value;
 
   @override
-  SetLog number(int number) => this(number: number);
+  SetLog number(int number) => call(number: number);
 
   @override
-  SetLog weight(double weight) => this(weight: weight);
+  SetLog weight(double weight) => call(weight: weight);
 
   @override
-  SetLog reps(int reps) => this(reps: reps);
+  SetLog reps(int reps) => call(reps: reps);
 
   @override
   SetLog restDuration(Duration restDuration) =>
-      this(restDuration: restDuration);
+      call(restDuration: restDuration);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SetLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SetLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SetLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SetLog call({
     Object? number = const $CopyWithPlaceholder(),
     Object? weight = const $CopyWithPlaceholder(),
@@ -63,28 +66,30 @@ class _$SetLogCWProxyImpl implements _$SetLogCWProxy {
     Object? restDuration = const $CopyWithPlaceholder(),
   }) {
     return SetLog(
-      number: number == const $CopyWithPlaceholder()
+      number: number == const $CopyWithPlaceholder() || number == null
           ? _value.number
           // ignore: cast_nullable_to_non_nullable
           : number as int,
-      weight: weight == const $CopyWithPlaceholder()
+      weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
           : weight as double,
-      reps: reps == const $CopyWithPlaceholder()
+      reps: reps == const $CopyWithPlaceholder() || reps == null
           ? _value.reps
           // ignore: cast_nullable_to_non_nullable
           : reps as int,
-      restDuration: restDuration == const $CopyWithPlaceholder()
-          ? _value.restDuration
-          // ignore: cast_nullable_to_non_nullable
-          : restDuration as Duration,
+      restDuration:
+          restDuration == const $CopyWithPlaceholder() || restDuration == null
+              ? _value.restDuration
+              // ignore: cast_nullable_to_non_nullable
+              : restDuration as Duration,
     );
   }
 }
 
 extension $SetLogCopyWith on SetLog {
-  /// Returns a callable class that can be used as follows: `instanceOfSetLog.copyWith(...)` or like so:`instanceOfSetLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSetLog.copyWith(...)` or `instanceOfSetLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SetLogCWProxy get copyWith => _$SetLogCWProxyImpl(this);
 }
@@ -100,12 +105,13 @@ abstract class _$ClassicExerciseLogCWProxy {
 
   ClassicExerciseLog sets(List<SetLog> sets);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicExerciseLog call({
     int id,
     int sessionExerciseId,
@@ -115,38 +121,40 @@ abstract class _$ClassicExerciseLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfClassicExerciseLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfClassicExerciseLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfClassicExerciseLog.copyWith(...)` or call `instanceOfClassicExerciseLog.copyWith.fieldName(value)` for a single field.
 class _$ClassicExerciseLogCWProxyImpl implements _$ClassicExerciseLogCWProxy {
   const _$ClassicExerciseLogCWProxyImpl(this._value);
 
   final ClassicExerciseLog _value;
 
   @override
-  ClassicExerciseLog id(int id) => this(id: id);
+  ClassicExerciseLog id(int id) => call(id: id);
 
   @override
   ClassicExerciseLog sessionExerciseId(int sessionExerciseId) =>
-      this(sessionExerciseId: sessionExerciseId);
+      call(sessionExerciseId: sessionExerciseId);
 
   @override
   ClassicExerciseLog exerciseName(String exerciseName) =>
-      this(exerciseName: exerciseName);
+      call(exerciseName: exerciseName);
 
   @override
   ClassicExerciseLog orderInRoundLog(int orderInRoundLog) =>
-      this(orderInRoundLog: orderInRoundLog);
+      call(orderInRoundLog: orderInRoundLog);
 
   @override
-  ClassicExerciseLog sets(List<SetLog> sets) => this(sets: sets);
+  ClassicExerciseLog sets(List<SetLog> sets) => call(sets: sets);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicExerciseLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionExerciseId = const $CopyWithPlaceholder(),
@@ -155,23 +163,26 @@ class _$ClassicExerciseLogCWProxyImpl implements _$ClassicExerciseLogCWProxy {
     Object? sets = const $CopyWithPlaceholder(),
   }) {
     return ClassicExerciseLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder()
+      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+              sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
-      exerciseName: exerciseName == const $CopyWithPlaceholder()
-          ? _value.exerciseName
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder()
+      exerciseName:
+          exerciseName == const $CopyWithPlaceholder() || exerciseName == null
+              ? _value.exerciseName
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseName as String,
+      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+              orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
-      sets: sets == const $CopyWithPlaceholder()
+      sets: sets == const $CopyWithPlaceholder() || sets == null
           ? _value.sets
           // ignore: cast_nullable_to_non_nullable
           : sets as List<SetLog>,
@@ -180,7 +191,8 @@ class _$ClassicExerciseLogCWProxyImpl implements _$ClassicExerciseLogCWProxy {
 }
 
 extension $ClassicExerciseLogCopyWith on ClassicExerciseLog {
-  /// Returns a callable class that can be used as follows: `instanceOfClassicExerciseLog.copyWith(...)` or like so:`instanceOfClassicExerciseLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfClassicExerciseLog.copyWith(...)` or `instanceOfClassicExerciseLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ClassicExerciseLogCWProxy get copyWith =>
       _$ClassicExerciseLogCWProxyImpl(this);
@@ -199,12 +211,13 @@ abstract class _$AmrapExerciseLogCWProxy {
 
   AmrapExerciseLog weight(double weight);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapExerciseLog call({
     int id,
     int sessionExerciseId,
@@ -215,41 +228,43 @@ abstract class _$AmrapExerciseLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfAmrapExerciseLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfAmrapExerciseLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfAmrapExerciseLog.copyWith(...)` or call `instanceOfAmrapExerciseLog.copyWith.fieldName(value)` for a single field.
 class _$AmrapExerciseLogCWProxyImpl implements _$AmrapExerciseLogCWProxy {
   const _$AmrapExerciseLogCWProxyImpl(this._value);
 
   final AmrapExerciseLog _value;
 
   @override
-  AmrapExerciseLog id(int id) => this(id: id);
+  AmrapExerciseLog id(int id) => call(id: id);
 
   @override
   AmrapExerciseLog sessionExerciseId(int sessionExerciseId) =>
-      this(sessionExerciseId: sessionExerciseId);
+      call(sessionExerciseId: sessionExerciseId);
 
   @override
   AmrapExerciseLog exerciseName(String exerciseName) =>
-      this(exerciseName: exerciseName);
+      call(exerciseName: exerciseName);
 
   @override
   AmrapExerciseLog orderInRoundLog(int orderInRoundLog) =>
-      this(orderInRoundLog: orderInRoundLog);
+      call(orderInRoundLog: orderInRoundLog);
 
   @override
-  AmrapExerciseLog repsNumber(int repsNumber) => this(repsNumber: repsNumber);
+  AmrapExerciseLog repsNumber(int repsNumber) => call(repsNumber: repsNumber);
 
   @override
-  AmrapExerciseLog weight(double weight) => this(weight: weight);
+  AmrapExerciseLog weight(double weight) => call(weight: weight);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapExerciseLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionExerciseId = const $CopyWithPlaceholder(),
@@ -259,27 +274,31 @@ class _$AmrapExerciseLogCWProxyImpl implements _$AmrapExerciseLogCWProxy {
     Object? weight = const $CopyWithPlaceholder(),
   }) {
     return AmrapExerciseLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder()
+      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+              sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
-      exerciseName: exerciseName == const $CopyWithPlaceholder()
-          ? _value.exerciseName
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder()
+      exerciseName:
+          exerciseName == const $CopyWithPlaceholder() || exerciseName == null
+              ? _value.exerciseName
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseName as String,
+      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+              orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
-      repsNumber: repsNumber == const $CopyWithPlaceholder()
-          ? _value.repsNumber
-          // ignore: cast_nullable_to_non_nullable
-          : repsNumber as int,
-      weight: weight == const $CopyWithPlaceholder()
+      repsNumber:
+          repsNumber == const $CopyWithPlaceholder() || repsNumber == null
+              ? _value.repsNumber
+              // ignore: cast_nullable_to_non_nullable
+              : repsNumber as int,
+      weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
           : weight as double,
@@ -288,7 +307,8 @@ class _$AmrapExerciseLogCWProxyImpl implements _$AmrapExerciseLogCWProxy {
 }
 
 extension $AmrapExerciseLogCopyWith on AmrapExerciseLog {
-  /// Returns a callable class that can be used as follows: `instanceOfAmrapExerciseLog.copyWith(...)` or like so:`instanceOfAmrapExerciseLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfAmrapExerciseLog.copyWith(...)` or `instanceOfAmrapExerciseLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$AmrapExerciseLogCWProxy get copyWith => _$AmrapExerciseLogCWProxyImpl(this);
 }
@@ -308,12 +328,13 @@ abstract class _$EmomExerciseLogCWProxy {
 
   EmomExerciseLog weight(double weight);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomExerciseLog call({
     int id,
     int sessionExerciseId,
@@ -325,44 +346,46 @@ abstract class _$EmomExerciseLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfEmomExerciseLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfEmomExerciseLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfEmomExerciseLog.copyWith(...)` or call `instanceOfEmomExerciseLog.copyWith.fieldName(value)` for a single field.
 class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
   const _$EmomExerciseLogCWProxyImpl(this._value);
 
   final EmomExerciseLog _value;
 
   @override
-  EmomExerciseLog id(int id) => this(id: id);
+  EmomExerciseLog id(int id) => call(id: id);
 
   @override
   EmomExerciseLog sessionExerciseId(int sessionExerciseId) =>
-      this(sessionExerciseId: sessionExerciseId);
+      call(sessionExerciseId: sessionExerciseId);
 
   @override
   EmomExerciseLog exerciseName(String exerciseName) =>
-      this(exerciseName: exerciseName);
+      call(exerciseName: exerciseName);
 
   @override
   EmomExerciseLog orderInRoundLog(int orderInRoundLog) =>
-      this(orderInRoundLog: orderInRoundLog);
+      call(orderInRoundLog: orderInRoundLog);
 
   @override
-  EmomExerciseLog duration(Duration duration) => this(duration: duration);
+  EmomExerciseLog duration(Duration duration) => call(duration: duration);
 
   @override
-  EmomExerciseLog repsNumber(int repsNumber) => this(repsNumber: repsNumber);
+  EmomExerciseLog repsNumber(int repsNumber) => call(repsNumber: repsNumber);
 
   @override
-  EmomExerciseLog weight(double weight) => this(weight: weight);
+  EmomExerciseLog weight(double weight) => call(weight: weight);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomExerciseLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionExerciseId = const $CopyWithPlaceholder(),
@@ -373,31 +396,35 @@ class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
     Object? weight = const $CopyWithPlaceholder(),
   }) {
     return EmomExerciseLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder()
+      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+              sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
-      exerciseName: exerciseName == const $CopyWithPlaceholder()
-          ? _value.exerciseName
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder()
+      exerciseName:
+          exerciseName == const $CopyWithPlaceholder() || exerciseName == null
+              ? _value.exerciseName
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseName as String,
+      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+              orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
-      duration: duration == const $CopyWithPlaceholder()
+      duration: duration == const $CopyWithPlaceholder() || duration == null
           ? _value.duration
           // ignore: cast_nullable_to_non_nullable
           : duration as Duration,
-      repsNumber: repsNumber == const $CopyWithPlaceholder()
-          ? _value.repsNumber
-          // ignore: cast_nullable_to_non_nullable
-          : repsNumber as int,
-      weight: weight == const $CopyWithPlaceholder()
+      repsNumber:
+          repsNumber == const $CopyWithPlaceholder() || repsNumber == null
+              ? _value.repsNumber
+              // ignore: cast_nullable_to_non_nullable
+              : repsNumber as int,
+      weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
           : weight as double,
@@ -406,7 +433,8 @@ class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
 }
 
 extension $EmomExerciseLogCopyWith on EmomExerciseLog {
-  /// Returns a callable class that can be used as follows: `instanceOfEmomExerciseLog.copyWith(...)` or like so:`instanceOfEmomExerciseLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfEmomExerciseLog.copyWith(...)` or `instanceOfEmomExerciseLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$EmomExerciseLogCWProxy get copyWith => _$EmomExerciseLogCWProxyImpl(this);
 }
@@ -426,12 +454,13 @@ abstract class _$HiitExerciseLogCWProxy {
 
   HiitExerciseLog weight(double weight);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitExerciseLog call({
     int id,
     int sessionExerciseId,
@@ -443,46 +472,48 @@ abstract class _$HiitExerciseLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfHiitExerciseLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfHiitExerciseLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfHiitExerciseLog.copyWith(...)` or call `instanceOfHiitExerciseLog.copyWith.fieldName(value)` for a single field.
 class _$HiitExerciseLogCWProxyImpl implements _$HiitExerciseLogCWProxy {
   const _$HiitExerciseLogCWProxyImpl(this._value);
 
   final HiitExerciseLog _value;
 
   @override
-  HiitExerciseLog id(int id) => this(id: id);
+  HiitExerciseLog id(int id) => call(id: id);
 
   @override
   HiitExerciseLog sessionExerciseId(int sessionExerciseId) =>
-      this(sessionExerciseId: sessionExerciseId);
+      call(sessionExerciseId: sessionExerciseId);
 
   @override
   HiitExerciseLog exerciseName(String exerciseName) =>
-      this(exerciseName: exerciseName);
+      call(exerciseName: exerciseName);
 
   @override
   HiitExerciseLog orderInRoundLog(int orderInRoundLog) =>
-      this(orderInRoundLog: orderInRoundLog);
+      call(orderInRoundLog: orderInRoundLog);
 
   @override
   HiitExerciseLog effortDuration(Duration effortDuration) =>
-      this(effortDuration: effortDuration);
+      call(effortDuration: effortDuration);
 
   @override
   HiitExerciseLog restDuration(Duration restDuration) =>
-      this(restDuration: restDuration);
+      call(restDuration: restDuration);
 
   @override
-  HiitExerciseLog weight(double weight) => this(weight: weight);
+  HiitExerciseLog weight(double weight) => call(weight: weight);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitExerciseLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExerciseLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitExerciseLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitExerciseLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionExerciseId = const $CopyWithPlaceholder(),
@@ -493,31 +524,36 @@ class _$HiitExerciseLogCWProxyImpl implements _$HiitExerciseLogCWProxy {
     Object? weight = const $CopyWithPlaceholder(),
   }) {
     return HiitExerciseLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder()
+      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+              sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
-      exerciseName: exerciseName == const $CopyWithPlaceholder()
-          ? _value.exerciseName
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder()
+      exerciseName:
+          exerciseName == const $CopyWithPlaceholder() || exerciseName == null
+              ? _value.exerciseName
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseName as String,
+      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+              orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
-      effortDuration: effortDuration == const $CopyWithPlaceholder()
+      effortDuration: effortDuration == const $CopyWithPlaceholder() ||
+              effortDuration == null
           ? _value.effortDuration
           // ignore: cast_nullable_to_non_nullable
           : effortDuration as Duration,
-      restDuration: restDuration == const $CopyWithPlaceholder()
-          ? _value.restDuration
-          // ignore: cast_nullable_to_non_nullable
-          : restDuration as Duration,
-      weight: weight == const $CopyWithPlaceholder()
+      restDuration:
+          restDuration == const $CopyWithPlaceholder() || restDuration == null
+              ? _value.restDuration
+              // ignore: cast_nullable_to_non_nullable
+              : restDuration as Duration,
+      weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
           : weight as double,
@@ -526,7 +562,8 @@ class _$HiitExerciseLogCWProxyImpl implements _$HiitExerciseLogCWProxy {
 }
 
 extension $HiitExerciseLogCopyWith on HiitExerciseLog {
-  /// Returns a callable class that can be used as follows: `instanceOfHiitExerciseLog.copyWith(...)` or like so:`instanceOfHiitExerciseLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfHiitExerciseLog.copyWith(...)` or `instanceOfHiitExerciseLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$HiitExerciseLogCWProxy get copyWith => _$HiitExerciseLogCWProxyImpl(this);
 }

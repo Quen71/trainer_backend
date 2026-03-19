@@ -25,12 +25,13 @@ abstract class _$SubscriptionSummaryCWProxy {
 
   SubscriptionSummary limits(SubscriptionSummaryLimits limits);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummary(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummary(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummary call({
     String? id,
     String userId,
@@ -44,52 +45,54 @@ abstract class _$SubscriptionSummaryCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionSummary.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionSummary.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionSummary.copyWith(...)` or call `instanceOfSubscriptionSummary.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
   const _$SubscriptionSummaryCWProxyImpl(this._value);
 
   final SubscriptionSummary _value;
 
   @override
-  SubscriptionSummary id(String? id) => this(id: id);
+  SubscriptionSummary id(String? id) => call(id: id);
 
   @override
-  SubscriptionSummary userId(String userId) => this(userId: userId);
+  SubscriptionSummary userId(String userId) => call(userId: userId);
 
   @override
-  SubscriptionSummary status(SubscriptionStatus status) => this(status: status);
+  SubscriptionSummary status(SubscriptionStatus status) => call(status: status);
 
   @override
   SubscriptionSummary startedAt(DateTime? startedAt) =>
-      this(startedAt: startedAt);
+      call(startedAt: startedAt);
 
   @override
   SubscriptionSummary expiresAt(DateTime? expiresAt) =>
-      this(expiresAt: expiresAt);
+      call(expiresAt: expiresAt);
 
   @override
-  SubscriptionSummary isTrial(bool isTrial) => this(isTrial: isTrial);
+  SubscriptionSummary isTrial(bool isTrial) => call(isTrial: isTrial);
 
   @override
   SubscriptionSummary entitlement(SubscriptionSummaryEntitlement entitlement) =>
-      this(entitlement: entitlement);
+      call(entitlement: entitlement);
 
   @override
   SubscriptionSummary product(ProductSummary? product) =>
-      this(product: product);
+      call(product: product);
 
   @override
   SubscriptionSummary limits(SubscriptionSummaryLimits limits) =>
-      this(limits: limits);
+      call(limits: limits);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummary(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummary(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummary(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummary call({
     Object? id = const $CopyWithPlaceholder(),
     Object? userId = const $CopyWithPlaceholder(),
@@ -106,11 +109,11 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String?,
-      userId: userId == const $CopyWithPlaceholder()
+      userId: userId == const $CopyWithPlaceholder() || userId == null
           ? _value.userId
           // ignore: cast_nullable_to_non_nullable
           : userId as String,
-      status: status == const $CopyWithPlaceholder()
+      status: status == const $CopyWithPlaceholder() || status == null
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as SubscriptionStatus,
@@ -122,19 +125,20 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
           ? _value.expiresAt
           // ignore: cast_nullable_to_non_nullable
           : expiresAt as DateTime?,
-      isTrial: isTrial == const $CopyWithPlaceholder()
+      isTrial: isTrial == const $CopyWithPlaceholder() || isTrial == null
           ? _value.isTrial
           // ignore: cast_nullable_to_non_nullable
           : isTrial as bool,
-      entitlement: entitlement == const $CopyWithPlaceholder()
-          ? _value.entitlement
-          // ignore: cast_nullable_to_non_nullable
-          : entitlement as SubscriptionSummaryEntitlement,
+      entitlement:
+          entitlement == const $CopyWithPlaceholder() || entitlement == null
+              ? _value.entitlement
+              // ignore: cast_nullable_to_non_nullable
+              : entitlement as SubscriptionSummaryEntitlement,
       product: product == const $CopyWithPlaceholder()
           ? _value.product
           // ignore: cast_nullable_to_non_nullable
           : product as ProductSummary?,
-      limits: limits == const $CopyWithPlaceholder()
+      limits: limits == const $CopyWithPlaceholder() || limits == null
           ? _value.limits
           // ignore: cast_nullable_to_non_nullable
           : limits as SubscriptionSummaryLimits,
@@ -143,7 +147,8 @@ class _$SubscriptionSummaryCWProxyImpl implements _$SubscriptionSummaryCWProxy {
 }
 
 extension $SubscriptionSummaryCopyWith on SubscriptionSummary {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionSummary.copyWith(...)` or like so:`instanceOfSubscriptionSummary.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionSummary.copyWith(...)` or `instanceOfSubscriptionSummary.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionSummaryCWProxy get copyWith =>
       _$SubscriptionSummaryCWProxyImpl(this);
@@ -156,12 +161,13 @@ abstract class _$SubscriptionSummaryEntitlementCWProxy {
 
   SubscriptionSummaryEntitlement name(String name);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummaryEntitlement(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummaryEntitlement(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummaryEntitlement(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummaryEntitlement call({
     String id,
     String entitlementKey,
@@ -169,7 +175,8 @@ abstract class _$SubscriptionSummaryEntitlementCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionSummaryEntitlement.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionSummaryEntitlement.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionSummaryEntitlement.copyWith(...)` or call `instanceOfSubscriptionSummaryEntitlement.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionSummaryEntitlementCWProxyImpl
     implements _$SubscriptionSummaryEntitlementCWProxy {
   const _$SubscriptionSummaryEntitlementCWProxyImpl(this._value);
@@ -177,38 +184,40 @@ class _$SubscriptionSummaryEntitlementCWProxyImpl
   final SubscriptionSummaryEntitlement _value;
 
   @override
-  SubscriptionSummaryEntitlement id(String id) => this(id: id);
+  SubscriptionSummaryEntitlement id(String id) => call(id: id);
 
   @override
   SubscriptionSummaryEntitlement entitlementKey(String entitlementKey) =>
-      this(entitlementKey: entitlementKey);
+      call(entitlementKey: entitlementKey);
 
   @override
-  SubscriptionSummaryEntitlement name(String name) => this(name: name);
+  SubscriptionSummaryEntitlement name(String name) => call(name: name);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummaryEntitlement(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummaryEntitlement(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummaryEntitlement(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummaryEntitlement call({
     Object? id = const $CopyWithPlaceholder(),
     Object? entitlementKey = const $CopyWithPlaceholder(),
     Object? name = const $CopyWithPlaceholder(),
   }) {
     return SubscriptionSummaryEntitlement(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      entitlementKey: entitlementKey == const $CopyWithPlaceholder()
+      entitlementKey: entitlementKey == const $CopyWithPlaceholder() ||
+              entitlementKey == null
           ? _value.entitlementKey
           // ignore: cast_nullable_to_non_nullable
           : entitlementKey as String,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
@@ -218,7 +227,8 @@ class _$SubscriptionSummaryEntitlementCWProxyImpl
 
 extension $SubscriptionSummaryEntitlementCopyWith
     on SubscriptionSummaryEntitlement {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionSummaryEntitlement.copyWith(...)` or like so:`instanceOfSubscriptionSummaryEntitlement.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionSummaryEntitlement.copyWith(...)` or `instanceOfSubscriptionSummaryEntitlement.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionSummaryEntitlementCWProxy get copyWith =>
       _$SubscriptionSummaryEntitlementCWProxyImpl(this);
@@ -239,12 +249,13 @@ abstract class _$SubscriptionSummaryLimitsCWProxy {
 
   SubscriptionSummaryLimits metadata(Map<String, dynamic> metadata);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummaryLimits(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummaryLimits(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummaryLimits(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummaryLimits call({
     int? maxPrograms,
     int? maxSessionsPerProgram,
@@ -256,7 +267,8 @@ abstract class _$SubscriptionSummaryLimitsCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionSummaryLimits.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionSummaryLimits.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionSummaryLimits.copyWith(...)` or call `instanceOfSubscriptionSummaryLimits.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionSummaryLimitsCWProxyImpl
     implements _$SubscriptionSummaryLimitsCWProxy {
   const _$SubscriptionSummaryLimitsCWProxyImpl(this._value);
@@ -265,41 +277,42 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
 
   @override
   SubscriptionSummaryLimits maxPrograms(int? maxPrograms) =>
-      this(maxPrograms: maxPrograms);
+      call(maxPrograms: maxPrograms);
 
   @override
   SubscriptionSummaryLimits maxSessionsPerProgram(int? maxSessionsPerProgram) =>
-      this(maxSessionsPerProgram: maxSessionsPerProgram);
+      call(maxSessionsPerProgram: maxSessionsPerProgram);
 
   @override
   SubscriptionSummaryLimits historyDays(int? historyDays) =>
-      this(historyDays: historyDays);
+      call(historyDays: historyDays);
 
   @override
   SubscriptionSummaryLimits maxExercisesPerSession(
           int? maxExercisesPerSession) =>
-      this(maxExercisesPerSession: maxExercisesPerSession);
+      call(maxExercisesPerSession: maxExercisesPerSession);
 
   @override
   SubscriptionSummaryLimits canExportData(bool canExportData) =>
-      this(canExportData: canExportData);
+      call(canExportData: canExportData);
 
   @override
   SubscriptionSummaryLimits canSharePrograms(bool canSharePrograms) =>
-      this(canSharePrograms: canSharePrograms);
+      call(canSharePrograms: canSharePrograms);
 
   @override
   SubscriptionSummaryLimits metadata(Map<String, dynamic> metadata) =>
-      this(metadata: metadata);
+      call(metadata: metadata);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionSummaryLimits(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionSummaryLimits(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionSummaryLimits(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionSummaryLimits call({
     Object? maxPrograms = const $CopyWithPlaceholder(),
     Object? maxSessionsPerProgram = const $CopyWithPlaceholder(),
@@ -328,15 +341,17 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
               ? _value.maxExercisesPerSession
               // ignore: cast_nullable_to_non_nullable
               : maxExercisesPerSession as int?,
-      canExportData: canExportData == const $CopyWithPlaceholder()
-          ? _value.canExportData
-          // ignore: cast_nullable_to_non_nullable
-          : canExportData as bool,
-      canSharePrograms: canSharePrograms == const $CopyWithPlaceholder()
+      canExportData:
+          canExportData == const $CopyWithPlaceholder() || canExportData == null
+              ? _value.canExportData
+              // ignore: cast_nullable_to_non_nullable
+              : canExportData as bool,
+      canSharePrograms: canSharePrograms == const $CopyWithPlaceholder() ||
+              canSharePrograms == null
           ? _value.canSharePrograms
           // ignore: cast_nullable_to_non_nullable
           : canSharePrograms as bool,
-      metadata: metadata == const $CopyWithPlaceholder()
+      metadata: metadata == const $CopyWithPlaceholder() || metadata == null
           ? _value.metadata
           // ignore: cast_nullable_to_non_nullable
           : metadata as Map<String, dynamic>,
@@ -345,7 +360,8 @@ class _$SubscriptionSummaryLimitsCWProxyImpl
 }
 
 extension $SubscriptionSummaryLimitsCopyWith on SubscriptionSummaryLimits {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionSummaryLimits.copyWith(...)` or like so:`instanceOfSubscriptionSummaryLimits.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionSummaryLimits.copyWith(...)` or `instanceOfSubscriptionSummaryLimits.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionSummaryLimitsCWProxy get copyWith =>
       _$SubscriptionSummaryLimitsCWProxyImpl(this);

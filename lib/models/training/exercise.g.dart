@@ -21,12 +21,13 @@ abstract class _$ClassicExerciseCWProxy {
   ClassicExercise objectiveParameters(
       ClassicExerciseParameters? objectiveParameters);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicExercise call({
     int id,
     int exerciseId,
@@ -37,43 +38,45 @@ abstract class _$ClassicExerciseCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfClassicExercise.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfClassicExercise.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfClassicExercise.copyWith(...)` or call `instanceOfClassicExercise.copyWith.fieldName(value)` for a single field.
 class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
   const _$ClassicExerciseCWProxyImpl(this._value);
 
   final ClassicExercise _value;
 
   @override
-  ClassicExercise id(int id) => this(id: id);
+  ClassicExercise id(int id) => call(id: id);
 
   @override
-  ClassicExercise exerciseId(int exerciseId) => this(exerciseId: exerciseId);
+  ClassicExercise exerciseId(int exerciseId) => call(exerciseId: exerciseId);
 
   @override
   ClassicExercise orderInSession(int orderInSession) =>
-      this(orderInSession: orderInSession);
+      call(orderInSession: orderInSession);
 
   @override
-  ClassicExercise name(String name) => this(name: name);
+  ClassicExercise name(String name) => call(name: name);
 
   @override
   ClassicExercise templateParameters(
           ClassicExerciseParameters templateParameters) =>
-      this(templateParameters: templateParameters);
+      call(templateParameters: templateParameters);
 
   @override
   ClassicExercise objectiveParameters(
           ClassicExerciseParameters? objectiveParameters) =>
-      this(objectiveParameters: objectiveParameters);
+      call(objectiveParameters: objectiveParameters);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicExercise call({
     Object? id = const $CopyWithPlaceholder(),
     Object? exerciseId = const $CopyWithPlaceholder(),
@@ -83,23 +86,26 @@ class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
     Object? objectiveParameters = const $CopyWithPlaceholder(),
   }) {
     return ClassicExercise(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      exerciseId: exerciseId == const $CopyWithPlaceholder()
-          ? _value.exerciseId
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder()
+      exerciseId:
+          exerciseId == const $CopyWithPlaceholder() || exerciseId == null
+              ? _value.exerciseId
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseId as int,
+      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+              orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
           : orderInSession as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder()
+      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+              templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
           : templateParameters as ClassicExerciseParameters,
@@ -112,7 +118,8 @@ class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
 }
 
 extension $ClassicExerciseCopyWith on ClassicExercise {
-  /// Returns a callable class that can be used as follows: `instanceOfClassicExercise.copyWith(...)` or like so:`instanceOfClassicExercise.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfClassicExercise.copyWith(...)` or `instanceOfClassicExercise.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ClassicExerciseCWProxy get copyWith => _$ClassicExerciseCWProxyImpl(this);
 }
@@ -131,12 +138,13 @@ abstract class _$AmrapExerciseCWProxy {
   AmrapExercise objectiveParameters(
       AmrapExerciseParameters? objectiveParameters);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapExercise call({
     int id,
     int exerciseId,
@@ -147,43 +155,45 @@ abstract class _$AmrapExerciseCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfAmrapExercise.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfAmrapExercise.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfAmrapExercise.copyWith(...)` or call `instanceOfAmrapExercise.copyWith.fieldName(value)` for a single field.
 class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
   const _$AmrapExerciseCWProxyImpl(this._value);
 
   final AmrapExercise _value;
 
   @override
-  AmrapExercise id(int id) => this(id: id);
+  AmrapExercise id(int id) => call(id: id);
 
   @override
-  AmrapExercise exerciseId(int exerciseId) => this(exerciseId: exerciseId);
+  AmrapExercise exerciseId(int exerciseId) => call(exerciseId: exerciseId);
 
   @override
   AmrapExercise orderInSession(int orderInSession) =>
-      this(orderInSession: orderInSession);
+      call(orderInSession: orderInSession);
 
   @override
-  AmrapExercise name(String name) => this(name: name);
+  AmrapExercise name(String name) => call(name: name);
 
   @override
   AmrapExercise templateParameters(
           AmrapExerciseParameters templateParameters) =>
-      this(templateParameters: templateParameters);
+      call(templateParameters: templateParameters);
 
   @override
   AmrapExercise objectiveParameters(
           AmrapExerciseParameters? objectiveParameters) =>
-      this(objectiveParameters: objectiveParameters);
+      call(objectiveParameters: objectiveParameters);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapExercise call({
     Object? id = const $CopyWithPlaceholder(),
     Object? exerciseId = const $CopyWithPlaceholder(),
@@ -193,23 +203,26 @@ class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
     Object? objectiveParameters = const $CopyWithPlaceholder(),
   }) {
     return AmrapExercise(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      exerciseId: exerciseId == const $CopyWithPlaceholder()
-          ? _value.exerciseId
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder()
+      exerciseId:
+          exerciseId == const $CopyWithPlaceholder() || exerciseId == null
+              ? _value.exerciseId
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseId as int,
+      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+              orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
           : orderInSession as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder()
+      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+              templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
           : templateParameters as AmrapExerciseParameters,
@@ -222,7 +235,8 @@ class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
 }
 
 extension $AmrapExerciseCopyWith on AmrapExercise {
-  /// Returns a callable class that can be used as follows: `instanceOfAmrapExercise.copyWith(...)` or like so:`instanceOfAmrapExercise.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfAmrapExercise.copyWith(...)` or `instanceOfAmrapExercise.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$AmrapExerciseCWProxy get copyWith => _$AmrapExerciseCWProxyImpl(this);
 }
@@ -240,12 +254,13 @@ abstract class _$EmomExerciseCWProxy {
 
   EmomExercise objectiveParameters(EmomExerciseParameters? objectiveParameters);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomExercise call({
     int id,
     int exerciseId,
@@ -256,42 +271,44 @@ abstract class _$EmomExerciseCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfEmomExercise.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfEmomExercise.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfEmomExercise.copyWith(...)` or call `instanceOfEmomExercise.copyWith.fieldName(value)` for a single field.
 class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
   const _$EmomExerciseCWProxyImpl(this._value);
 
   final EmomExercise _value;
 
   @override
-  EmomExercise id(int id) => this(id: id);
+  EmomExercise id(int id) => call(id: id);
 
   @override
-  EmomExercise exerciseId(int exerciseId) => this(exerciseId: exerciseId);
+  EmomExercise exerciseId(int exerciseId) => call(exerciseId: exerciseId);
 
   @override
   EmomExercise orderInSession(int orderInSession) =>
-      this(orderInSession: orderInSession);
+      call(orderInSession: orderInSession);
 
   @override
-  EmomExercise name(String name) => this(name: name);
+  EmomExercise name(String name) => call(name: name);
 
   @override
   EmomExercise templateParameters(EmomExerciseParameters templateParameters) =>
-      this(templateParameters: templateParameters);
+      call(templateParameters: templateParameters);
 
   @override
   EmomExercise objectiveParameters(
           EmomExerciseParameters? objectiveParameters) =>
-      this(objectiveParameters: objectiveParameters);
+      call(objectiveParameters: objectiveParameters);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomExercise call({
     Object? id = const $CopyWithPlaceholder(),
     Object? exerciseId = const $CopyWithPlaceholder(),
@@ -301,23 +318,26 @@ class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
     Object? objectiveParameters = const $CopyWithPlaceholder(),
   }) {
     return EmomExercise(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      exerciseId: exerciseId == const $CopyWithPlaceholder()
-          ? _value.exerciseId
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder()
+      exerciseId:
+          exerciseId == const $CopyWithPlaceholder() || exerciseId == null
+              ? _value.exerciseId
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseId as int,
+      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+              orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
           : orderInSession as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder()
+      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+              templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
           : templateParameters as EmomExerciseParameters,
@@ -330,7 +350,8 @@ class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
 }
 
 extension $EmomExerciseCopyWith on EmomExercise {
-  /// Returns a callable class that can be used as follows: `instanceOfEmomExercise.copyWith(...)` or like so:`instanceOfEmomExercise.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfEmomExercise.copyWith(...)` or `instanceOfEmomExercise.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$EmomExerciseCWProxy get copyWith => _$EmomExerciseCWProxyImpl(this);
 }
@@ -348,12 +369,13 @@ abstract class _$HiitExerciseCWProxy {
 
   HiitExercise objectiveParameters(HiitExerciseParameters? objectiveParameters);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitExercise call({
     int id,
     int exerciseId,
@@ -364,42 +386,44 @@ abstract class _$HiitExerciseCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfHiitExercise.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfHiitExercise.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfHiitExercise.copyWith(...)` or call `instanceOfHiitExercise.copyWith.fieldName(value)` for a single field.
 class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
   const _$HiitExerciseCWProxyImpl(this._value);
 
   final HiitExercise _value;
 
   @override
-  HiitExercise id(int id) => this(id: id);
+  HiitExercise id(int id) => call(id: id);
 
   @override
-  HiitExercise exerciseId(int exerciseId) => this(exerciseId: exerciseId);
+  HiitExercise exerciseId(int exerciseId) => call(exerciseId: exerciseId);
 
   @override
   HiitExercise orderInSession(int orderInSession) =>
-      this(orderInSession: orderInSession);
+      call(orderInSession: orderInSession);
 
   @override
-  HiitExercise name(String name) => this(name: name);
+  HiitExercise name(String name) => call(name: name);
 
   @override
   HiitExercise templateParameters(HiitExerciseParameters templateParameters) =>
-      this(templateParameters: templateParameters);
+      call(templateParameters: templateParameters);
 
   @override
   HiitExercise objectiveParameters(
           HiitExerciseParameters? objectiveParameters) =>
-      this(objectiveParameters: objectiveParameters);
+      call(objectiveParameters: objectiveParameters);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitExercise(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExercise(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitExercise(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitExercise call({
     Object? id = const $CopyWithPlaceholder(),
     Object? exerciseId = const $CopyWithPlaceholder(),
@@ -409,23 +433,26 @@ class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
     Object? objectiveParameters = const $CopyWithPlaceholder(),
   }) {
     return HiitExercise(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      exerciseId: exerciseId == const $CopyWithPlaceholder()
-          ? _value.exerciseId
-          // ignore: cast_nullable_to_non_nullable
-          : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder()
+      exerciseId:
+          exerciseId == const $CopyWithPlaceholder() || exerciseId == null
+              ? _value.exerciseId
+              // ignore: cast_nullable_to_non_nullable
+              : exerciseId as int,
+      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+              orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
           : orderInSession as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder()
+      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+              templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
           : templateParameters as HiitExerciseParameters,
@@ -438,7 +465,8 @@ class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
 }
 
 extension $HiitExerciseCopyWith on HiitExercise {
-  /// Returns a callable class that can be used as follows: `instanceOfHiitExercise.copyWith(...)` or like so:`instanceOfHiitExercise.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfHiitExercise.copyWith(...)` or `instanceOfHiitExercise.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$HiitExerciseCWProxy get copyWith => _$HiitExerciseCWProxyImpl(this);
 }

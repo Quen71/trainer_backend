@@ -35,12 +35,13 @@ abstract class _$SubscriptionCWProxy {
 
   Subscription entitlement(Entitlement? entitlement);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Subscription(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Subscription(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Subscription(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Subscription call({
     String id,
     String userId,
@@ -59,67 +60,69 @@ abstract class _$SubscriptionCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscription.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscription.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscription.copyWith(...)` or call `instanceOfSubscription.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
   const _$SubscriptionCWProxyImpl(this._value);
 
   final Subscription _value;
 
   @override
-  Subscription id(String id) => this(id: id);
+  Subscription id(String id) => call(id: id);
 
   @override
-  Subscription userId(String userId) => this(userId: userId);
+  Subscription userId(String userId) => call(userId: userId);
 
   @override
   Subscription entitlementId(String entitlementId) =>
-      this(entitlementId: entitlementId);
+      call(entitlementId: entitlementId);
 
   @override
-  Subscription productId(String? productId) => this(productId: productId);
+  Subscription productId(String? productId) => call(productId: productId);
 
   @override
   Subscription vendorTransactionId(String? vendorTransactionId) =>
-      this(vendorTransactionId: vendorTransactionId);
+      call(vendorTransactionId: vendorTransactionId);
 
   @override
-  Subscription status(SubscriptionStatus status) => this(status: status);
+  Subscription status(SubscriptionStatus status) => call(status: status);
 
   @override
-  Subscription startedAt(DateTime startedAt) => this(startedAt: startedAt);
+  Subscription startedAt(DateTime startedAt) => call(startedAt: startedAt);
 
   @override
-  Subscription expiresAt(DateTime? expiresAt) => this(expiresAt: expiresAt);
+  Subscription expiresAt(DateTime? expiresAt) => call(expiresAt: expiresAt);
 
   @override
-  Subscription isTrial(bool isTrial) => this(isTrial: isTrial);
+  Subscription isTrial(bool isTrial) => call(isTrial: isTrial);
 
   @override
   Subscription rawReceipt(Map<String, dynamic>? rawReceipt) =>
-      this(rawReceipt: rawReceipt);
+      call(rawReceipt: rawReceipt);
 
   @override
   Subscription metadata(Map<String, dynamic> metadata) =>
-      this(metadata: metadata);
+      call(metadata: metadata);
 
   @override
-  Subscription createdAt(DateTime createdAt) => this(createdAt: createdAt);
+  Subscription createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-  Subscription updatedAt(DateTime updatedAt) => this(updatedAt: updatedAt);
+  Subscription updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
   Subscription entitlement(Entitlement? entitlement) =>
-      this(entitlement: entitlement);
+      call(entitlement: entitlement);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Subscription(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Subscription(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Subscription(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Subscription call({
     Object? id = const $CopyWithPlaceholder(),
     Object? userId = const $CopyWithPlaceholder(),
@@ -137,18 +140,19 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
     Object? entitlement = const $CopyWithPlaceholder(),
   }) {
     return Subscription(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      userId: userId == const $CopyWithPlaceholder()
+      userId: userId == const $CopyWithPlaceholder() || userId == null
           ? _value.userId
           // ignore: cast_nullable_to_non_nullable
           : userId as String,
-      entitlementId: entitlementId == const $CopyWithPlaceholder()
-          ? _value.entitlementId
-          // ignore: cast_nullable_to_non_nullable
-          : entitlementId as String,
+      entitlementId:
+          entitlementId == const $CopyWithPlaceholder() || entitlementId == null
+              ? _value.entitlementId
+              // ignore: cast_nullable_to_non_nullable
+              : entitlementId as String,
       productId: productId == const $CopyWithPlaceholder()
           ? _value.productId
           // ignore: cast_nullable_to_non_nullable
@@ -157,11 +161,11 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
           ? _value.vendorTransactionId
           // ignore: cast_nullable_to_non_nullable
           : vendorTransactionId as String?,
-      status: status == const $CopyWithPlaceholder()
+      status: status == const $CopyWithPlaceholder() || status == null
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as SubscriptionStatus,
-      startedAt: startedAt == const $CopyWithPlaceholder()
+      startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
           : startedAt as DateTime,
@@ -169,7 +173,7 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
           ? _value.expiresAt
           // ignore: cast_nullable_to_non_nullable
           : expiresAt as DateTime?,
-      isTrial: isTrial == const $CopyWithPlaceholder()
+      isTrial: isTrial == const $CopyWithPlaceholder() || isTrial == null
           ? _value.isTrial
           // ignore: cast_nullable_to_non_nullable
           : isTrial as bool,
@@ -177,15 +181,15 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
           ? _value.rawReceipt
           // ignore: cast_nullable_to_non_nullable
           : rawReceipt as Map<String, dynamic>?,
-      metadata: metadata == const $CopyWithPlaceholder()
+      metadata: metadata == const $CopyWithPlaceholder() || metadata == null
           ? _value.metadata
           // ignore: cast_nullable_to_non_nullable
           : metadata as Map<String, dynamic>,
-      createdAt: createdAt == const $CopyWithPlaceholder()
+      createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
           : createdAt as DateTime,
-      updatedAt: updatedAt == const $CopyWithPlaceholder()
+      updatedAt: updatedAt == const $CopyWithPlaceholder() || updatedAt == null
           ? _value.updatedAt
           // ignore: cast_nullable_to_non_nullable
           : updatedAt as DateTime,
@@ -198,7 +202,8 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
 }
 
 extension $SubscriptionCopyWith on Subscription {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscription.copyWith(...)` or like so:`instanceOfSubscription.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscription.copyWith(...)` or `instanceOfSubscription.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionCWProxy get copyWith => _$SubscriptionCWProxyImpl(this);
 }

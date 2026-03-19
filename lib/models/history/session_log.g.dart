@@ -21,12 +21,13 @@ abstract class _$ClassicSessionLogCWProxy {
 
   ClassicSessionLog rounds(List<RoundLog<ClassicExerciseLog>> rounds);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicSessionLog call({
     int id,
     int sessionId,
@@ -38,43 +39,45 @@ abstract class _$ClassicSessionLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfClassicSessionLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfClassicSessionLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfClassicSessionLog.copyWith(...)` or call `instanceOfClassicSessionLog.copyWith.fieldName(value)` for a single field.
 class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
   const _$ClassicSessionLogCWProxyImpl(this._value);
 
   final ClassicSessionLog _value;
 
   @override
-  ClassicSessionLog id(int id) => this(id: id);
+  ClassicSessionLog id(int id) => call(id: id);
 
   @override
-  ClassicSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
+  ClassicSessionLog sessionId(int sessionId) => call(sessionId: sessionId);
 
   @override
-  ClassicSessionLog name(String name) => this(name: name);
+  ClassicSessionLog name(String name) => call(name: name);
 
   @override
   ClassicSessionLog programName(String programName) =>
-      this(programName: programName);
+      call(programName: programName);
 
   @override
-  ClassicSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
+  ClassicSessionLog startedAt(DateTime startedAt) => call(startedAt: startedAt);
 
   @override
-  ClassicSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
+  ClassicSessionLog endedAt(DateTime endedAt) => call(endedAt: endedAt);
 
   @override
   ClassicSessionLog rounds(List<RoundLog<ClassicExerciseLog>> rounds) =>
-      this(rounds: rounds);
+      call(rounds: rounds);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `ClassicSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// ClassicSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   ClassicSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
@@ -85,31 +88,32 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
     Object? rounds = const $CopyWithPlaceholder(),
   }) {
     return ClassicSessionLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionId: sessionId == const $CopyWithPlaceholder()
+      sessionId: sessionId == const $CopyWithPlaceholder() || sessionId == null
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      programName: programName == const $CopyWithPlaceholder()
-          ? _value.programName
-          // ignore: cast_nullable_to_non_nullable
-          : programName as String,
-      startedAt: startedAt == const $CopyWithPlaceholder()
+      programName:
+          programName == const $CopyWithPlaceholder() || programName == null
+              ? _value.programName
+              // ignore: cast_nullable_to_non_nullable
+              : programName as String,
+      startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
           : startedAt as DateTime,
-      endedAt: endedAt == const $CopyWithPlaceholder()
+      endedAt: endedAt == const $CopyWithPlaceholder() || endedAt == null
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
           : endedAt as DateTime,
-      rounds: rounds == const $CopyWithPlaceholder()
+      rounds: rounds == const $CopyWithPlaceholder() || rounds == null
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
           : rounds as List<RoundLog<ClassicExerciseLog>>,
@@ -118,7 +122,8 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
 }
 
 extension $ClassicSessionLogCopyWith on ClassicSessionLog {
-  /// Returns a callable class that can be used as follows: `instanceOfClassicSessionLog.copyWith(...)` or like so:`instanceOfClassicSessionLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfClassicSessionLog.copyWith(...)` or `instanceOfClassicSessionLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$ClassicSessionLogCWProxy get copyWith =>
       _$ClassicSessionLogCWProxyImpl(this);
@@ -139,12 +144,13 @@ abstract class _$AmrapSessionLogCWProxy {
 
   AmrapSessionLog rounds(List<RoundLog<AmrapExerciseLog>> rounds);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapSessionLog call({
     int id,
     int sessionId,
@@ -156,43 +162,45 @@ abstract class _$AmrapSessionLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfAmrapSessionLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfAmrapSessionLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfAmrapSessionLog.copyWith(...)` or call `instanceOfAmrapSessionLog.copyWith.fieldName(value)` for a single field.
 class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
   const _$AmrapSessionLogCWProxyImpl(this._value);
 
   final AmrapSessionLog _value;
 
   @override
-  AmrapSessionLog id(int id) => this(id: id);
+  AmrapSessionLog id(int id) => call(id: id);
 
   @override
-  AmrapSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
+  AmrapSessionLog sessionId(int sessionId) => call(sessionId: sessionId);
 
   @override
-  AmrapSessionLog name(String name) => this(name: name);
+  AmrapSessionLog name(String name) => call(name: name);
 
   @override
   AmrapSessionLog programName(String programName) =>
-      this(programName: programName);
+      call(programName: programName);
 
   @override
-  AmrapSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
+  AmrapSessionLog startedAt(DateTime startedAt) => call(startedAt: startedAt);
 
   @override
-  AmrapSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
+  AmrapSessionLog endedAt(DateTime endedAt) => call(endedAt: endedAt);
 
   @override
   AmrapSessionLog rounds(List<RoundLog<AmrapExerciseLog>> rounds) =>
-      this(rounds: rounds);
+      call(rounds: rounds);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `AmrapSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// AmrapSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   AmrapSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
@@ -203,31 +211,32 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
     Object? rounds = const $CopyWithPlaceholder(),
   }) {
     return AmrapSessionLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionId: sessionId == const $CopyWithPlaceholder()
+      sessionId: sessionId == const $CopyWithPlaceholder() || sessionId == null
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      programName: programName == const $CopyWithPlaceholder()
-          ? _value.programName
-          // ignore: cast_nullable_to_non_nullable
-          : programName as String,
-      startedAt: startedAt == const $CopyWithPlaceholder()
+      programName:
+          programName == const $CopyWithPlaceholder() || programName == null
+              ? _value.programName
+              // ignore: cast_nullable_to_non_nullable
+              : programName as String,
+      startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
           : startedAt as DateTime,
-      endedAt: endedAt == const $CopyWithPlaceholder()
+      endedAt: endedAt == const $CopyWithPlaceholder() || endedAt == null
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
           : endedAt as DateTime,
-      rounds: rounds == const $CopyWithPlaceholder()
+      rounds: rounds == const $CopyWithPlaceholder() || rounds == null
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
           : rounds as List<RoundLog<AmrapExerciseLog>>,
@@ -236,7 +245,8 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
 }
 
 extension $AmrapSessionLogCopyWith on AmrapSessionLog {
-  /// Returns a callable class that can be used as follows: `instanceOfAmrapSessionLog.copyWith(...)` or like so:`instanceOfAmrapSessionLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfAmrapSessionLog.copyWith(...)` or `instanceOfAmrapSessionLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$AmrapSessionLogCWProxy get copyWith => _$AmrapSessionLogCWProxyImpl(this);
 }
@@ -256,12 +266,13 @@ abstract class _$EmomSessionLogCWProxy {
 
   EmomSessionLog rounds(List<RoundLog<EmomExerciseLog>> rounds);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomSessionLog call({
     int id,
     int sessionId,
@@ -273,43 +284,45 @@ abstract class _$EmomSessionLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfEmomSessionLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfEmomSessionLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfEmomSessionLog.copyWith(...)` or call `instanceOfEmomSessionLog.copyWith.fieldName(value)` for a single field.
 class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
   const _$EmomSessionLogCWProxyImpl(this._value);
 
   final EmomSessionLog _value;
 
   @override
-  EmomSessionLog id(int id) => this(id: id);
+  EmomSessionLog id(int id) => call(id: id);
 
   @override
-  EmomSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
+  EmomSessionLog sessionId(int sessionId) => call(sessionId: sessionId);
 
   @override
-  EmomSessionLog name(String name) => this(name: name);
+  EmomSessionLog name(String name) => call(name: name);
 
   @override
   EmomSessionLog programName(String programName) =>
-      this(programName: programName);
+      call(programName: programName);
 
   @override
-  EmomSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
+  EmomSessionLog startedAt(DateTime startedAt) => call(startedAt: startedAt);
 
   @override
-  EmomSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
+  EmomSessionLog endedAt(DateTime endedAt) => call(endedAt: endedAt);
 
   @override
   EmomSessionLog rounds(List<RoundLog<EmomExerciseLog>> rounds) =>
-      this(rounds: rounds);
+      call(rounds: rounds);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EmomSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EmomSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EmomSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
@@ -320,31 +333,32 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
     Object? rounds = const $CopyWithPlaceholder(),
   }) {
     return EmomSessionLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionId: sessionId == const $CopyWithPlaceholder()
+      sessionId: sessionId == const $CopyWithPlaceholder() || sessionId == null
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      programName: programName == const $CopyWithPlaceholder()
-          ? _value.programName
-          // ignore: cast_nullable_to_non_nullable
-          : programName as String,
-      startedAt: startedAt == const $CopyWithPlaceholder()
+      programName:
+          programName == const $CopyWithPlaceholder() || programName == null
+              ? _value.programName
+              // ignore: cast_nullable_to_non_nullable
+              : programName as String,
+      startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
           : startedAt as DateTime,
-      endedAt: endedAt == const $CopyWithPlaceholder()
+      endedAt: endedAt == const $CopyWithPlaceholder() || endedAt == null
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
           : endedAt as DateTime,
-      rounds: rounds == const $CopyWithPlaceholder()
+      rounds: rounds == const $CopyWithPlaceholder() || rounds == null
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
           : rounds as List<RoundLog<EmomExerciseLog>>,
@@ -353,7 +367,8 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
 }
 
 extension $EmomSessionLogCopyWith on EmomSessionLog {
-  /// Returns a callable class that can be used as follows: `instanceOfEmomSessionLog.copyWith(...)` or like so:`instanceOfEmomSessionLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfEmomSessionLog.copyWith(...)` or `instanceOfEmomSessionLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$EmomSessionLogCWProxy get copyWith => _$EmomSessionLogCWProxyImpl(this);
 }
@@ -373,12 +388,13 @@ abstract class _$HiitSessionLogCWProxy {
 
   HiitSessionLog rounds(List<RoundLog<HiitExerciseLog>> rounds);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitSessionLog call({
     int id,
     int sessionId,
@@ -390,43 +406,45 @@ abstract class _$HiitSessionLogCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfHiitSessionLog.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfHiitSessionLog.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfHiitSessionLog.copyWith(...)` or call `instanceOfHiitSessionLog.copyWith.fieldName(value)` for a single field.
 class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
   const _$HiitSessionLogCWProxyImpl(this._value);
 
   final HiitSessionLog _value;
 
   @override
-  HiitSessionLog id(int id) => this(id: id);
+  HiitSessionLog id(int id) => call(id: id);
 
   @override
-  HiitSessionLog sessionId(int sessionId) => this(sessionId: sessionId);
+  HiitSessionLog sessionId(int sessionId) => call(sessionId: sessionId);
 
   @override
-  HiitSessionLog name(String name) => this(name: name);
+  HiitSessionLog name(String name) => call(name: name);
 
   @override
   HiitSessionLog programName(String programName) =>
-      this(programName: programName);
+      call(programName: programName);
 
   @override
-  HiitSessionLog startedAt(DateTime startedAt) => this(startedAt: startedAt);
+  HiitSessionLog startedAt(DateTime startedAt) => call(startedAt: startedAt);
 
   @override
-  HiitSessionLog endedAt(DateTime endedAt) => this(endedAt: endedAt);
+  HiitSessionLog endedAt(DateTime endedAt) => call(endedAt: endedAt);
 
   @override
   HiitSessionLog rounds(List<RoundLog<HiitExerciseLog>> rounds) =>
-      this(rounds: rounds);
+      call(rounds: rounds);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `HiitSessionLog(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSessionLog(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// HiitSessionLog(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   HiitSessionLog call({
     Object? id = const $CopyWithPlaceholder(),
     Object? sessionId = const $CopyWithPlaceholder(),
@@ -437,31 +455,32 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
     Object? rounds = const $CopyWithPlaceholder(),
   }) {
     return HiitSessionLog(
-      id: id == const $CopyWithPlaceholder()
+      id: id == const $CopyWithPlaceholder() || id == null
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionId: sessionId == const $CopyWithPlaceholder()
+      sessionId: sessionId == const $CopyWithPlaceholder() || sessionId == null
           ? _value.sessionId
           // ignore: cast_nullable_to_non_nullable
           : sessionId as int,
-      name: name == const $CopyWithPlaceholder()
+      name: name == const $CopyWithPlaceholder() || name == null
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      programName: programName == const $CopyWithPlaceholder()
-          ? _value.programName
-          // ignore: cast_nullable_to_non_nullable
-          : programName as String,
-      startedAt: startedAt == const $CopyWithPlaceholder()
+      programName:
+          programName == const $CopyWithPlaceholder() || programName == null
+              ? _value.programName
+              // ignore: cast_nullable_to_non_nullable
+              : programName as String,
+      startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
           : startedAt as DateTime,
-      endedAt: endedAt == const $CopyWithPlaceholder()
+      endedAt: endedAt == const $CopyWithPlaceholder() || endedAt == null
           ? _value.endedAt
           // ignore: cast_nullable_to_non_nullable
           : endedAt as DateTime,
-      rounds: rounds == const $CopyWithPlaceholder()
+      rounds: rounds == const $CopyWithPlaceholder() || rounds == null
           ? _value.rounds
           // ignore: cast_nullable_to_non_nullable
           : rounds as List<RoundLog<HiitExerciseLog>>,
@@ -470,7 +489,8 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
 }
 
 extension $HiitSessionLogCopyWith on HiitSessionLog {
-  /// Returns a callable class that can be used as follows: `instanceOfHiitSessionLog.copyWith(...)` or like so:`instanceOfHiitSessionLog.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfHiitSessionLog.copyWith(...)` or `instanceOfHiitSessionLog.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$HiitSessionLogCWProxy get copyWith => _$HiitSessionLogCWProxyImpl(this);
 }

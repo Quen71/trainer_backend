@@ -19,12 +19,13 @@ abstract class _$IntroductoryPriceCWProxy {
 
   IntroductoryPrice periodNumberOfUnits(int periodNumberOfUnits);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `IntroductoryPrice(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `IntroductoryPrice(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// IntroductoryPrice(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   IntroductoryPrice call({
     double price,
     String priceString,
@@ -35,41 +36,43 @@ abstract class _$IntroductoryPriceCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfIntroductoryPrice.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfIntroductoryPrice.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfIntroductoryPrice.copyWith(...)` or call `instanceOfIntroductoryPrice.copyWith.fieldName(value)` for a single field.
 class _$IntroductoryPriceCWProxyImpl implements _$IntroductoryPriceCWProxy {
   const _$IntroductoryPriceCWProxyImpl(this._value);
 
   final IntroductoryPrice _value;
 
   @override
-  IntroductoryPrice price(double price) => this(price: price);
+  IntroductoryPrice price(double price) => call(price: price);
 
   @override
   IntroductoryPrice priceString(String priceString) =>
-      this(priceString: priceString);
+      call(priceString: priceString);
 
   @override
-  IntroductoryPrice period(String period) => this(period: period);
+  IntroductoryPrice period(String period) => call(period: period);
 
   @override
-  IntroductoryPrice cycles(int cycles) => this(cycles: cycles);
+  IntroductoryPrice cycles(int cycles) => call(cycles: cycles);
 
   @override
   IntroductoryPrice periodUnit(PeriodUnit periodUnit) =>
-      this(periodUnit: periodUnit);
+      call(periodUnit: periodUnit);
 
   @override
   IntroductoryPrice periodNumberOfUnits(int periodNumberOfUnits) =>
-      this(periodNumberOfUnits: periodNumberOfUnits);
+      call(periodNumberOfUnits: periodNumberOfUnits);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `IntroductoryPrice(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `IntroductoryPrice(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// IntroductoryPrice(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   IntroductoryPrice call({
     Object? price = const $CopyWithPlaceholder(),
     Object? priceString = const $CopyWithPlaceholder(),
@@ -79,36 +82,41 @@ class _$IntroductoryPriceCWProxyImpl implements _$IntroductoryPriceCWProxy {
     Object? periodNumberOfUnits = const $CopyWithPlaceholder(),
   }) {
     return IntroductoryPrice(
-      price: price == const $CopyWithPlaceholder()
+      price: price == const $CopyWithPlaceholder() || price == null
           ? _value.price
           // ignore: cast_nullable_to_non_nullable
           : price as double,
-      priceString: priceString == const $CopyWithPlaceholder()
-          ? _value.priceString
-          // ignore: cast_nullable_to_non_nullable
-          : priceString as String,
-      period: period == const $CopyWithPlaceholder()
+      priceString:
+          priceString == const $CopyWithPlaceholder() || priceString == null
+              ? _value.priceString
+              // ignore: cast_nullable_to_non_nullable
+              : priceString as String,
+      period: period == const $CopyWithPlaceholder() || period == null
           ? _value.period
           // ignore: cast_nullable_to_non_nullable
           : period as String,
-      cycles: cycles == const $CopyWithPlaceholder()
+      cycles: cycles == const $CopyWithPlaceholder() || cycles == null
           ? _value.cycles
           // ignore: cast_nullable_to_non_nullable
           : cycles as int,
-      periodUnit: periodUnit == const $CopyWithPlaceholder()
-          ? _value.periodUnit
-          // ignore: cast_nullable_to_non_nullable
-          : periodUnit as PeriodUnit,
-      periodNumberOfUnits: periodNumberOfUnits == const $CopyWithPlaceholder()
-          ? _value.periodNumberOfUnits
-          // ignore: cast_nullable_to_non_nullable
-          : periodNumberOfUnits as int,
+      periodUnit:
+          periodUnit == const $CopyWithPlaceholder() || periodUnit == null
+              ? _value.periodUnit
+              // ignore: cast_nullable_to_non_nullable
+              : periodUnit as PeriodUnit,
+      periodNumberOfUnits:
+          periodNumberOfUnits == const $CopyWithPlaceholder() ||
+                  periodNumberOfUnits == null
+              ? _value.periodNumberOfUnits
+              // ignore: cast_nullable_to_non_nullable
+              : periodNumberOfUnits as int,
     );
   }
 }
 
 extension $IntroductoryPriceCopyWith on IntroductoryPrice {
-  /// Returns a callable class that can be used as follows: `instanceOfIntroductoryPrice.copyWith(...)` or like so:`instanceOfIntroductoryPrice.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfIntroductoryPrice.copyWith(...)` or `instanceOfIntroductoryPrice.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$IntroductoryPriceCWProxy get copyWith =>
       _$IntroductoryPriceCWProxyImpl(this);

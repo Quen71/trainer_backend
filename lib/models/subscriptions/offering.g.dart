@@ -13,12 +13,13 @@ abstract class _$OfferingCWProxy {
 
   Offering availablePackages(List<Package> availablePackages);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Offering(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Offering(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Offering(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Offering call({
     String identifier,
     String? serverDescription,
@@ -26,46 +27,50 @@ abstract class _$OfferingCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfOffering.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfOffering.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfOffering.copyWith(...)` or call `instanceOfOffering.copyWith.fieldName(value)` for a single field.
 class _$OfferingCWProxyImpl implements _$OfferingCWProxy {
   const _$OfferingCWProxyImpl(this._value);
 
   final Offering _value;
 
   @override
-  Offering identifier(String identifier) => this(identifier: identifier);
+  Offering identifier(String identifier) => call(identifier: identifier);
 
   @override
   Offering serverDescription(String? serverDescription) =>
-      this(serverDescription: serverDescription);
+      call(serverDescription: serverDescription);
 
   @override
   Offering availablePackages(List<Package> availablePackages) =>
-      this(availablePackages: availablePackages);
+      call(availablePackages: availablePackages);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `Offering(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Offering(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// Offering(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   Offering call({
     Object? identifier = const $CopyWithPlaceholder(),
     Object? serverDescription = const $CopyWithPlaceholder(),
     Object? availablePackages = const $CopyWithPlaceholder(),
   }) {
     return Offering(
-      identifier: identifier == const $CopyWithPlaceholder()
-          ? _value.identifier
-          // ignore: cast_nullable_to_non_nullable
-          : identifier as String,
+      identifier:
+          identifier == const $CopyWithPlaceholder() || identifier == null
+              ? _value.identifier
+              // ignore: cast_nullable_to_non_nullable
+              : identifier as String,
       serverDescription: serverDescription == const $CopyWithPlaceholder()
           ? _value.serverDescription
           // ignore: cast_nullable_to_non_nullable
           : serverDescription as String?,
-      availablePackages: availablePackages == const $CopyWithPlaceholder()
+      availablePackages: availablePackages == const $CopyWithPlaceholder() ||
+              availablePackages == null
           ? _value.availablePackages
           // ignore: cast_nullable_to_non_nullable
           : availablePackages as List<Package>,
@@ -74,7 +79,8 @@ class _$OfferingCWProxyImpl implements _$OfferingCWProxy {
 }
 
 extension $OfferingCopyWith on Offering {
-  /// Returns a callable class that can be used as follows: `instanceOfOffering.copyWith(...)` or like so:`instanceOfOffering.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfOffering.copyWith(...)` or `instanceOfOffering.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$OfferingCWProxy get copyWith => _$OfferingCWProxyImpl(this);
 }

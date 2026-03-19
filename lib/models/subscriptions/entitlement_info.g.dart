@@ -25,12 +25,13 @@ abstract class _$EntitlementInfoCWProxy {
 
   EntitlementInfo productIdentifier(String productIdentifier);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EntitlementInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EntitlementInfo(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EntitlementInfo(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EntitlementInfo call({
     String identifier,
     bool isActive,
@@ -44,51 +45,53 @@ abstract class _$EntitlementInfoCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfEntitlementInfo.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfEntitlementInfo.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfEntitlementInfo.copyWith(...)` or call `instanceOfEntitlementInfo.copyWith.fieldName(value)` for a single field.
 class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
   const _$EntitlementInfoCWProxyImpl(this._value);
 
   final EntitlementInfo _value;
 
   @override
-  EntitlementInfo identifier(String identifier) => this(identifier: identifier);
+  EntitlementInfo identifier(String identifier) => call(identifier: identifier);
 
   @override
-  EntitlementInfo isActive(bool isActive) => this(isActive: isActive);
+  EntitlementInfo isActive(bool isActive) => call(isActive: isActive);
 
   @override
-  EntitlementInfo willRenew(bool willRenew) => this(willRenew: willRenew);
+  EntitlementInfo willRenew(bool willRenew) => call(willRenew: willRenew);
 
   @override
-  EntitlementInfo periodType(String periodType) => this(periodType: periodType);
+  EntitlementInfo periodType(String periodType) => call(periodType: periodType);
 
   @override
   EntitlementInfo latestPurchaseDate(DateTime latestPurchaseDate) =>
-      this(latestPurchaseDate: latestPurchaseDate);
+      call(latestPurchaseDate: latestPurchaseDate);
 
   @override
   EntitlementInfo originalPurchaseDate(DateTime originalPurchaseDate) =>
-      this(originalPurchaseDate: originalPurchaseDate);
+      call(originalPurchaseDate: originalPurchaseDate);
 
   @override
   EntitlementInfo expirationDate(DateTime? expirationDate) =>
-      this(expirationDate: expirationDate);
+      call(expirationDate: expirationDate);
 
   @override
-  EntitlementInfo store(String store) => this(store: store);
+  EntitlementInfo store(String store) => call(store: store);
 
   @override
   EntitlementInfo productIdentifier(String productIdentifier) =>
-      this(productIdentifier: productIdentifier);
+      call(productIdentifier: productIdentifier);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `EntitlementInfo(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EntitlementInfo(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// EntitlementInfo(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   EntitlementInfo call({
     Object? identifier = const $CopyWithPlaceholder(),
     Object? isActive = const $CopyWithPlaceholder(),
@@ -101,39 +104,45 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
     Object? productIdentifier = const $CopyWithPlaceholder(),
   }) {
     return EntitlementInfo(
-      identifier: identifier == const $CopyWithPlaceholder()
-          ? _value.identifier
-          // ignore: cast_nullable_to_non_nullable
-          : identifier as String,
-      isActive: isActive == const $CopyWithPlaceholder()
+      identifier:
+          identifier == const $CopyWithPlaceholder() || identifier == null
+              ? _value.identifier
+              // ignore: cast_nullable_to_non_nullable
+              : identifier as String,
+      isActive: isActive == const $CopyWithPlaceholder() || isActive == null
           ? _value.isActive
           // ignore: cast_nullable_to_non_nullable
           : isActive as bool,
-      willRenew: willRenew == const $CopyWithPlaceholder()
+      willRenew: willRenew == const $CopyWithPlaceholder() || willRenew == null
           ? _value.willRenew
           // ignore: cast_nullable_to_non_nullable
           : willRenew as bool,
-      periodType: periodType == const $CopyWithPlaceholder()
-          ? _value.periodType
-          // ignore: cast_nullable_to_non_nullable
-          : periodType as String,
-      latestPurchaseDate: latestPurchaseDate == const $CopyWithPlaceholder()
+      periodType:
+          periodType == const $CopyWithPlaceholder() || periodType == null
+              ? _value.periodType
+              // ignore: cast_nullable_to_non_nullable
+              : periodType as String,
+      latestPurchaseDate: latestPurchaseDate == const $CopyWithPlaceholder() ||
+              latestPurchaseDate == null
           ? _value.latestPurchaseDate
           // ignore: cast_nullable_to_non_nullable
           : latestPurchaseDate as DateTime,
-      originalPurchaseDate: originalPurchaseDate == const $CopyWithPlaceholder()
-          ? _value.originalPurchaseDate
-          // ignore: cast_nullable_to_non_nullable
-          : originalPurchaseDate as DateTime,
+      originalPurchaseDate:
+          originalPurchaseDate == const $CopyWithPlaceholder() ||
+                  originalPurchaseDate == null
+              ? _value.originalPurchaseDate
+              // ignore: cast_nullable_to_non_nullable
+              : originalPurchaseDate as DateTime,
       expirationDate: expirationDate == const $CopyWithPlaceholder()
           ? _value.expirationDate
           // ignore: cast_nullable_to_non_nullable
           : expirationDate as DateTime?,
-      store: store == const $CopyWithPlaceholder()
+      store: store == const $CopyWithPlaceholder() || store == null
           ? _value.store
           // ignore: cast_nullable_to_non_nullable
           : store as String,
-      productIdentifier: productIdentifier == const $CopyWithPlaceholder()
+      productIdentifier: productIdentifier == const $CopyWithPlaceholder() ||
+              productIdentifier == null
           ? _value.productIdentifier
           // ignore: cast_nullable_to_non_nullable
           : productIdentifier as String,
@@ -142,7 +151,8 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
 }
 
 extension $EntitlementInfoCopyWith on EntitlementInfo {
-  /// Returns a callable class that can be used as follows: `instanceOfEntitlementInfo.copyWith(...)` or like so:`instanceOfEntitlementInfo.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfEntitlementInfo.copyWith(...)` or `instanceOfEntitlementInfo.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$EntitlementInfoCWProxy get copyWith => _$EntitlementInfoCWProxyImpl(this);
 }

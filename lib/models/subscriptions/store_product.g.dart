@@ -21,12 +21,13 @@ abstract class _$StoreProductCWProxy {
 
   StoreProduct introductoryPrice(IntroductoryPrice? introductoryPrice);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `StoreProduct(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoreProduct(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// StoreProduct(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   StoreProduct call({
     String identifier,
     String title,
@@ -38,45 +39,47 @@ abstract class _$StoreProductCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfStoreProduct.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfStoreProduct.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfStoreProduct.copyWith(...)` or call `instanceOfStoreProduct.copyWith.fieldName(value)` for a single field.
 class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
   const _$StoreProductCWProxyImpl(this._value);
 
   final StoreProduct _value;
 
   @override
-  StoreProduct identifier(String identifier) => this(identifier: identifier);
+  StoreProduct identifier(String identifier) => call(identifier: identifier);
 
   @override
-  StoreProduct title(String title) => this(title: title);
+  StoreProduct title(String title) => call(title: title);
 
   @override
   StoreProduct description(String description) =>
-      this(description: description);
+      call(description: description);
 
   @override
-  StoreProduct price(double price) => this(price: price);
+  StoreProduct price(double price) => call(price: price);
 
   @override
   StoreProduct priceString(String priceString) =>
-      this(priceString: priceString);
+      call(priceString: priceString);
 
   @override
   StoreProduct currencyCode(String currencyCode) =>
-      this(currencyCode: currencyCode);
+      call(currencyCode: currencyCode);
 
   @override
   StoreProduct introductoryPrice(IntroductoryPrice? introductoryPrice) =>
-      this(introductoryPrice: introductoryPrice);
+      call(introductoryPrice: introductoryPrice);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `StoreProduct(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoreProduct(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// StoreProduct(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   StoreProduct call({
     Object? identifier = const $CopyWithPlaceholder(),
     Object? title = const $CopyWithPlaceholder(),
@@ -87,30 +90,34 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
     Object? introductoryPrice = const $CopyWithPlaceholder(),
   }) {
     return StoreProduct(
-      identifier: identifier == const $CopyWithPlaceholder()
-          ? _value.identifier
-          // ignore: cast_nullable_to_non_nullable
-          : identifier as String,
-      title: title == const $CopyWithPlaceholder()
+      identifier:
+          identifier == const $CopyWithPlaceholder() || identifier == null
+              ? _value.identifier
+              // ignore: cast_nullable_to_non_nullable
+              : identifier as String,
+      title: title == const $CopyWithPlaceholder() || title == null
           ? _value.title
           // ignore: cast_nullable_to_non_nullable
           : title as String,
-      description: description == const $CopyWithPlaceholder()
-          ? _value.description
-          // ignore: cast_nullable_to_non_nullable
-          : description as String,
-      price: price == const $CopyWithPlaceholder()
+      description:
+          description == const $CopyWithPlaceholder() || description == null
+              ? _value.description
+              // ignore: cast_nullable_to_non_nullable
+              : description as String,
+      price: price == const $CopyWithPlaceholder() || price == null
           ? _value.price
           // ignore: cast_nullable_to_non_nullable
           : price as double,
-      priceString: priceString == const $CopyWithPlaceholder()
-          ? _value.priceString
-          // ignore: cast_nullable_to_non_nullable
-          : priceString as String,
-      currencyCode: currencyCode == const $CopyWithPlaceholder()
-          ? _value.currencyCode
-          // ignore: cast_nullable_to_non_nullable
-          : currencyCode as String,
+      priceString:
+          priceString == const $CopyWithPlaceholder() || priceString == null
+              ? _value.priceString
+              // ignore: cast_nullable_to_non_nullable
+              : priceString as String,
+      currencyCode:
+          currencyCode == const $CopyWithPlaceholder() || currencyCode == null
+              ? _value.currencyCode
+              // ignore: cast_nullable_to_non_nullable
+              : currencyCode as String,
       introductoryPrice: introductoryPrice == const $CopyWithPlaceholder()
           ? _value.introductoryPrice
           // ignore: cast_nullable_to_non_nullable
@@ -120,7 +127,8 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
 }
 
 extension $StoreProductCopyWith on StoreProduct {
-  /// Returns a callable class that can be used as follows: `instanceOfStoreProduct.copyWith(...)` or like so:`instanceOfStoreProduct.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfStoreProduct.copyWith(...)` or `instanceOfStoreProduct.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$StoreProductCWProxy get copyWith => _$StoreProductCWProxyImpl(this);
 }

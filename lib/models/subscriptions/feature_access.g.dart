@@ -13,12 +13,13 @@ abstract class _$FeatureAccessCWProxy {
 
   FeatureAccess limits(SubscriptionSummaryLimits? limits);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `FeatureAccess(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `FeatureAccess(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// FeatureAccess(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   FeatureAccess call({
     bool hasAccess,
     String featureKey,
@@ -26,44 +27,47 @@ abstract class _$FeatureAccessCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfFeatureAccess.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfFeatureAccess.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfFeatureAccess.copyWith(...)` or call `instanceOfFeatureAccess.copyWith.fieldName(value)` for a single field.
 class _$FeatureAccessCWProxyImpl implements _$FeatureAccessCWProxy {
   const _$FeatureAccessCWProxyImpl(this._value);
 
   final FeatureAccess _value;
 
   @override
-  FeatureAccess hasAccess(bool hasAccess) => this(hasAccess: hasAccess);
+  FeatureAccess hasAccess(bool hasAccess) => call(hasAccess: hasAccess);
 
   @override
-  FeatureAccess featureKey(String featureKey) => this(featureKey: featureKey);
+  FeatureAccess featureKey(String featureKey) => call(featureKey: featureKey);
 
   @override
   FeatureAccess limits(SubscriptionSummaryLimits? limits) =>
-      this(limits: limits);
+      call(limits: limits);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `FeatureAccess(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `FeatureAccess(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// FeatureAccess(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   FeatureAccess call({
     Object? hasAccess = const $CopyWithPlaceholder(),
     Object? featureKey = const $CopyWithPlaceholder(),
     Object? limits = const $CopyWithPlaceholder(),
   }) {
     return FeatureAccess(
-      hasAccess: hasAccess == const $CopyWithPlaceholder()
+      hasAccess: hasAccess == const $CopyWithPlaceholder() || hasAccess == null
           ? _value.hasAccess
           // ignore: cast_nullable_to_non_nullable
           : hasAccess as bool,
-      featureKey: featureKey == const $CopyWithPlaceholder()
-          ? _value.featureKey
-          // ignore: cast_nullable_to_non_nullable
-          : featureKey as String,
+      featureKey:
+          featureKey == const $CopyWithPlaceholder() || featureKey == null
+              ? _value.featureKey
+              // ignore: cast_nullable_to_non_nullable
+              : featureKey as String,
       limits: limits == const $CopyWithPlaceholder()
           ? _value.limits
           // ignore: cast_nullable_to_non_nullable
@@ -73,7 +77,8 @@ class _$FeatureAccessCWProxyImpl implements _$FeatureAccessCWProxy {
 }
 
 extension $FeatureAccessCopyWith on FeatureAccess {
-  /// Returns a callable class that can be used as follows: `instanceOfFeatureAccess.copyWith(...)` or like so:`instanceOfFeatureAccess.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfFeatureAccess.copyWith(...)` or `instanceOfFeatureAccess.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$FeatureAccessCWProxy get copyWith => _$FeatureAccessCWProxyImpl(this);
 }

@@ -28,12 +28,13 @@ abstract class _$SubscriptionLimitsWithUsageCWProxy {
 
   SubscriptionLimitsWithUsage usage(SubscriptionUsage usage);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionLimitsWithUsage(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionLimitsWithUsage(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionLimitsWithUsage(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionLimitsWithUsage call({
     String? id,
     String userId,
@@ -48,7 +49,8 @@ abstract class _$SubscriptionLimitsWithUsageCWProxy {
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionLimitsWithUsage.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionLimitsWithUsage.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionLimitsWithUsage.copyWith(...)` or call `instanceOfSubscriptionLimitsWithUsage.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionLimitsWithUsageCWProxyImpl
     implements _$SubscriptionLimitsWithUsageCWProxy {
   const _$SubscriptionLimitsWithUsageCWProxyImpl(this._value);
@@ -56,51 +58,52 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
   final SubscriptionLimitsWithUsage _value;
 
   @override
-  SubscriptionLimitsWithUsage id(String? id) => this(id: id);
+  SubscriptionLimitsWithUsage id(String? id) => call(id: id);
 
   @override
-  SubscriptionLimitsWithUsage userId(String userId) => this(userId: userId);
+  SubscriptionLimitsWithUsage userId(String userId) => call(userId: userId);
 
   @override
   SubscriptionLimitsWithUsage status(SubscriptionStatus status) =>
-      this(status: status);
+      call(status: status);
 
   @override
   SubscriptionLimitsWithUsage startedAt(DateTime? startedAt) =>
-      this(startedAt: startedAt);
+      call(startedAt: startedAt);
 
   @override
   SubscriptionLimitsWithUsage expiresAt(DateTime? expiresAt) =>
-      this(expiresAt: expiresAt);
+      call(expiresAt: expiresAt);
 
   @override
-  SubscriptionLimitsWithUsage isTrial(bool isTrial) => this(isTrial: isTrial);
+  SubscriptionLimitsWithUsage isTrial(bool isTrial) => call(isTrial: isTrial);
 
   @override
   SubscriptionLimitsWithUsage entitlement(
           SubscriptionSummaryEntitlement entitlement) =>
-      this(entitlement: entitlement);
+      call(entitlement: entitlement);
 
   @override
   SubscriptionLimitsWithUsage product(ProductSummary? product) =>
-      this(product: product);
+      call(product: product);
 
   @override
   SubscriptionLimitsWithUsage limits(SubscriptionSummaryLimits limits) =>
-      this(limits: limits);
+      call(limits: limits);
 
   @override
   SubscriptionLimitsWithUsage usage(SubscriptionUsage usage) =>
-      this(usage: usage);
+      call(usage: usage);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionLimitsWithUsage(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionLimitsWithUsage(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionLimitsWithUsage(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionLimitsWithUsage call({
     Object? id = const $CopyWithPlaceholder(),
     Object? userId = const $CopyWithPlaceholder(),
@@ -118,11 +121,11 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String?,
-      userId: userId == const $CopyWithPlaceholder()
+      userId: userId == const $CopyWithPlaceholder() || userId == null
           ? _value.userId
           // ignore: cast_nullable_to_non_nullable
           : userId as String,
-      status: status == const $CopyWithPlaceholder()
+      status: status == const $CopyWithPlaceholder() || status == null
           ? _value.status
           // ignore: cast_nullable_to_non_nullable
           : status as SubscriptionStatus,
@@ -134,23 +137,24 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
           ? _value.expiresAt
           // ignore: cast_nullable_to_non_nullable
           : expiresAt as DateTime?,
-      isTrial: isTrial == const $CopyWithPlaceholder()
+      isTrial: isTrial == const $CopyWithPlaceholder() || isTrial == null
           ? _value.isTrial
           // ignore: cast_nullable_to_non_nullable
           : isTrial as bool,
-      entitlement: entitlement == const $CopyWithPlaceholder()
-          ? _value.entitlement
-          // ignore: cast_nullable_to_non_nullable
-          : entitlement as SubscriptionSummaryEntitlement,
+      entitlement:
+          entitlement == const $CopyWithPlaceholder() || entitlement == null
+              ? _value.entitlement
+              // ignore: cast_nullable_to_non_nullable
+              : entitlement as SubscriptionSummaryEntitlement,
       product: product == const $CopyWithPlaceholder()
           ? _value.product
           // ignore: cast_nullable_to_non_nullable
           : product as ProductSummary?,
-      limits: limits == const $CopyWithPlaceholder()
+      limits: limits == const $CopyWithPlaceholder() || limits == null
           ? _value.limits
           // ignore: cast_nullable_to_non_nullable
           : limits as SubscriptionSummaryLimits,
-      usage: usage == const $CopyWithPlaceholder()
+      usage: usage == const $CopyWithPlaceholder() || usage == null
           ? _value.usage
           // ignore: cast_nullable_to_non_nullable
           : usage as SubscriptionUsage,
@@ -159,7 +163,8 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
 }
 
 extension $SubscriptionLimitsWithUsageCopyWith on SubscriptionLimitsWithUsage {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionLimitsWithUsage.copyWith(...)` or like so:`instanceOfSubscriptionLimitsWithUsage.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionLimitsWithUsage.copyWith(...)` or `instanceOfSubscriptionLimitsWithUsage.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionLimitsWithUsageCWProxy get copyWith =>
       _$SubscriptionLimitsWithUsageCWProxyImpl(this);
@@ -171,19 +176,21 @@ abstract class _$SubscriptionUsageCWProxy {
   SubscriptionUsage sessionsCountByProgram(
       Map<String, int> sessionsCountByProgram);
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionUsage(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionUsage(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionUsage(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionUsage call({
     int programsCount,
     Map<String, int> sessionsCountByProgram,
   });
 }
 
-/// Proxy class for `copyWith` functionality. This is a callable class and can be used as follows: `instanceOfSubscriptionUsage.copyWith(...)`. Additionally contains functions for specific fields e.g. `instanceOfSubscriptionUsage.copyWith.fieldName(...)`
+/// Callable proxy for `copyWith` functionality.
+/// Use as `instanceOfSubscriptionUsage.copyWith(...)` or call `instanceOfSubscriptionUsage.copyWith.fieldName(value)` for a single field.
 class _$SubscriptionUsageCWProxyImpl implements _$SubscriptionUsageCWProxy {
   const _$SubscriptionUsageCWProxyImpl(this._value);
 
@@ -191,32 +198,35 @@ class _$SubscriptionUsageCWProxyImpl implements _$SubscriptionUsageCWProxy {
 
   @override
   SubscriptionUsage programsCount(int programsCount) =>
-      this(programsCount: programsCount);
+      call(programsCount: programsCount);
 
   @override
   SubscriptionUsage sessionsCountByProgram(
           Map<String, int> sessionsCountByProgram) =>
-      this(sessionsCountByProgram: sessionsCountByProgram);
+      call(sessionsCountByProgram: sessionsCountByProgram);
 
   @override
 
-  /// This function **does support** nullification of nullable fields. All `null` values passed to `non-nullable` fields will be ignored. You can also use `SubscriptionUsage(...).copyWith.fieldName(...)` to override fields one at a time with nullification support.
+  /// Creates a new instance with the provided field values.
+  /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionUsage(...).copyWith.fieldName(value)`.
   ///
-  /// Usage
+  /// Example:
   /// ```dart
   /// SubscriptionUsage(...).copyWith(id: 12, name: "My name")
-  /// ````
+  /// ```
   SubscriptionUsage call({
     Object? programsCount = const $CopyWithPlaceholder(),
     Object? sessionsCountByProgram = const $CopyWithPlaceholder(),
   }) {
     return SubscriptionUsage(
-      programsCount: programsCount == const $CopyWithPlaceholder()
-          ? _value.programsCount
-          // ignore: cast_nullable_to_non_nullable
-          : programsCount as int,
+      programsCount:
+          programsCount == const $CopyWithPlaceholder() || programsCount == null
+              ? _value.programsCount
+              // ignore: cast_nullable_to_non_nullable
+              : programsCount as int,
       sessionsCountByProgram:
-          sessionsCountByProgram == const $CopyWithPlaceholder()
+          sessionsCountByProgram == const $CopyWithPlaceholder() ||
+                  sessionsCountByProgram == null
               ? _value.sessionsCountByProgram
               // ignore: cast_nullable_to_non_nullable
               : sessionsCountByProgram as Map<String, int>,
@@ -225,7 +235,8 @@ class _$SubscriptionUsageCWProxyImpl implements _$SubscriptionUsageCWProxy {
 }
 
 extension $SubscriptionUsageCopyWith on SubscriptionUsage {
-  /// Returns a callable class that can be used as follows: `instanceOfSubscriptionUsage.copyWith(...)` or like so:`instanceOfSubscriptionUsage.copyWith.fieldName(...)`.
+  /// Returns a callable class used to build a new instance with modified fields.
+  /// Example: `instanceOfSubscriptionUsage.copyWith(...)` or `instanceOfSubscriptionUsage.copyWith.fieldName(...)`.
   // ignore: library_private_types_in_public_api
   _$SubscriptionUsageCWProxy get copyWith =>
       _$SubscriptionUsageCWProxyImpl(this);
