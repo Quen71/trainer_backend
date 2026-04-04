@@ -10,8 +10,9 @@ class CleanupHelper {
   /// Cleans up all data for a specific user.
   ///
   /// Deletes in order:
-  /// 1. Programs (cascades to sessions and exercises)
-  /// 2. Subscription limit monitoring events
+  /// 1. Session logs (must precede programs to avoid FK cascade conflict)
+  /// 2. Programs (cascades to sessions and exercises)
+  /// 3. Subscription limit monitoring events
   ///
   /// - [supabase]: Supabase client instance
   /// - [userId]: UUID of the user to clean up
@@ -20,6 +21,15 @@ class CleanupHelper {
     String userId,
   ) async {
     try {
+      // Delete session_logs first to prevent FK cascade conflict.
+      //
+      // The session_logs.session_id FK is configured with ON DELETE SET NULL, but
+      // the column also has a NOT NULL constraint — deleting sessions via programs
+      // cascade would therefore raise a constraint violation. We pre-delete ALL
+      // session_logs (including any orphaned rows where session_id is already null)
+      // so that the subsequent program cascade finds no rows left to update.
+      await supabase.from('session_logs').delete().eq('user_id', userId);
+
       // Delete programs (cascades to sessions and exercises)
       await supabase.from('programs').delete().eq('user_id', userId);
 

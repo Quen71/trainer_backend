@@ -18,12 +18,10 @@ class SubscriptionsTestScreen extends StatefulWidget {
 class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
   SubscriptionSummary? _subscriptionSummary;
   SubscriptionLimitsWithUsage? _limitsWithUsage;
-  FeatureAccess? _featureAccessResult;
   Offerings? _offerings;
   CustomerInfo? _customerInfo;
   bool _isLoadingSummary = false;
   bool _isLoadingLimitsWithUsage = false;
-  bool _isLoadingAccess = false;
   bool _isLoadingOfferings = false;
   bool _isLoadingPurchase = false;
   bool _isLoadingRestore = false;
@@ -80,30 +78,6 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
       setState(() {
         _errorMessage = 'Error: $e';
         _isLoadingLimitsWithUsage = false;
-      });
-    }
-  }
-
-  Future<void> _testCheckFeatureAccess(String featureKey) async {
-    setState(() {
-      _isLoadingAccess = true;
-      _errorMessage = null;
-      _featureAccessResult = null;
-    });
-
-    try {
-      final FeatureAccess result = await SubscriptionsService.checkFeatureAccess(
-        featureKey: featureKey,
-      );
-
-      setState(() {
-        _featureAccessResult = result;
-        _isLoadingAccess = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = 'Error: $e';
-        _isLoadingAccess = false;
       });
     }
   }
@@ -357,25 +331,6 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                 'Test Feature Access:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 5),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: <Widget>[
-                  ElevatedButton(
-                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('Premium'),
-                    child: const Text('Check Premium'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('Pro'),
-                    child: const Text('Check Pro'),
-                  ),
-                  ElevatedButton(
-                    onPressed: _isLoadingAccess ? null : () => _testCheckFeatureAccess('export_data'),
-                    child: const Text('Check Export'),
-                  ),
-                ],
-              ),
               if (_errorMessage != null) ...<Widget>[
                 const SizedBox(height: 20),
                 Container(
@@ -457,41 +412,6 @@ class _SubscriptionsTestScreenState extends State<SubscriptionsTestScreen> {
                       const SizedBox(height: 10),
                       Text(
                         const JsonEncoder.withIndent('  ').convert(_limitsWithUsage!.toJson()),
-                        style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-              if (_featureAccessResult != null) ...<Widget>[
-                const SizedBox(height: 20),
-                const Text(
-                  'Feature Access Result:',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: (_featureAccessResult!.hasAccess ? Colors.green : Colors.red).shade100,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Has Access: ${_featureAccessResult!.hasAccess}',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: (_featureAccessResult!.hasAccess ? Colors.green : Colors.red).shade900,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        const JsonEncoder.withIndent('  ').convert(_featureAccessResult!.toJson()),
                         style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                       ),
                     ],

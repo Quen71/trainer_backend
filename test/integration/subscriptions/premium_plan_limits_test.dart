@@ -6,9 +6,9 @@ import 'package:trainer_backend/models/training/session.dart';
 import 'package:trainer_backend/services/programs.service.dart';
 import 'package:trainer_backend/services/subscriptions.service.dart';
 
-import '../fixtures/test_accounts.dart';
-import '../fixtures/test_programs.dart';
-import 'test_setup.dart';
+import '../../fixtures/test_accounts.dart';
+import '../../fixtures/test_programs.dart';
+import '../test_setup.dart';
 
 /// Integration tests for Premium Plan subscription limits.
 ///
@@ -52,9 +52,7 @@ void main() {
     test('should create 10 programs without error (exceeds Basic limit of 5)', () async {
       // Arrange & Act: Create 10 programs (2x Basic limit of 5)
       for (int i = 1; i <= 10; i++) {
-        final Program program = TestPrograms.createSimpleProgram(
-          name: 'Premium Program $i',
-        );
+        final Program program = TestPrograms.createSimpleProgram(name: 'Premium Program $i');
 
         final Program createdProgram = await ProgramsService.createFullProgram(program);
         expect(createdProgram.id, greaterThan(0));

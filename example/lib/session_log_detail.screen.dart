@@ -11,6 +11,7 @@ class SessionLogDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: always_specify_types
     final (String type, String durationStr, List<RoundLog> rounds) = switch (log) {
       ClassicSessionLog l => (
           'CLASSIC',

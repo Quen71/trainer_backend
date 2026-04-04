@@ -6,9 +6,9 @@ import 'package:trainer_backend/models/training/session.dart';
 import 'package:trainer_backend/services/programs.service.dart';
 import 'package:trainer_backend/services/subscriptions.service.dart';
 
-import '../fixtures/test_accounts.dart';
-import '../fixtures/test_programs.dart';
-import 'test_setup.dart';
+import '../../fixtures/test_accounts.dart';
+import '../../fixtures/test_programs.dart';
+import '../test_setup.dart';
 
 /// Integration tests for Free Plan subscription limits.
 ///
@@ -37,9 +37,7 @@ void main() {
 
     test('should create 1 program successfully', () async {
       // Arrange
-      final Program program = TestPrograms.createSimpleProgram(
-        name: 'Free Test Program',
-      );
+      final Program program = TestPrograms.createSimpleProgram(name: 'Free Test Program');
 
       // Act
       final Program createdProgram = await ProgramsService.createFullProgram(program);
@@ -56,23 +54,17 @@ void main() {
 
     test('should throw SUBSCRIPTION_LIMIT_PROGRAMS on 2nd program', () async {
       // Arrange: Create the first program
-      final Program program1 = TestPrograms.createSimpleProgram(
-        name: 'Program 1',
-      );
+      final Program program1 = TestPrograms.createSimpleProgram(name: 'Program 1');
 
       await ProgramsService.createFullProgram(program1);
 
       // Act & Assert: Should throw exception: Attempt to create a 2nd program
-      final Program program2 = TestPrograms.createSimpleProgram(
-        name: 'Program 2',
-      );
+      final Program program2 = TestPrograms.createSimpleProgram(name: 'Program 2');
 
       expect(
         () => ProgramsService.createFullProgram(program2),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_PROGRAMS'),
-          ),
+          predicate<PostgrestException>((PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_PROGRAMS')),
         ),
       );
     });
@@ -101,20 +93,12 @@ void main() {
       final Program createdProgram = await ProgramsService.createFullProgram(program);
 
       // Act & Assert: Should throw exception: Attempt to add a 3rd session (should fail)
-      final ClassicSession newSession = TestPrograms.createClassicSession(
-        name: 'Session 3',
-        orderInProgram: 3,
-      );
+      final ClassicSession newSession = TestPrograms.createClassicSession(name: 'Session 3', orderInProgram: 3);
 
       expect(
-        () => ProgramsService.addSessionToProgram(
-          programId: createdProgram.id,
-          session: newSession,
-        ),
+        () => ProgramsService.addSessionToProgram(programId: createdProgram.id, session: newSession),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
-          ),
+          predicate<PostgrestException>((PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS')),
         ),
       );
     });
@@ -284,20 +268,12 @@ void main() {
       final Program createdProgram = await ProgramsService.createFullProgram(program);
 
       // Act & Assert: Attempt to add 3rd AMRAP session
-      final AmrapSession newSession = TestPrograms.createAmrapSession(
-        name: 'AMRAP Session 3',
-        orderInProgram: 3,
-      );
+      final AmrapSession newSession = TestPrograms.createAmrapSession(name: 'AMRAP Session 3', orderInProgram: 3);
 
       expect(
-        () => ProgramsService.addSessionToProgram(
-          programId: createdProgram.id,
-          session: newSession,
-        ),
+        () => ProgramsService.addSessionToProgram(programId: createdProgram.id, session: newSession),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
-          ),
+          predicate<PostgrestException>((PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS')),
         ),
       );
     });
@@ -335,20 +311,12 @@ void main() {
       final Program createdProgram = await ProgramsService.createFullProgram(program);
 
       // Act & Assert: Attempt to add 3rd session
-      final AmrapSession newSession = TestPrograms.createAmrapSession(
-        name: 'AMRAP Session 3',
-        orderInProgram: 3,
-      );
+      final AmrapSession newSession = TestPrograms.createAmrapSession(name: 'AMRAP Session 3', orderInProgram: 3);
 
       expect(
-        () => ProgramsService.addSessionToProgram(
-          programId: createdProgram.id,
-          session: newSession,
-        ),
+        () => ProgramsService.addSessionToProgram(programId: createdProgram.id, session: newSession),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
-          ),
+          predicate<PostgrestException>((PostgrestException e) => e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS')),
         ),
       );
     });

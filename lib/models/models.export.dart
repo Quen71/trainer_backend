@@ -12,7 +12,6 @@ export 'subscriptions/entitlement_info.dart';
 export 'subscriptions/enums/package_type.dart';
 export 'subscriptions/enums/period_unit.dart';
 export 'subscriptions/enums/subscription_status.dart';
-export 'subscriptions/feature_access.dart';
 export 'subscriptions/introductory_price.dart';
 export 'subscriptions/offering.dart';
 export 'subscriptions/offerings.dart';

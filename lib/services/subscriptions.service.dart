@@ -3,7 +3,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
 import 'package:trainer_backend/mappers/revenuecat.mapper.dart';
 import 'package:trainer_backend/models/subscriptions/customer_info.dart';
-import 'package:trainer_backend/models/subscriptions/feature_access.dart';
 import 'package:trainer_backend/models/subscriptions/offerings.dart';
 import 'package:trainer_backend/models/subscriptions/package.dart';
 import 'package:trainer_backend/models/subscriptions/subscription_limits_with_usage.dart';
@@ -39,10 +38,7 @@ class SubscriptionsService {
   ///
   /// Throws a [PurchasesError] if the SDK configuration fails or if the
   /// API key is invalid. Throws an [Exception] if the userId is empty.
-  static Future<void> configureRevenueCat({
-    required String apiKey,
-    required String userId,
-  }) async {
+  static Future<void> configureRevenueCat({required String apiKey, required String userId}) async {
     if (userId.isEmpty) {
       throw Exception('User ID cannot be empty');
     }
@@ -71,38 +67,6 @@ class SubscriptionsService {
     );
 
     return SubscriptionSummary.fromJson(response as Map<String, dynamic>);
-  }
-
-  /// Checks if the current user has access to a specific feature.
-  ///
-  /// - [featureKey]: The key identifying the feature to check access for.
-  ///   This should match an entitlement key or feature identifier.
-  ///
-  /// Returns a [Future] with a [FeatureAccess] containing:
-  /// - `hasAccess`: A boolean indicating if the user has access
-  /// - `featureKey`: The feature key that was checked
-  /// - `limits`: Subscription limits if access is granted
-  ///
-  /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<FeatureAccess> checkFeatureAccess({
-    required String featureKey,
-  }) async {
-    final dynamic response = await _client.rpc(
-      'check_feature_access',
-      params: <String, dynamic>{
-        'p_user_id': null,
-        'p_feature_key': featureKey,
-      },
-    );
-
-    if (response == null) {
-      return FeatureAccess(
-        hasAccess: false,
-        featureKey: featureKey,
-      );
-    }
-
-    return FeatureAccess.fromJson(response as Map<String, dynamic>);
   }
 
   /// Retrieves the available offerings (subscription packages) from RevenueCat.
@@ -155,9 +119,7 @@ class SubscriptionsService {
   /// - `PURCHASE_NOT_ALLOWED`: Purchase is not allowed
   /// - `PRODUCT_NOT_AVAILABLE_FOR_PURCHASE`: Product is not available
   /// - Other network/StoreKit errors
-  static Future<SubscriptionSummary> purchasePackage({
-    required Package package,
-  }) async {
+  static Future<SubscriptionSummary> purchasePackage({required Package package}) async {
     _checkRevenueCatInitialized();
 
     // Validate entitlement identifier
@@ -177,10 +139,7 @@ class SubscriptionsService {
     // Use storeProduct.identifier (the unique product ID) instead of package.identifier
     // because package.identifier (e.g., "$rc_monthly") is shared across offerings,
     // while storeProduct.identifier (e.g., "basic_monthly_subscription") is unique.
-    final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(
-      rcOfferings,
-      package.storeProduct.identifier,
-    );
+    final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(rcOfferings, package.storeProduct.identifier);
 
     if (rcPackage == null) {
       throw Exception('Package not found in offerings for product: ${package.storeProduct.identifier}');
@@ -190,9 +149,7 @@ class SubscriptionsService {
     final CustomerInfo customerInfo = await _purchasePackageWithRevenueCatPackage(rcPackage);
 
     // 2. Fetch limits from Supabase (independent of webhook)
-    final SubscriptionSummaryLimits limits = await SubscriptionSummaryUtils.getEntitlementLimits(
-      entitlementKey,
-    );
+    final SubscriptionSummaryLimits limits = await SubscriptionSummaryUtils.getEntitlementLimits(entitlementKey);
 
     // 3. Build and return SubscriptionSummary
     return SubscriptionSummaryUtils.buildFromCustomerInfo(
@@ -312,9 +269,7 @@ class SubscriptionsService {
   /// Throws an [Exception] if RevenueCat has not been initialized.
   static void _checkRevenueCatInitialized() {
     if (!_isRevenueCatInitialized) {
-      throw Exception(
-        'RevenueCat SDK not initialized. Call configureRevenueCat() first.',
-      );
+      throw Exception('RevenueCat SDK not initialized. Call configureRevenueCat() first.');
     }
   }
 }
