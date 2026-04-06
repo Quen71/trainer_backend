@@ -19,10 +19,9 @@ import '../test_setup.dart';
 /// - Correct return of [SessionApiResponse]
 /// - Name updates
 /// - Exercise parameter updates
-///
-/// Note: exercise *names* are stored in the global `exercises` table and are
-/// not updated by the `update_full_session` RPC. Parameter changes (weight,
-/// reps, duration, …) are the correct way to verify the exercise update path.
+/// - Exercise rename within a session (creates a new exercise in the global
+///   library if the name does not already exist; updates the session_exercises
+///   link to point to the new exercise while preserving progressions)
 ///
 /// Uses [TestAccounts.premiumUser] to avoid subscription limit interference.
 ///
@@ -101,6 +100,27 @@ void main() {
         isTrue,
       );
     });
+
+    test('should rename an exercise within the session', () async {
+      final Program created = await ProgramsService.createFullProgram(
+        TestPrograms.createSimpleProgram(name: 'Program for Exercise Rename'),
+      );
+      addTearDown(() async => ProgramsService.deleteProgram(created.id));
+      final ClassicSession session = created.sessions.first as ClassicSession;
+      final ClassicExercise original = session.exercises.first;
+
+      final SessionApiResponse response = await SessionsService.updateFullSession(
+        session.copyWith(
+          exercises: <ClassicExercise>[original.copyWith(name: 'Renamed Exercise')],
+        ),
+      );
+
+      expect(response.session, isA<ClassicSession>());
+      final ClassicSession returned = response.session as ClassicSession;
+      expect(returned.exercises.length, equals(1));
+      expect(returned.exercises.first.name, equals('Renamed Exercise'));
+      expect(returned.exercises.first.id, equals(original.id));
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -152,6 +172,30 @@ void main() {
       expect(returned.exercises.length, equals(2));
       expect(returned.exercises.every((AmrapExercise e) => e.templateParameters.weight == 999.0), isTrue);
     });
+
+    test('should rename an exercise within the session', () async {
+      final Program base = await ProgramsService.createFullProgram(
+        Program.forCreation(
+          name: 'AMRAP Program for Exercise Rename',
+          sessions: <Session>[TestPrograms.createAmrapSession(name: 'AMRAP Session', orderInProgram: 0)],
+        ),
+      );
+      addTearDown(() async => ProgramsService.deleteProgram(base.id));
+      final AmrapSession session = base.sessions.whereType<AmrapSession>().first;
+      final AmrapExercise original = session.exercises.first;
+
+      final SessionApiResponse response = await SessionsService.updateFullSession(
+        session.copyWith(
+          exercises: <AmrapExercise>[original.copyWith(name: 'Renamed AMRAP Exercise')],
+        ),
+      );
+
+      expect(response.session, isA<AmrapSession>());
+      final AmrapSession returned = response.session as AmrapSession;
+      expect(returned.exercises.length, equals(1));
+      expect(returned.exercises.first.name, equals('Renamed AMRAP Exercise'));
+      expect(returned.exercises.first.id, equals(original.id));
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -202,6 +246,30 @@ void main() {
       final EmomSession returned = response.session as EmomSession;
       expect(returned.exercises.length, equals(2));
       expect(returned.exercises.every((EmomExercise e) => e.templateParameters.weight == 999.0), isTrue);
+    });
+
+    test('should rename an exercise within the session', () async {
+      final Program base = await ProgramsService.createFullProgram(
+        Program.forCreation(
+          name: 'EMOM Program for Exercise Rename',
+          sessions: <Session>[TestPrograms.createEmomSession(name: 'EMOM Session', orderInProgram: 0)],
+        ),
+      );
+      addTearDown(() async => ProgramsService.deleteProgram(base.id));
+      final EmomSession session = base.sessions.whereType<EmomSession>().first;
+      final EmomExercise original = session.exercises.first;
+
+      final SessionApiResponse response = await SessionsService.updateFullSession(
+        session.copyWith(
+          exercises: <EmomExercise>[original.copyWith(name: 'Renamed EMOM Exercise')],
+        ),
+      );
+
+      expect(response.session, isA<EmomSession>());
+      final EmomSession returned = response.session as EmomSession;
+      expect(returned.exercises.length, equals(1));
+      expect(returned.exercises.first.name, equals('Renamed EMOM Exercise'));
+      expect(returned.exercises.first.id, equals(original.id));
     });
   });
 
@@ -257,6 +325,30 @@ void main() {
         returned.exercises.every((HiitExercise e) => e.templateParameters.effortDuration == updatedEffort),
         isTrue,
       );
+    });
+
+    test('should rename an exercise within the session', () async {
+      final Program base = await ProgramsService.createFullProgram(
+        Program.forCreation(
+          name: 'HIIT Program for Exercise Rename',
+          sessions: <Session>[TestPrograms.createHiitSession(name: 'HIIT Session', orderInProgram: 0)],
+        ),
+      );
+      addTearDown(() async => ProgramsService.deleteProgram(base.id));
+      final HiitSession session = base.sessions.whereType<HiitSession>().first;
+      final HiitExercise original = session.exercises.first;
+
+      final SessionApiResponse response = await SessionsService.updateFullSession(
+        session.copyWith(
+          exercises: <HiitExercise>[original.copyWith(name: 'Renamed HIIT Exercise')],
+        ),
+      );
+
+      expect(response.session, isA<HiitSession>());
+      final HiitSession returned = response.session as HiitSession;
+      expect(returned.exercises.length, equals(1));
+      expect(returned.exercises.first.name, equals('Renamed HIIT Exercise'));
+      expect(returned.exercises.first.id, equals(original.id));
     });
   });
 }

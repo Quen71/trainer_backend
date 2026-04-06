@@ -368,7 +368,8 @@ BEGIN
         ELSE
             UPDATE public.session_exercises
             SET order_in_session = (exercise_data->>'order_in_session')::int,
-                parameters = (exercise_data->'parameters')::jsonb
+                parameters = (exercise_data->'parameters')::jsonb,
+                exercise_id = v_exercise_id
             WHERE id = v_session_exercise_id AND session_id = v_session_id;
 
             UPDATE public.exercise_progressions
