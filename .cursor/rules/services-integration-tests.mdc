@@ -1,0 +1,33 @@
+---
+description: Run and maintain Supabase integration tests when changing trainer_backend services
+globs: lib/services/**/*.dart,test/integration/**/*.dart
+alwaysApply: false
+---
+
+# `lib/services` — integration tests
+
+## After changing service code
+
+From the **trainer_backend** repo root, run integration tests before considering the task done:
+
+```bash
+flutter test test/integration/
+```
+
+If failures look order- or state-related (shared Premium user across files), retry with:
+
+```bash
+flutter test test/integration/ --concurrency=1
+```
+
+Requires `unit-test.env` at the project root (see `test/README.md`). Do not commit secrets.
+
+## New or changed public API
+
+- Add or update tests under `test/integration/` in the matching area (`programs/`, `sessions/`, `history/`, `subscriptions/`).
+- Follow existing patterns: `TestSetup.initializeSupabase()`, `TestSetup.signInAndCleanup`, `TestAccounts.premiumUser` for program/session/history suites (avoids quota noise), `addTearDown` to delete data the test created.
+- **SubscriptionsService**: only exercise Supabase-backed methods in integration tests (e.g. `getUserSubscriptionSummary`). Do not add integration tests for RevenueCat / store flows here.
+
+## References
+
+- `test/README.md` — structure, env vars, troubleshooting.
