@@ -18,10 +18,7 @@ abstract class _$OfferingsCWProxy {
   /// ```dart
   /// Offerings(...).copyWith(id: 12, name: "My name")
   /// ```
-  Offerings call({
-    Map<String, Offering> all,
-    Offering? current,
-  });
+  Offerings call({Map<String, Offering> all, Offering? current});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -38,7 +35,6 @@ class _$OfferingsCWProxyImpl implements _$OfferingsCWProxy {
   Offerings current(Offering? current) => call(current: current);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Offerings(...).copyWith.fieldName(value)`.
   ///

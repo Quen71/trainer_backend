@@ -32,7 +32,8 @@ class Subscription {
   });
 
   /// Creates a [Subscription] from a JSON object.
-  factory Subscription.fromJson(Map<String, dynamic> json) => _$SubscriptionFromJson(json);
+  factory Subscription.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionFromJson(json);
 
   /// The unique identifier for the subscription.
   final String id;

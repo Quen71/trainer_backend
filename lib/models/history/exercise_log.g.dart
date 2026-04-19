@@ -22,12 +22,7 @@ abstract class _$SetLogCWProxy {
   /// ```dart
   /// SetLog(...).copyWith(id: 12, name: "My name")
   /// ```
-  SetLog call({
-    int number,
-    double weight,
-    int reps,
-    Duration restDuration,
-  });
+  SetLog call({int number, double weight, int reps, Duration restDuration});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -51,7 +46,6 @@ class _$SetLogCWProxyImpl implements _$SetLogCWProxy {
       call(restDuration: restDuration);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SetLog(...).copyWith.fieldName(value)`.
   ///
@@ -80,9 +74,9 @@ class _$SetLogCWProxyImpl implements _$SetLogCWProxy {
           : reps as int,
       restDuration:
           restDuration == const $CopyWithPlaceholder() || restDuration == null
-              ? _value.restDuration
-              // ignore: cast_nullable_to_non_nullable
-              : restDuration as Duration,
+          ? _value.restDuration
+          // ignore: cast_nullable_to_non_nullable
+          : restDuration as Duration,
     );
   }
 }
@@ -147,7 +141,6 @@ class _$ClassicExerciseLogCWProxyImpl implements _$ClassicExerciseLogCWProxy {
   ClassicExerciseLog sets(List<SetLog> sets) => call(sets: sets);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExerciseLog(...).copyWith.fieldName(value)`.
   ///
@@ -167,17 +160,19 @@ class _$ClassicExerciseLogCWProxyImpl implements _$ClassicExerciseLogCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+      sessionExerciseId:
+          sessionExerciseId == const $CopyWithPlaceholder() ||
               sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
       exerciseName:
           exerciseName == const $CopyWithPlaceholder() || exerciseName == null
-              ? _value.exerciseName
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+          ? _value.exerciseName
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseName as String,
+      orderInRoundLog:
+          orderInRoundLog == const $CopyWithPlaceholder() ||
               orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
@@ -257,7 +252,6 @@ class _$AmrapExerciseLogCWProxyImpl implements _$AmrapExerciseLogCWProxy {
   AmrapExerciseLog weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExerciseLog(...).copyWith.fieldName(value)`.
   ///
@@ -278,26 +272,28 @@ class _$AmrapExerciseLogCWProxyImpl implements _$AmrapExerciseLogCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+      sessionExerciseId:
+          sessionExerciseId == const $CopyWithPlaceholder() ||
               sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
       exerciseName:
           exerciseName == const $CopyWithPlaceholder() || exerciseName == null
-              ? _value.exerciseName
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+          ? _value.exerciseName
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseName as String,
+      orderInRoundLog:
+          orderInRoundLog == const $CopyWithPlaceholder() ||
               orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
       repsNumber:
           repsNumber == const $CopyWithPlaceholder() || repsNumber == null
-              ? _value.repsNumber
-              // ignore: cast_nullable_to_non_nullable
-              : repsNumber as int,
+          ? _value.repsNumber
+          // ignore: cast_nullable_to_non_nullable
+          : repsNumber as int,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -378,7 +374,6 @@ class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
   EmomExerciseLog weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExerciseLog(...).copyWith.fieldName(value)`.
   ///
@@ -400,17 +395,19 @@ class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+      sessionExerciseId:
+          sessionExerciseId == const $CopyWithPlaceholder() ||
               sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
       exerciseName:
           exerciseName == const $CopyWithPlaceholder() || exerciseName == null
-              ? _value.exerciseName
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+          ? _value.exerciseName
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseName as String,
+      orderInRoundLog:
+          orderInRoundLog == const $CopyWithPlaceholder() ||
               orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
@@ -421,9 +418,9 @@ class _$EmomExerciseLogCWProxyImpl implements _$EmomExerciseLogCWProxy {
           : duration as Duration,
       repsNumber:
           repsNumber == const $CopyWithPlaceholder() || repsNumber == null
-              ? _value.repsNumber
-              // ignore: cast_nullable_to_non_nullable
-              : repsNumber as int,
+          ? _value.repsNumber
+          // ignore: cast_nullable_to_non_nullable
+          : repsNumber as int,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -506,7 +503,6 @@ class _$HiitExerciseLogCWProxyImpl implements _$HiitExerciseLogCWProxy {
   HiitExerciseLog weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExerciseLog(...).copyWith.fieldName(value)`.
   ///
@@ -528,31 +524,34 @@ class _$HiitExerciseLogCWProxyImpl implements _$HiitExerciseLogCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as int,
-      sessionExerciseId: sessionExerciseId == const $CopyWithPlaceholder() ||
+      sessionExerciseId:
+          sessionExerciseId == const $CopyWithPlaceholder() ||
               sessionExerciseId == null
           ? _value.sessionExerciseId
           // ignore: cast_nullable_to_non_nullable
           : sessionExerciseId as int,
       exerciseName:
           exerciseName == const $CopyWithPlaceholder() || exerciseName == null
-              ? _value.exerciseName
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseName as String,
-      orderInRoundLog: orderInRoundLog == const $CopyWithPlaceholder() ||
+          ? _value.exerciseName
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseName as String,
+      orderInRoundLog:
+          orderInRoundLog == const $CopyWithPlaceholder() ||
               orderInRoundLog == null
           ? _value.orderInRoundLog
           // ignore: cast_nullable_to_non_nullable
           : orderInRoundLog as int,
-      effortDuration: effortDuration == const $CopyWithPlaceholder() ||
+      effortDuration:
+          effortDuration == const $CopyWithPlaceholder() ||
               effortDuration == null
           ? _value.effortDuration
           // ignore: cast_nullable_to_non_nullable
           : effortDuration as Duration,
       restDuration:
           restDuration == const $CopyWithPlaceholder() || restDuration == null
-              ? _value.restDuration
-              // ignore: cast_nullable_to_non_nullable
-              : restDuration as Duration,
+          ? _value.restDuration
+          // ignore: cast_nullable_to_non_nullable
+          : restDuration as Duration,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -573,19 +572,20 @@ extension $HiitExerciseLogCopyWith on HiitExerciseLog {
 // **************************************************************************
 
 SetLog _$SetLogFromJson(Map<String, dynamic> json) => SetLog(
-      number: (json['number'] as num).toInt(),
-      weight: (json['weight'] as num).toDouble(),
-      reps: (json['reps'] as num).toInt(),
-      restDuration: const DurationConverter()
-          .fromJson((json['rest_duration'] as num).toInt()),
-    );
+  number: (json['number'] as num).toInt(),
+  weight: (json['weight'] as num).toDouble(),
+  reps: (json['reps'] as num).toInt(),
+  restDuration: const DurationConverter().fromJson(
+    (json['rest_duration'] as num).toInt(),
+  ),
+);
 
 Map<String, dynamic> _$SetLogToJson(SetLog instance) => <String, dynamic>{
-      'number': instance.number,
-      'weight': instance.weight,
-      'reps': instance.reps,
-      'rest_duration': const DurationConverter().toJson(instance.restDuration),
-    };
+  'number': instance.number,
+  'weight': instance.weight,
+  'reps': instance.reps,
+  'rest_duration': const DurationConverter().toJson(instance.restDuration),
+};
 
 ClassicExerciseLog _$ClassicExerciseLogFromJson(Map<String, dynamic> json) =>
     ClassicExerciseLog(
@@ -633,8 +633,9 @@ EmomExerciseLog _$EmomExerciseLogFromJson(Map<String, dynamic> json) =>
       sessionExerciseId: (json['session_exercise_id'] as num).toInt(),
       exerciseName: json['exercise_name'] as String,
       orderInRoundLog: (json['order_in_round_log'] as num).toInt(),
-      duration:
-          const DurationConverter().fromJson((json['duration'] as num).toInt()),
+      duration: const DurationConverter().fromJson(
+        (json['duration'] as num).toInt(),
+      ),
       repsNumber: (json['reps_number'] as num).toInt(),
       weight: (json['weight'] as num).toDouble(),
     );
@@ -656,21 +657,23 @@ HiitExerciseLog _$HiitExerciseLogFromJson(Map<String, dynamic> json) =>
       sessionExerciseId: (json['session_exercise_id'] as num).toInt(),
       exerciseName: json['exercise_name'] as String,
       orderInRoundLog: (json['order_in_round_log'] as num).toInt(),
-      effortDuration: const DurationConverter()
-          .fromJson((json['effort_duration'] as num).toInt()),
-      restDuration: const DurationConverter()
-          .fromJson((json['rest_duration'] as num).toInt()),
+      effortDuration: const DurationConverter().fromJson(
+        (json['effort_duration'] as num).toInt(),
+      ),
+      restDuration: const DurationConverter().fromJson(
+        (json['rest_duration'] as num).toInt(),
+      ),
       weight: (json['weight'] as num).toDouble(),
     );
 
-Map<String, dynamic> _$HiitExerciseLogToJson(HiitExerciseLog instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'session_exercise_id': instance.sessionExerciseId,
-      'exercise_name': instance.exerciseName,
-      'order_in_round_log': instance.orderInRoundLog,
-      'effort_duration':
-          const DurationConverter().toJson(instance.effortDuration),
-      'rest_duration': const DurationConverter().toJson(instance.restDuration),
-      'weight': instance.weight,
-    };
+Map<String, dynamic> _$HiitExerciseLogToJson(
+  HiitExerciseLog instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'session_exercise_id': instance.sessionExerciseId,
+  'exercise_name': instance.exerciseName,
+  'order_in_round_log': instance.orderInRoundLog,
+  'effort_duration': const DurationConverter().toJson(instance.effortDuration),
+  'rest_duration': const DurationConverter().toJson(instance.restDuration),
+  'weight': instance.weight,
+};

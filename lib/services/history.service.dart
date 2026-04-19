@@ -56,10 +56,7 @@ class HistoryService {
   }) async {
     final dynamic response = await _client.rpc(
       'get_user_sessions_logs',
-      params: <String, dynamic>{
-        'page_number': page,
-        'page_size': pageSize,
-      },
+      params: <String, dynamic>{'page_number': page, 'page_size': pageSize},
     );
 
     if (response == null) {
@@ -68,6 +65,8 @@ class HistoryService {
 
     final List<dynamic> logsJson = response as List<dynamic>;
 
-    return logsJson.map((dynamic l) => SessionLog.fromJson(l as Map<String, dynamic>)).toList();
+    return logsJson
+        .map((dynamic l) => SessionLog.fromJson(l as Map<String, dynamic>))
+        .toList();
   }
 }

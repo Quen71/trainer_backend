@@ -18,7 +18,8 @@ class CreateSessionLogResponse {
   });
 
   /// A factory for creating a [CreateSessionLogResponse] instance from a JSON object.
-  factory CreateSessionLogResponse.fromJson(Map<String, dynamic> json) => _$CreateSessionLogResponseFromJson(json);
+  factory CreateSessionLogResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateSessionLogResponseFromJson(json);
 
   /// The session log that was created and saved to the database.
   final SessionLog sessionLog;

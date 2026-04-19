@@ -69,7 +69,9 @@ class AppAuthenticated extends AppAuthState {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is AppAuthenticated && other.user == user && other.isTokenRefresh == isTokenRefresh;
+    return other is AppAuthenticated &&
+        other.user == user &&
+        other.isTokenRefresh == isTokenRefresh;
   }
 
   @override

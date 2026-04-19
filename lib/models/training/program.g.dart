@@ -74,7 +74,6 @@ class _$ProgramCWProxyImpl implements _$ProgramCWProxy {
   Program updatedAt(DateTime updatedAt) => call(updatedAt: updatedAt);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Program(...).copyWith.fieldName(value)`.
   ///
@@ -115,9 +114,9 @@ class _$ProgramCWProxyImpl implements _$ProgramCWProxy {
           : sessions as List<Session>,
       isFavorite:
           isFavorite == const $CopyWithPlaceholder() || isFavorite == null
-              ? _value.isFavorite
-              // ignore: cast_nullable_to_non_nullable
-              : isFavorite as bool,
+          ? _value.isFavorite
+          // ignore: cast_nullable_to_non_nullable
+          : isFavorite as bool,
       createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable
@@ -142,25 +141,26 @@ extension $ProgramCopyWith on Program {
 // **************************************************************************
 
 Program _$ProgramFromJson(Map<String, dynamic> json) => Program(
-      id: (json['id'] as num).toInt(),
-      userId: json['user_id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String?,
-      sessions: (json['sessions'] as List<dynamic>?)
-              ?.map((e) => Session.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <Session>[],
-      isFavorite: json['is_favorite'] as bool,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-    );
+  id: (json['id'] as num).toInt(),
+  userId: json['user_id'] as String,
+  name: json['name'] as String,
+  description: json['description'] as String?,
+  sessions:
+      (json['sessions'] as List<dynamic>?)
+          ?.map((e) => Session.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <Session>[],
+  isFavorite: json['is_favorite'] as bool,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+);
 
 Map<String, dynamic> _$ProgramToJson(Program instance) => <String, dynamic>{
-      'id': instance.id,
-      'user_id': instance.userId,
-      'name': instance.name,
-      'description': instance.description,
-      'sessions': instance.sessions,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
-    };
+  'id': instance.id,
+  'user_id': instance.userId,
+  'name': instance.name,
+  'description': instance.description,
+  'sessions': instance.sessions,
+  'created_at': instance.createdAt.toIso8601String(),
+  'updated_at': instance.updatedAt.toIso8601String(),
+};

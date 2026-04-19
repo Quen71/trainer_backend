@@ -50,25 +50,29 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('createSessionLog', () {
-    test('should create a Classic session log and return a valid response', () async {
-      final Program program = await ProgramsService.createFullProgram(
-        TestPrograms.createSimpleProgram(name: 'Program for Classic Log'),
-      );
-      addTearDown(() async => deleteProgramWithLogs(program.id));
-      final ClassicSession session = program.sessions.first as ClassicSession;
-      final Exercise exercise = session.exercises.first;
+    test(
+      'should create a Classic session log and return a valid response',
+      () async {
+        final Program program = await ProgramsService.createFullProgram(
+          TestPrograms.createSimpleProgram(name: 'Program for Classic Log'),
+        );
+        addTearDown(() async => deleteProgramWithLogs(program.id));
+        final ClassicSession session = program.sessions.first as ClassicSession;
+        final Exercise exercise = session.exercises.first;
 
-      final CreateSessionLogResponse response = await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(
-          sessionId: session.id,
-          sessionExerciseId: exercise.id,
-        ),
-      );
+        final CreateSessionLogResponse response =
+            await HistoryService.createSessionLog(
+              TestSessionLogs.createClassicSessionLog(
+                sessionId: session.id,
+                sessionExerciseId: exercise.id,
+              ),
+            );
 
-      expect(response.sessionLog.id, greaterThan(0));
-      expect(response.sessionLog.sessionId, equals(session.id));
-      expect(response.sessionLog, isA<ClassicSessionLog>());
-    });
+        expect(response.sessionLog.id, greaterThan(0));
+        expect(response.sessionLog.sessionId, equals(session.id));
+        expect(response.sessionLog, isA<ClassicSessionLog>());
+      },
+    );
 
     test('should return an updatedSessionPreview in the response', () async {
       final Program program = await ProgramsService.createFullProgram(
@@ -78,12 +82,13 @@ void main() {
       final ClassicSession session = program.sessions.first as ClassicSession;
       final Exercise exercise = session.exercises.first;
 
-      final CreateSessionLogResponse response = await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(
-          sessionId: session.id,
-          sessionExerciseId: exercise.id,
-        ),
-      );
+      final CreateSessionLogResponse response =
+          await HistoryService.createSessionLog(
+            TestSessionLogs.createClassicSessionLog(
+              sessionId: session.id,
+              sessionExerciseId: exercise.id,
+            ),
+          );
 
       expect(response.updatedSessionPreview.id, equals(session.id));
     });
@@ -92,20 +97,28 @@ void main() {
       final Program base = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'Program for AMRAP Log',
-          sessions: <Session>[TestPrograms.createAmrapSession(name: 'AMRAP Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createAmrapSession(
+              name: 'AMRAP Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => deleteProgramWithLogs(base.id));
-      final AmrapSession session = base.sessions.whereType<AmrapSession>().first;
+      final AmrapSession session = base.sessions
+          .whereType<AmrapSession>()
+          .first;
       final Exercise exercise = session.exercises.first;
 
-      final CreateSessionLogResponse response = await HistoryService.createSessionLog(
-        TestSessionLogs.createAmrapSessionLog(
-          sessionId: session.id,
-          sessionExerciseId: exercise.id,
-          roundCount: 4,
-        ),
-      );
+      final CreateSessionLogResponse response =
+          await HistoryService.createSessionLog(
+            TestSessionLogs.createAmrapSessionLog(
+              sessionId: session.id,
+              sessionExerciseId: exercise.id,
+              roundCount: 4,
+            ),
+          );
 
       expect(response.sessionLog.id, greaterThan(0));
       expect(response.sessionLog.sessionId, equals(session.id));
@@ -116,20 +129,26 @@ void main() {
       final Program base = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'Program for EMOM Log',
-          sessions: <Session>[TestPrograms.createEmomSession(name: 'EMOM Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createEmomSession(
+              name: 'EMOM Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => deleteProgramWithLogs(base.id));
       final EmomSession session = base.sessions.whereType<EmomSession>().first;
       final Exercise exercise = session.exercises.first;
 
-      final CreateSessionLogResponse response = await HistoryService.createSessionLog(
-        TestSessionLogs.createEmomSessionLog(
-          sessionId: session.id,
-          sessionExerciseId: exercise.id,
-          roundCount: 10,
-        ),
-      );
+      final CreateSessionLogResponse response =
+          await HistoryService.createSessionLog(
+            TestSessionLogs.createEmomSessionLog(
+              sessionId: session.id,
+              sessionExerciseId: exercise.id,
+              roundCount: 10,
+            ),
+          );
 
       expect(response.sessionLog.id, greaterThan(0));
       expect(response.sessionLog.sessionId, equals(session.id));
@@ -140,20 +159,26 @@ void main() {
       final Program base = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'Program for HIIT Log',
-          sessions: <Session>[TestPrograms.createHiitSession(name: 'HIIT Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createHiitSession(
+              name: 'HIIT Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => deleteProgramWithLogs(base.id));
       final HiitSession session = base.sessions.whereType<HiitSession>().first;
       final Exercise exercise = session.exercises.first;
 
-      final CreateSessionLogResponse response = await HistoryService.createSessionLog(
-        TestSessionLogs.createHiitSessionLog(
-          sessionId: session.id,
-          sessionExerciseId: exercise.id,
-          roundCount: 8,
-        ),
-      );
+      final CreateSessionLogResponse response =
+          await HistoryService.createSessionLog(
+            TestSessionLogs.createHiitSessionLog(
+              sessionId: session.id,
+              sessionExerciseId: exercise.id,
+              roundCount: 8,
+            ),
+          );
 
       expect(response.sessionLog.id, greaterThan(0));
       expect(response.sessionLog.sessionId, equals(session.id));
@@ -169,15 +194,25 @@ void main() {
       final Exercise exercise = session.exercises.first;
 
       await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(sessionId: session.id, sessionExerciseId: exercise.id),
+        TestSessionLogs.createClassicSessionLog(
+          sessionId: session.id,
+          sessionExerciseId: exercise.id,
+        ),
       );
       await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(sessionId: session.id, sessionExerciseId: exercise.id),
+        TestSessionLogs.createClassicSessionLog(
+          sessionId: session.id,
+          sessionExerciseId: exercise.id,
+        ),
       );
 
       // Filter by sessionId to be resilient against logs from concurrent test files.
-      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(page: 0);
-      final List<SessionLog> ours = logs.where((SessionLog l) => l.sessionId == session.id).toList();
+      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(
+        page: 0,
+      );
+      final List<SessionLog> ours = logs
+          .where((SessionLog l) => l.sessionId == session.id)
+          .toList();
       expect(ours.length, equals(2));
     });
   });
@@ -188,7 +223,9 @@ void main() {
 
   group('fetchUserSessionsLogs', () {
     test('should return empty list when no logs exist', () async {
-      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(page: 0);
+      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(
+        page: 0,
+      );
       expect(logs, isEmpty);
     });
 
@@ -201,13 +238,20 @@ void main() {
       final Exercise exercise = session.exercises.first;
 
       await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(sessionId: session.id, sessionExerciseId: exercise.id),
+        TestSessionLogs.createClassicSessionLog(
+          sessionId: session.id,
+          sessionExerciseId: exercise.id,
+        ),
       );
 
-      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(page: 0);
+      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(
+        page: 0,
+      );
 
       // Filter by sessionId to be resilient against logs from concurrent test files.
-      final List<SessionLog> ours = logs.where((SessionLog l) => l.sessionId == session.id).toList();
+      final List<SessionLog> ours = logs
+          .where((SessionLog l) => l.sessionId == session.id)
+          .toList();
       expect(ours.length, equals(1));
       expect(ours.first.id, greaterThan(0));
       expect(ours.first, isA<ClassicSessionLog>());
@@ -216,32 +260,59 @@ void main() {
     test('should correctly deserialize all 4 log types', () async {
       // Arrange: Create a mixed-type program and one log per session type
       final Program program = await ProgramsService.createFullProgram(
-        TestPrograms.createMixedTypeProgram(name: 'Program for Multi-Type Fetch'),
+        TestPrograms.createMixedTypeProgram(
+          name: 'Program for Multi-Type Fetch',
+        ),
       );
       addTearDown(() async => deleteProgramWithLogs(program.id));
 
-      final ClassicSession classic = program.sessions.whereType<ClassicSession>().first;
-      final AmrapSession amrap = program.sessions.whereType<AmrapSession>().first;
+      final ClassicSession classic = program.sessions
+          .whereType<ClassicSession>()
+          .first;
+      final AmrapSession amrap = program.sessions
+          .whereType<AmrapSession>()
+          .first;
       final EmomSession emom = program.sessions.whereType<EmomSession>().first;
       final HiitSession hiit = program.sessions.whereType<HiitSession>().first;
 
       await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(sessionId: classic.id, sessionExerciseId: classic.exercises.first.id),
+        TestSessionLogs.createClassicSessionLog(
+          sessionId: classic.id,
+          sessionExerciseId: classic.exercises.first.id,
+        ),
       );
       await HistoryService.createSessionLog(
-        TestSessionLogs.createAmrapSessionLog(sessionId: amrap.id, sessionExerciseId: amrap.exercises.first.id),
+        TestSessionLogs.createAmrapSessionLog(
+          sessionId: amrap.id,
+          sessionExerciseId: amrap.exercises.first.id,
+        ),
       );
       await HistoryService.createSessionLog(
-        TestSessionLogs.createEmomSessionLog(sessionId: emom.id, sessionExerciseId: emom.exercises.first.id),
+        TestSessionLogs.createEmomSessionLog(
+          sessionId: emom.id,
+          sessionExerciseId: emom.exercises.first.id,
+        ),
       );
       await HistoryService.createSessionLog(
-        TestSessionLogs.createHiitSessionLog(sessionId: hiit.id, sessionExerciseId: hiit.exercises.first.id),
+        TestSessionLogs.createHiitSessionLog(
+          sessionId: hiit.id,
+          sessionExerciseId: hiit.exercises.first.id,
+        ),
       );
 
       // Act: Fetch all logs and filter to those from this test's program
-      final List<SessionLog> all = await HistoryService.fetchUserSessionsLogs(page: 0);
-      final Set<int> ourSessionIds = <int>{classic.id, amrap.id, emom.id, hiit.id};
-      final List<SessionLog> ours = all.where((SessionLog l) => ourSessionIds.contains(l.sessionId)).toList();
+      final List<SessionLog> all = await HistoryService.fetchUserSessionsLogs(
+        page: 0,
+      );
+      final Set<int> ourSessionIds = <int>{
+        classic.id,
+        amrap.id,
+        emom.id,
+        hiit.id,
+      };
+      final List<SessionLog> ours = all
+          .where((SessionLog l) => ourSessionIds.contains(l.sessionId))
+          .toList();
 
       // Assert: All 4 types are present and deserialized correctly
       expect(ours.length, equals(4));
@@ -260,10 +331,15 @@ void main() {
       final Exercise exercise = session.exercises.first;
 
       await HistoryService.createSessionLog(
-        TestSessionLogs.createClassicSessionLog(sessionId: session.id, sessionExerciseId: exercise.id),
+        TestSessionLogs.createClassicSessionLog(
+          sessionId: session.id,
+          sessionExerciseId: exercise.id,
+        ),
       );
 
-      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(page: 1);
+      final List<SessionLog> logs = await HistoryService.fetchUserSessionsLogs(
+        page: 1,
+      );
       expect(logs, isEmpty);
     });
 
@@ -277,17 +353,28 @@ void main() {
 
       for (int i = 0; i < 4; i++) {
         await HistoryService.createSessionLog(
-          TestSessionLogs.createClassicSessionLog(sessionId: session.id, sessionExerciseId: exercise.id),
+          TestSessionLogs.createClassicSessionLog(
+            sessionId: session.id,
+            sessionExerciseId: exercise.id,
+          ),
         );
       }
 
-      final List<SessionLog> page0 = await HistoryService.fetchUserSessionsLogs(page: 0, pageSize: 2);
-      final List<SessionLog> page1 = await HistoryService.fetchUserSessionsLogs(page: 1, pageSize: 2);
+      final List<SessionLog> page0 = await HistoryService.fetchUserSessionsLogs(
+        page: 0,
+        pageSize: 2,
+      );
+      final List<SessionLog> page1 = await HistoryService.fetchUserSessionsLogs(
+        page: 1,
+        pageSize: 2,
+      );
 
       expect(page0.length, equals(2));
       expect(page1.length, greaterThanOrEqualTo(2));
       final List<SessionLog> allFetched = <SessionLog>[...page0, ...page1];
-      final List<SessionLog> ours = allFetched.where((SessionLog l) => l.sessionId == session.id).toList();
+      final List<SessionLog> ours = allFetched
+          .where((SessionLog l) => l.sessionId == session.id)
+          .toList();
       expect(ours.length, equals(4));
     });
   });

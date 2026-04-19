@@ -41,7 +41,8 @@ class TrainerBackendConfiguration {
   ///
   /// Throws an [Exception] if [init] has not been called first.
   static TrainerBackendConfiguration get instance {
-    if (_instance == null) throw Exception('No instance build for TrainerBackendConfiguration');
+    if (_instance == null)
+      throw Exception('No instance build for TrainerBackendConfiguration');
 
     return _instance!;
   }
@@ -54,9 +55,15 @@ class TrainerBackendConfiguration {
   /// and initializes the [Supabase] client.
   ///
   /// - [trainerBackendFlavor]: The environment to configure.
-  static Future<void> init({required TrainerBackendFlavor trainerBackendFlavor}) async {
-    final String envString = await rootBundle.loadString('packages/trainer_backend/.env');
-    final Map<String, String> envMap = const Parser().parse(envString.split('\n'));
+  static Future<void> init({
+    required TrainerBackendFlavor trainerBackendFlavor,
+  }) async {
+    final String envString = await rootBundle.loadString(
+      'packages/trainer_backend/.env',
+    );
+    final Map<String, String> envMap = const Parser().parse(
+      envString.split('\n'),
+    );
 
     switch (trainerBackendFlavor) {
       case TrainerBackendFlavor.test:
@@ -75,9 +82,6 @@ class TrainerBackendConfiguration {
         break;
     }
 
-    await Supabase.initialize(
-      url: instance.baseUrl,
-      anonKey: instance.anonKey,
-    );
+    await Supabase.initialize(url: instance.baseUrl, anonKey: instance.anonKey);
   }
 }

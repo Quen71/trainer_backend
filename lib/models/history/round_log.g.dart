@@ -20,11 +20,7 @@ abstract class _$RoundLogCWProxy<T extends ExerciseLog> {
   /// ```dart
   /// RoundLog<T>(...).copyWith(id: 12, name: "My name")
   /// ```
-  RoundLog<T> call({
-    int id,
-    int roundNumber,
-    List<T> exercises,
-  });
+  RoundLog<T> call({int id, int roundNumber, List<T> exercises});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -45,7 +41,6 @@ class _$RoundLogCWProxyImpl<T extends ExerciseLog>
   RoundLog<T> exercises(List<T> exercises) => call(exercises: exercises);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `RoundLog<T>(...).copyWith.fieldName(value)`.
   ///
@@ -65,9 +60,9 @@ class _$RoundLogCWProxyImpl<T extends ExerciseLog>
           : id as int,
       roundNumber:
           roundNumber == const $CopyWithPlaceholder() || roundNumber == null
-              ? _value.roundNumber
-              // ignore: cast_nullable_to_non_nullable
-              : roundNumber as int,
+          ? _value.roundNumber
+          // ignore: cast_nullable_to_non_nullable
+          : roundNumber as int,
       exercises: exercises == const $CopyWithPlaceholder() || exercises == null
           ? _value.exercises
           // ignore: cast_nullable_to_non_nullable
@@ -90,19 +85,17 @@ extension $RoundLogCopyWith<T extends ExerciseLog> on RoundLog<T> {
 RoundLog<T> _$RoundLogFromJson<T extends ExerciseLog>(
   Map<String, dynamic> json,
   T Function(Object? json) fromJsonT,
-) =>
-    RoundLog<T>(
-      id: (json['id'] as num).toInt(),
-      roundNumber: (json['round_number'] as num).toInt(),
-      exercises: (json['exercises'] as List<dynamic>).map(fromJsonT).toList(),
-    );
+) => RoundLog<T>(
+  id: (json['id'] as num).toInt(),
+  roundNumber: (json['round_number'] as num).toInt(),
+  exercises: (json['exercises'] as List<dynamic>).map(fromJsonT).toList(),
+);
 
 Map<String, dynamic> _$RoundLogToJson<T extends ExerciseLog>(
   RoundLog<T> instance,
   Object? Function(T value) toJsonT,
-) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'round_number': instance.roundNumber,
-      'exercises': instance.exercises.map(toJsonT).toList(),
-    };
+) => <String, dynamic>{
+  'id': instance.id,
+  'round_number': instance.roundNumber,
+  'exercises': instance.exercises.map(toJsonT).toList(),
+};

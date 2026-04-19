@@ -12,7 +12,8 @@ abstract class _$CustomerInfoCWProxy {
   CustomerInfo activeSubscriptions(List<String> activeSubscriptions);
 
   CustomerInfo allPurchasedProductIdentifiers(
-      List<String> allPurchasedProductIdentifiers);
+    List<String> allPurchasedProductIdentifiers,
+  );
 
   CustomerInfo firstSeen(DateTime firstSeen);
 
@@ -57,8 +58,8 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
 
   @override
   CustomerInfo allPurchasedProductIdentifiers(
-          List<String> allPurchasedProductIdentifiers) =>
-      call(allPurchasedProductIdentifiers: allPurchasedProductIdentifiers);
+    List<String> allPurchasedProductIdentifiers,
+  ) => call(allPurchasedProductIdentifiers: allPurchasedProductIdentifiers);
 
   @override
   CustomerInfo firstSeen(DateTime firstSeen) => call(firstSeen: firstSeen);
@@ -76,7 +77,6 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
       call(managementURL: managementURL);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `CustomerInfo(...).copyWith.fieldName(value)`.
   ///
@@ -96,31 +96,32 @@ class _$CustomerInfoCWProxyImpl implements _$CustomerInfoCWProxy {
     return CustomerInfo(
       entitlements:
           entitlements == const $CopyWithPlaceholder() || entitlements == null
-              ? _value.entitlements
-              // ignore: cast_nullable_to_non_nullable
-              : entitlements as Map<String, EntitlementInfo>,
+          ? _value.entitlements
+          // ignore: cast_nullable_to_non_nullable
+          : entitlements as Map<String, EntitlementInfo>,
       activeSubscriptions:
           activeSubscriptions == const $CopyWithPlaceholder() ||
-                  activeSubscriptions == null
-              ? _value.activeSubscriptions
-              // ignore: cast_nullable_to_non_nullable
-              : activeSubscriptions as List<String>,
+              activeSubscriptions == null
+          ? _value.activeSubscriptions
+          // ignore: cast_nullable_to_non_nullable
+          : activeSubscriptions as List<String>,
       allPurchasedProductIdentifiers:
           allPurchasedProductIdentifiers == const $CopyWithPlaceholder() ||
-                  allPurchasedProductIdentifiers == null
-              ? _value.allPurchasedProductIdentifiers
-              // ignore: cast_nullable_to_non_nullable
-              : allPurchasedProductIdentifiers as List<String>,
+              allPurchasedProductIdentifiers == null
+          ? _value.allPurchasedProductIdentifiers
+          // ignore: cast_nullable_to_non_nullable
+          : allPurchasedProductIdentifiers as List<String>,
       firstSeen: firstSeen == const $CopyWithPlaceholder() || firstSeen == null
           ? _value.firstSeen
           // ignore: cast_nullable_to_non_nullable
           : firstSeen as DateTime,
       requestDate:
           requestDate == const $CopyWithPlaceholder() || requestDate == null
-              ? _value.requestDate
-              // ignore: cast_nullable_to_non_nullable
-              : requestDate as DateTime,
-      originalAppUserId: originalAppUserId == const $CopyWithPlaceholder() ||
+          ? _value.requestDate
+          // ignore: cast_nullable_to_non_nullable
+          : requestDate as DateTime,
+      originalAppUserId:
+          originalAppUserId == const $CopyWithPlaceholder() ||
               originalAppUserId == null
           ? _value.originalAppUserId
           // ignore: cast_nullable_to_non_nullable

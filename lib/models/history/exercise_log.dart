@@ -113,17 +113,17 @@ class ClassicExerciseLog extends ExerciseLog {
     required int sessionExerciseId,
     required int orderInRoundLog,
     required List<SetLog> sets,
-  }) =>
-      ClassicExerciseLog(
-        id: 0,
-        sessionExerciseId: sessionExerciseId,
-        exerciseName: '', // Name is added during fetch, not creation
-        orderInRoundLog: orderInRoundLog,
-        sets: sets,
-      );
+  }) => ClassicExerciseLog(
+    id: 0,
+    sessionExerciseId: sessionExerciseId,
+    exerciseName: '', // Name is added during fetch, not creation
+    orderInRoundLog: orderInRoundLog,
+    sets: sets,
+  );
 
   /// Creates a [ClassicExerciseLog] from a JSON object.
-  factory ClassicExerciseLog.fromJson(Map<String, dynamic> json) => _$ClassicExerciseLogFromJson(json);
+  factory ClassicExerciseLog.fromJson(Map<String, dynamic> json) =>
+      _$ClassicExerciseLogFromJson(json);
 
   /// The list of sets performed for this exercise.
   final List<SetLog> sets;
@@ -155,18 +155,18 @@ class AmrapExerciseLog extends ExerciseLog {
     required int orderInRoundLog,
     required int repsNumber,
     required double weight,
-  }) =>
-      AmrapExerciseLog(
-        id: 0,
-        sessionExerciseId: sessionExerciseId,
-        exerciseName: '', // Name is added during fetch, not creation
-        orderInRoundLog: orderInRoundLog,
-        repsNumber: repsNumber,
-        weight: weight,
-      );
+  }) => AmrapExerciseLog(
+    id: 0,
+    sessionExerciseId: sessionExerciseId,
+    exerciseName: '', // Name is added during fetch, not creation
+    orderInRoundLog: orderInRoundLog,
+    repsNumber: repsNumber,
+    weight: weight,
+  );
 
   /// Creates an [AmrapExerciseLog] from a JSON object.
-  factory AmrapExerciseLog.fromJson(Map<String, dynamic> json) => _$AmrapExerciseLogFromJson(json);
+  factory AmrapExerciseLog.fromJson(Map<String, dynamic> json) =>
+      _$AmrapExerciseLogFromJson(json);
 
   /// The number of repetitions performed.
   final int repsNumber;
@@ -203,19 +203,19 @@ class EmomExerciseLog extends ExerciseLog {
     required Duration duration,
     required int repsNumber,
     required double weight,
-  }) =>
-      EmomExerciseLog(
-        id: 0,
-        sessionExerciseId: sessionExerciseId,
-        exerciseName: '', // Name is added during fetch, not creation
-        orderInRoundLog: orderInRoundLog,
-        duration: duration,
-        repsNumber: repsNumber,
-        weight: weight,
-      );
+  }) => EmomExerciseLog(
+    id: 0,
+    sessionExerciseId: sessionExerciseId,
+    exerciseName: '', // Name is added during fetch, not creation
+    orderInRoundLog: orderInRoundLog,
+    duration: duration,
+    repsNumber: repsNumber,
+    weight: weight,
+  );
 
   /// Creates an [EmomExerciseLog] from a JSON object.
-  factory EmomExerciseLog.fromJson(Map<String, dynamic> json) => _$EmomExerciseLogFromJson(json);
+  factory EmomExerciseLog.fromJson(Map<String, dynamic> json) =>
+      _$EmomExerciseLogFromJson(json);
 
   /// The duration of the performance.
   @DurationConverter()
@@ -256,19 +256,19 @@ class HiitExerciseLog extends ExerciseLog {
     required Duration effortDuration,
     required Duration restDuration,
     required double weight,
-  }) =>
-      HiitExerciseLog(
-        id: 0,
-        sessionExerciseId: sessionExerciseId,
-        exerciseName: '', // Name is added during fetch, not creation
-        orderInRoundLog: orderInRoundLog,
-        effortDuration: effortDuration,
-        restDuration: restDuration,
-        weight: weight,
-      );
+  }) => HiitExerciseLog(
+    id: 0,
+    sessionExerciseId: sessionExerciseId,
+    exerciseName: '', // Name is added during fetch, not creation
+    orderInRoundLog: orderInRoundLog,
+    effortDuration: effortDuration,
+    restDuration: restDuration,
+    weight: weight,
+  );
 
   /// Creates a [HiitExerciseLog] from a JSON object.
-  factory HiitExerciseLog.fromJson(Map<String, dynamic> json) => _$HiitExerciseLogFromJson(json);
+  factory HiitExerciseLog.fromJson(Map<String, dynamic> json) =>
+      _$HiitExerciseLogFromJson(json);
 
   /// The duration of the high-intensity effort.
   @DurationConverter()

@@ -52,7 +52,6 @@ class _$ClassicExerciseSetCWProxyImpl implements _$ClassicExerciseSetCWProxy {
       call(restDuration: restDuration);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExerciseSet(...).copyWith.fieldName(value)`.
   ///
@@ -67,25 +66,26 @@ class _$ClassicExerciseSetCWProxyImpl implements _$ClassicExerciseSetCWProxy {
     Object? restDuration = const $CopyWithPlaceholder(),
   }) {
     return ClassicExerciseSet(
-      orderInExercise: orderInExercise == const $CopyWithPlaceholder() ||
+      orderInExercise:
+          orderInExercise == const $CopyWithPlaceholder() ||
               orderInExercise == null
           ? _value.orderInExercise
           // ignore: cast_nullable_to_non_nullable
           : orderInExercise as int,
       repsNumber:
           repsNumber == const $CopyWithPlaceholder() || repsNumber == null
-              ? _value.repsNumber
-              // ignore: cast_nullable_to_non_nullable
-              : repsNumber as int,
+          ? _value.repsNumber
+          // ignore: cast_nullable_to_non_nullable
+          : repsNumber as int,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
           : weight as double,
       restDuration:
           restDuration == const $CopyWithPlaceholder() || restDuration == null
-              ? _value.restDuration
-              // ignore: cast_nullable_to_non_nullable
-              : restDuration as Duration,
+          ? _value.restDuration
+          // ignore: cast_nullable_to_non_nullable
+          : restDuration as Duration,
     );
   }
 }
@@ -108,9 +108,7 @@ abstract class _$ClassicExerciseParametersCWProxy {
   /// ```dart
   /// ClassicExerciseParameters(...).copyWith(id: 12, name: "My name")
   /// ```
-  ClassicExerciseParameters call({
-    List<ClassicExerciseSet> sets,
-  });
+  ClassicExerciseParameters call({List<ClassicExerciseSet> sets});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -126,7 +124,6 @@ class _$ClassicExerciseParametersCWProxyImpl
       call(sets: sets);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExerciseParameters(...).copyWith.fieldName(value)`.
   ///
@@ -166,10 +163,7 @@ abstract class _$AmrapExerciseParametersCWProxy {
   /// ```dart
   /// AmrapExerciseParameters(...).copyWith(id: 12, name: "My name")
   /// ```
-  AmrapExerciseParameters call({
-    int repsNumber,
-    double weight,
-  });
+  AmrapExerciseParameters call({int repsNumber, double weight});
 }
 
 /// Callable proxy for `copyWith` functionality.
@@ -188,7 +182,6 @@ class _$AmrapExerciseParametersCWProxyImpl
   AmrapExerciseParameters weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExerciseParameters(...).copyWith.fieldName(value)`.
   ///
@@ -203,9 +196,9 @@ class _$AmrapExerciseParametersCWProxyImpl
     return AmrapExerciseParameters(
       repsNumber:
           repsNumber == const $CopyWithPlaceholder() || repsNumber == null
-              ? _value.repsNumber
-              // ignore: cast_nullable_to_non_nullable
-              : repsNumber as int,
+          ? _value.repsNumber
+          // ignore: cast_nullable_to_non_nullable
+          : repsNumber as int,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -263,7 +256,6 @@ class _$EmomExerciseParametersCWProxyImpl
   EmomExerciseParameters weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExerciseParameters(...).copyWith.fieldName(value)`.
   ///
@@ -283,9 +275,9 @@ class _$EmomExerciseParametersCWProxyImpl
           : duration as Duration,
       repsNumber:
           repsNumber == const $CopyWithPlaceholder() || repsNumber == null
-              ? _value.repsNumber
-              // ignore: cast_nullable_to_non_nullable
-              : repsNumber as int,
+          ? _value.repsNumber
+          // ignore: cast_nullable_to_non_nullable
+          : repsNumber as int,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -343,7 +335,6 @@ class _$HiitExerciseParametersCWProxyImpl
   HiitExerciseParameters weight(double weight) => call(weight: weight);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExerciseParameters(...).copyWith.fieldName(value)`.
   ///
@@ -357,16 +348,17 @@ class _$HiitExerciseParametersCWProxyImpl
     Object? weight = const $CopyWithPlaceholder(),
   }) {
     return HiitExerciseParameters(
-      effortDuration: effortDuration == const $CopyWithPlaceholder() ||
+      effortDuration:
+          effortDuration == const $CopyWithPlaceholder() ||
               effortDuration == null
           ? _value.effortDuration
           // ignore: cast_nullable_to_non_nullable
           : effortDuration as Duration,
       restDuration:
           restDuration == const $CopyWithPlaceholder() || restDuration == null
-              ? _value.restDuration
-              // ignore: cast_nullable_to_non_nullable
-              : restDuration as Duration,
+          ? _value.restDuration
+          // ignore: cast_nullable_to_non_nullable
+          : restDuration as Duration,
       weight: weight == const $CopyWithPlaceholder() || weight == null
           ? _value.weight
           // ignore: cast_nullable_to_non_nullable
@@ -392,8 +384,9 @@ ClassicExerciseSet _$ClassicExerciseSetFromJson(Map<String, dynamic> json) =>
       orderInExercise: (json['order_in_exercise'] as num).toInt(),
       repsNumber: (json['reps_number'] as num).toInt(),
       weight: (json['weight'] as num).toDouble(),
-      restDuration: const DurationConverter()
-          .fromJson((json['rest_duration'] as num).toInt()),
+      restDuration: const DurationConverter().fromJson(
+        (json['rest_duration'] as num).toInt(),
+      ),
     );
 
 Map<String, dynamic> _$ClassicExerciseSetToJson(ClassicExerciseSet instance) =>
@@ -405,65 +398,65 @@ Map<String, dynamic> _$ClassicExerciseSetToJson(ClassicExerciseSet instance) =>
     };
 
 ClassicExerciseParameters _$ClassicExerciseParametersFromJson(
-        Map<String, dynamic> json) =>
-    ClassicExerciseParameters(
-      sets: (json['sets'] as List<dynamic>)
-          .map((e) => ClassicExerciseSet.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+  Map<String, dynamic> json,
+) => ClassicExerciseParameters(
+  sets: (json['sets'] as List<dynamic>)
+      .map((e) => ClassicExerciseSet.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$ClassicExerciseParametersToJson(
-        ClassicExerciseParameters instance) =>
-    <String, dynamic>{
-      'sets': instance.sets,
-    };
+  ClassicExerciseParameters instance,
+) => <String, dynamic>{'sets': instance.sets};
 
 AmrapExerciseParameters _$AmrapExerciseParametersFromJson(
-        Map<String, dynamic> json) =>
-    AmrapExerciseParameters(
-      repsNumber: (json['reps_number'] as num).toInt(),
-      weight: (json['weight'] as num).toDouble(),
-    );
+  Map<String, dynamic> json,
+) => AmrapExerciseParameters(
+  repsNumber: (json['reps_number'] as num).toInt(),
+  weight: (json['weight'] as num).toDouble(),
+);
 
 Map<String, dynamic> _$AmrapExerciseParametersToJson(
-        AmrapExerciseParameters instance) =>
-    <String, dynamic>{
-      'reps_number': instance.repsNumber,
-      'weight': instance.weight,
-    };
+  AmrapExerciseParameters instance,
+) => <String, dynamic>{
+  'reps_number': instance.repsNumber,
+  'weight': instance.weight,
+};
 
 EmomExerciseParameters _$EmomExerciseParametersFromJson(
-        Map<String, dynamic> json) =>
-    EmomExerciseParameters(
-      duration:
-          const DurationConverter().fromJson((json['duration'] as num).toInt()),
-      repsNumber: (json['reps_number'] as num).toInt(),
-      weight: (json['weight'] as num).toDouble(),
-    );
+  Map<String, dynamic> json,
+) => EmomExerciseParameters(
+  duration: const DurationConverter().fromJson(
+    (json['duration'] as num).toInt(),
+  ),
+  repsNumber: (json['reps_number'] as num).toInt(),
+  weight: (json['weight'] as num).toDouble(),
+);
 
 Map<String, dynamic> _$EmomExerciseParametersToJson(
-        EmomExerciseParameters instance) =>
-    <String, dynamic>{
-      'duration': const DurationConverter().toJson(instance.duration),
-      'reps_number': instance.repsNumber,
-      'weight': instance.weight,
-    };
+  EmomExerciseParameters instance,
+) => <String, dynamic>{
+  'duration': const DurationConverter().toJson(instance.duration),
+  'reps_number': instance.repsNumber,
+  'weight': instance.weight,
+};
 
 HiitExerciseParameters _$HiitExerciseParametersFromJson(
-        Map<String, dynamic> json) =>
-    HiitExerciseParameters(
-      effortDuration: const DurationConverter()
-          .fromJson((json['effort_duration'] as num).toInt()),
-      restDuration: const DurationConverter()
-          .fromJson((json['rest_duration'] as num).toInt()),
-      weight: (json['weight'] as num).toDouble(),
-    );
+  Map<String, dynamic> json,
+) => HiitExerciseParameters(
+  effortDuration: const DurationConverter().fromJson(
+    (json['effort_duration'] as num).toInt(),
+  ),
+  restDuration: const DurationConverter().fromJson(
+    (json['rest_duration'] as num).toInt(),
+  ),
+  weight: (json['weight'] as num).toDouble(),
+);
 
 Map<String, dynamic> _$HiitExerciseParametersToJson(
-        HiitExerciseParameters instance) =>
-    <String, dynamic>{
-      'effort_duration':
-          const DurationConverter().toJson(instance.effortDuration),
-      'rest_duration': const DurationConverter().toJson(instance.restDuration),
-      'weight': instance.weight,
-    };
+  HiitExerciseParameters instance,
+) => <String, dynamic>{
+  'effort_duration': const DurationConverter().toJson(instance.effortDuration),
+  'rest_duration': const DurationConverter().toJson(instance.restDuration),
+  'weight': instance.weight,
+};

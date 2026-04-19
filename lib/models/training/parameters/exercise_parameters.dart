@@ -19,7 +19,8 @@ class ClassicExerciseSet {
   });
 
   /// Creates a [ClassicExerciseSet] from a JSON object.
-  factory ClassicExerciseSet.fromJson(Map<String, dynamic> json) => _$ClassicExerciseSetFromJson(json);
+  factory ClassicExerciseSet.fromJson(Map<String, dynamic> json) =>
+      _$ClassicExerciseSetFromJson(json);
 
   /// Converts this [ClassicExerciseSet] to a JSON object.
   Map<String, dynamic> toJson() => _$ClassicExerciseSetToJson(this);
@@ -43,12 +44,11 @@ class ClassicExerciseSet {
 @CopyWith()
 class ClassicExerciseParameters {
   /// Creates an instance of [ClassicExerciseParameters].
-  const ClassicExerciseParameters({
-    required this.sets,
-  });
+  const ClassicExerciseParameters({required this.sets});
 
   /// Creates a [ClassicExerciseParameters] from a JSON object.
-  factory ClassicExerciseParameters.fromJson(Map<String, dynamic> json) => _$ClassicExerciseParametersFromJson(json);
+  factory ClassicExerciseParameters.fromJson(Map<String, dynamic> json) =>
+      _$ClassicExerciseParametersFromJson(json);
 
   /// The list of sets that define the exercise structure.
   final List<ClassicExerciseSet> sets;
@@ -68,7 +68,8 @@ class AmrapExerciseParameters {
   });
 
   /// Creates an [AmrapExerciseParameters] from a JSON object.
-  factory AmrapExerciseParameters.fromJson(Map<String, dynamic> json) => _$AmrapExerciseParametersFromJson(json);
+  factory AmrapExerciseParameters.fromJson(Map<String, dynamic> json) =>
+      _$AmrapExerciseParametersFromJson(json);
 
   /// The target number of repetitions for each round.
   final int repsNumber;
@@ -92,7 +93,8 @@ class EmomExerciseParameters {
   });
 
   /// Creates an [EmomExerciseParameters] from a JSON object.
-  factory EmomExerciseParameters.fromJson(Map<String, dynamic> json) => _$EmomExerciseParametersFromJson(json);
+  factory EmomExerciseParameters.fromJson(Map<String, dynamic> json) =>
+      _$EmomExerciseParametersFromJson(json);
 
   /// The duration of each minute's work interval.
   @DurationConverter()
@@ -120,7 +122,8 @@ class HiitExerciseParameters {
   });
 
   /// Creates a [HiitExerciseParameters] from a JSON object.
-  factory HiitExerciseParameters.fromJson(Map<String, dynamic> json) => _$HiitExerciseParametersFromJson(json);
+  factory HiitExerciseParameters.fromJson(Map<String, dynamic> json) =>
+      _$HiitExerciseParametersFromJson(json);
 
   /// The duration of the high-intensity effort interval.
   @DurationConverter()

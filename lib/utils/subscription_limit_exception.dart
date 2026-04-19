@@ -19,11 +19,14 @@ class SubscriptionLimitException implements Exception {
     if (message.startsWith('LIMIT_EXCEEDED:')) {
       final List<String> parts = message.split(':');
       if (parts.length >= 3) {
-        final String limitType = parts[1]; // MAX_PROGRAMS, MAX_SESSIONS, MAX_EXERCISES
+        final String limitType =
+            parts[1]; // MAX_PROGRAMS, MAX_SESSIONS, MAX_EXERCISES
         final String counts = parts[2].split(' ')[0]; // X/Y
         final List<String> countParts = counts.split('/');
         final int? current = int.tryParse(countParts[0]);
-        final int? max = countParts.length > 1 ? int.tryParse(countParts[1]) : null;
+        final int? max = countParts.length > 1
+            ? int.tryParse(countParts[1])
+            : null;
         final String userMessage = parts.length > 2
             ? parts.sublist(2).join(':').split(' ').skip(1).join(' ')
             : message;
@@ -41,7 +44,9 @@ class SubscriptionLimitException implements Exception {
 
     // Parse SUBSCRIPTION_INACTIVE errors
     if (message.startsWith('SUBSCRIPTION_INACTIVE')) {
-      final String userMessage = message.replaceFirst('SUBSCRIPTION_INACTIVE', '').trim();
+      final String userMessage = message
+          .replaceFirst('SUBSCRIPTION_INACTIVE', '')
+          .trim();
       return SubscriptionLimitException._(
         errorCode: 'SUBSCRIPTION_INACTIVE',
         limitType: null,
@@ -54,7 +59,9 @@ class SubscriptionLimitException implements Exception {
 
     // Parse SUBSCRIPTION_EXPIRED errors
     if (message.startsWith('SUBSCRIPTION_EXPIRED')) {
-      final String userMessage = message.replaceFirst('SUBSCRIPTION_EXPIRED', '').trim();
+      final String userMessage = message
+          .replaceFirst('SUBSCRIPTION_EXPIRED', '')
+          .trim();
       return SubscriptionLimitException._(
         errorCode: 'SUBSCRIPTION_EXPIRED',
         limitType: null,

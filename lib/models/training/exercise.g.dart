@@ -16,10 +16,12 @@ abstract class _$ClassicExerciseCWProxy {
   ClassicExercise name(String name);
 
   ClassicExercise templateParameters(
-      ClassicExerciseParameters templateParameters);
+    ClassicExerciseParameters templateParameters,
+  );
 
   ClassicExercise objectiveParameters(
-      ClassicExerciseParameters? objectiveParameters);
+    ClassicExerciseParameters? objectiveParameters,
+  );
 
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExercise(...).copyWith.fieldName(value)`.
@@ -60,16 +62,15 @@ class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
 
   @override
   ClassicExercise templateParameters(
-          ClassicExerciseParameters templateParameters) =>
-      call(templateParameters: templateParameters);
+    ClassicExerciseParameters templateParameters,
+  ) => call(templateParameters: templateParameters);
 
   @override
   ClassicExercise objectiveParameters(
-          ClassicExerciseParameters? objectiveParameters) =>
-      call(objectiveParameters: objectiveParameters);
+    ClassicExerciseParameters? objectiveParameters,
+  ) => call(objectiveParameters: objectiveParameters);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicExercise(...).copyWith.fieldName(value)`.
   ///
@@ -92,10 +93,11 @@ class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
           : id as int,
       exerciseId:
           exerciseId == const $CopyWithPlaceholder() || exerciseId == null
-              ? _value.exerciseId
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+          ? _value.exerciseId
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseId as int,
+      orderInSession:
+          orderInSession == const $CopyWithPlaceholder() ||
               orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
@@ -104,7 +106,8 @@ class _$ClassicExerciseCWProxyImpl implements _$ClassicExerciseCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+      templateParameters:
+          templateParameters == const $CopyWithPlaceholder() ||
               templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
@@ -136,7 +139,8 @@ abstract class _$AmrapExerciseCWProxy {
   AmrapExercise templateParameters(AmrapExerciseParameters templateParameters);
 
   AmrapExercise objectiveParameters(
-      AmrapExerciseParameters? objectiveParameters);
+    AmrapExerciseParameters? objectiveParameters,
+  );
 
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExercise(...).copyWith.fieldName(value)`.
@@ -177,16 +181,15 @@ class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
 
   @override
   AmrapExercise templateParameters(
-          AmrapExerciseParameters templateParameters) =>
-      call(templateParameters: templateParameters);
+    AmrapExerciseParameters templateParameters,
+  ) => call(templateParameters: templateParameters);
 
   @override
   AmrapExercise objectiveParameters(
-          AmrapExerciseParameters? objectiveParameters) =>
-      call(objectiveParameters: objectiveParameters);
+    AmrapExerciseParameters? objectiveParameters,
+  ) => call(objectiveParameters: objectiveParameters);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapExercise(...).copyWith.fieldName(value)`.
   ///
@@ -209,10 +212,11 @@ class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
           : id as int,
       exerciseId:
           exerciseId == const $CopyWithPlaceholder() || exerciseId == null
-              ? _value.exerciseId
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+          ? _value.exerciseId
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseId as int,
+      orderInSession:
+          orderInSession == const $CopyWithPlaceholder() ||
               orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
@@ -221,7 +225,8 @@ class _$AmrapExerciseCWProxyImpl implements _$AmrapExerciseCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+      templateParameters:
+          templateParameters == const $CopyWithPlaceholder() ||
               templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
@@ -297,11 +302,10 @@ class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
 
   @override
   EmomExercise objectiveParameters(
-          EmomExerciseParameters? objectiveParameters) =>
-      call(objectiveParameters: objectiveParameters);
+    EmomExerciseParameters? objectiveParameters,
+  ) => call(objectiveParameters: objectiveParameters);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomExercise(...).copyWith.fieldName(value)`.
   ///
@@ -324,10 +328,11 @@ class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
           : id as int,
       exerciseId:
           exerciseId == const $CopyWithPlaceholder() || exerciseId == null
-              ? _value.exerciseId
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+          ? _value.exerciseId
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseId as int,
+      orderInSession:
+          orderInSession == const $CopyWithPlaceholder() ||
               orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
@@ -336,7 +341,8 @@ class _$EmomExerciseCWProxyImpl implements _$EmomExerciseCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+      templateParameters:
+          templateParameters == const $CopyWithPlaceholder() ||
               templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
@@ -412,11 +418,10 @@ class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
 
   @override
   HiitExercise objectiveParameters(
-          HiitExerciseParameters? objectiveParameters) =>
-      call(objectiveParameters: objectiveParameters);
+    HiitExerciseParameters? objectiveParameters,
+  ) => call(objectiveParameters: objectiveParameters);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitExercise(...).copyWith.fieldName(value)`.
   ///
@@ -439,10 +444,11 @@ class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
           : id as int,
       exerciseId:
           exerciseId == const $CopyWithPlaceholder() || exerciseId == null
-              ? _value.exerciseId
-              // ignore: cast_nullable_to_non_nullable
-              : exerciseId as int,
-      orderInSession: orderInSession == const $CopyWithPlaceholder() ||
+          ? _value.exerciseId
+          // ignore: cast_nullable_to_non_nullable
+          : exerciseId as int,
+      orderInSession:
+          orderInSession == const $CopyWithPlaceholder() ||
               orderInSession == null
           ? _value.orderInSession
           // ignore: cast_nullable_to_non_nullable
@@ -451,7 +457,8 @@ class _$HiitExerciseCWProxyImpl implements _$HiitExerciseCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      templateParameters: templateParameters == const $CopyWithPlaceholder() ||
+      templateParameters:
+          templateParameters == const $CopyWithPlaceholder() ||
               templateParameters == null
           ? _value.templateParameters
           // ignore: cast_nullable_to_non_nullable
@@ -482,9 +489,11 @@ ClassicExercise _$ClassicExerciseFromJson(Map<String, dynamic> json) =>
       orderInSession: (json['order_in_session'] as num).toInt(),
       name: _readName(json, 'name') as String,
       templateParameters: ClassicExerciseParameters.fromJson(
-          json['parameters'] as Map<String, dynamic>),
-      objectiveParameters:
-          _progressionToObjective(json['progression'] as List?),
+        json['parameters'] as Map<String, dynamic>,
+      ),
+      objectiveParameters: _progressionToObjective(
+        json['progression'] as List?,
+      ),
     );
 
 Map<String, dynamic> _$ClassicExerciseToJson(ClassicExercise instance) =>
@@ -504,9 +513,11 @@ AmrapExercise _$AmrapExerciseFromJson(Map<String, dynamic> json) =>
       orderInSession: (json['order_in_session'] as num).toInt(),
       name: _readName(json, 'name') as String,
       templateParameters: AmrapExerciseParameters.fromJson(
-          json['parameters'] as Map<String, dynamic>),
-      objectiveParameters:
-          _amrapProgressionToObjective(json['progression'] as List?),
+        json['parameters'] as Map<String, dynamic>,
+      ),
+      objectiveParameters: _amrapProgressionToObjective(
+        json['progression'] as List?,
+      ),
     );
 
 Map<String, dynamic> _$AmrapExerciseToJson(AmrapExercise instance) =>
@@ -520,15 +531,17 @@ Map<String, dynamic> _$AmrapExerciseToJson(AmrapExercise instance) =>
     };
 
 EmomExercise _$EmomExerciseFromJson(Map<String, dynamic> json) => EmomExercise(
-      id: (json['id'] as num).toInt(),
-      exerciseId: (json['exercise_id'] as num).toInt(),
-      orderInSession: (json['order_in_session'] as num).toInt(),
-      name: _readName(json, 'name') as String,
-      templateParameters: EmomExerciseParameters.fromJson(
-          json['parameters'] as Map<String, dynamic>),
-      objectiveParameters:
-          _emomProgressionToObjective(json['progression'] as List?),
-    );
+  id: (json['id'] as num).toInt(),
+  exerciseId: (json['exercise_id'] as num).toInt(),
+  orderInSession: (json['order_in_session'] as num).toInt(),
+  name: _readName(json, 'name') as String,
+  templateParameters: EmomExerciseParameters.fromJson(
+    json['parameters'] as Map<String, dynamic>,
+  ),
+  objectiveParameters: _emomProgressionToObjective(
+    json['progression'] as List?,
+  ),
+);
 
 Map<String, dynamic> _$EmomExerciseToJson(EmomExercise instance) =>
     <String, dynamic>{
@@ -541,15 +554,17 @@ Map<String, dynamic> _$EmomExerciseToJson(EmomExercise instance) =>
     };
 
 HiitExercise _$HiitExerciseFromJson(Map<String, dynamic> json) => HiitExercise(
-      id: (json['id'] as num).toInt(),
-      exerciseId: (json['exercise_id'] as num).toInt(),
-      orderInSession: (json['order_in_session'] as num).toInt(),
-      name: _readName(json, 'name') as String,
-      templateParameters: HiitExerciseParameters.fromJson(
-          json['parameters'] as Map<String, dynamic>),
-      objectiveParameters:
-          _hiitProgressionToObjective(json['progression'] as List?),
-    );
+  id: (json['id'] as num).toInt(),
+  exerciseId: (json['exercise_id'] as num).toInt(),
+  orderInSession: (json['order_in_session'] as num).toInt(),
+  name: _readName(json, 'name') as String,
+  templateParameters: HiitExerciseParameters.fromJson(
+    json['parameters'] as Map<String, dynamic>,
+  ),
+  objectiveParameters: _hiitProgressionToObjective(
+    json['progression'] as List?,
+  ),
+);
 
 Map<String, dynamic> _$HiitExerciseToJson(HiitExercise instance) =>
     <String, dynamic>{

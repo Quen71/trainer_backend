@@ -26,7 +26,8 @@ class Profile {
   });
 
   /// Creates a [Profile] from a JSON object.
-  factory Profile.fromJson(Map<String, dynamic> json) => _$ProfileFromJson(json);
+  factory Profile.fromJson(Map<String, dynamic> json) =>
+      _$ProfileFromJson(json);
 
   /// The unique identifier for the user, typically a UUID from Supabase Auth.
   final String id;

@@ -46,7 +46,6 @@ class _$OfferingCWProxyImpl implements _$OfferingCWProxy {
       call(availablePackages: availablePackages);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Offering(...).copyWith.fieldName(value)`.
   ///
@@ -62,14 +61,15 @@ class _$OfferingCWProxyImpl implements _$OfferingCWProxy {
     return Offering(
       identifier:
           identifier == const $CopyWithPlaceholder() || identifier == null
-              ? _value.identifier
-              // ignore: cast_nullable_to_non_nullable
-              : identifier as String,
+          ? _value.identifier
+          // ignore: cast_nullable_to_non_nullable
+          : identifier as String,
       serverDescription: serverDescription == const $CopyWithPlaceholder()
           ? _value.serverDescription
           // ignore: cast_nullable_to_non_nullable
           : serverDescription as String?,
-      availablePackages: availablePackages == const $CopyWithPlaceholder() ||
+      availablePackages:
+          availablePackages == const $CopyWithPlaceholder() ||
               availablePackages == null
           ? _value.availablePackages
           // ignore: cast_nullable_to_non_nullable

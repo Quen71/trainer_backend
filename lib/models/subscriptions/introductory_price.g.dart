@@ -65,7 +65,6 @@ class _$IntroductoryPriceCWProxyImpl implements _$IntroductoryPriceCWProxy {
       call(periodNumberOfUnits: periodNumberOfUnits);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `IntroductoryPrice(...).copyWith.fieldName(value)`.
   ///
@@ -88,9 +87,9 @@ class _$IntroductoryPriceCWProxyImpl implements _$IntroductoryPriceCWProxy {
           : price as double,
       priceString:
           priceString == const $CopyWithPlaceholder() || priceString == null
-              ? _value.priceString
-              // ignore: cast_nullable_to_non_nullable
-              : priceString as String,
+          ? _value.priceString
+          // ignore: cast_nullable_to_non_nullable
+          : priceString as String,
       period: period == const $CopyWithPlaceholder() || period == null
           ? _value.period
           // ignore: cast_nullable_to_non_nullable
@@ -101,15 +100,15 @@ class _$IntroductoryPriceCWProxyImpl implements _$IntroductoryPriceCWProxy {
           : cycles as int,
       periodUnit:
           periodUnit == const $CopyWithPlaceholder() || periodUnit == null
-              ? _value.periodUnit
-              // ignore: cast_nullable_to_non_nullable
-              : periodUnit as PeriodUnit,
+          ? _value.periodUnit
+          // ignore: cast_nullable_to_non_nullable
+          : periodUnit as PeriodUnit,
       periodNumberOfUnits:
           periodNumberOfUnits == const $CopyWithPlaceholder() ||
-                  periodNumberOfUnits == null
-              ? _value.periodNumberOfUnits
-              // ignore: cast_nullable_to_non_nullable
-              : periodNumberOfUnits as int,
+              periodNumberOfUnits == null
+          ? _value.periodNumberOfUnits
+          // ignore: cast_nullable_to_non_nullable
+          : periodNumberOfUnits as int,
     );
   }
 }

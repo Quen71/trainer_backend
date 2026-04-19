@@ -84,7 +84,6 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
       call(productIdentifier: productIdentifier);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EntitlementInfo(...).copyWith.fieldName(value)`.
   ///
@@ -106,9 +105,9 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
     return EntitlementInfo(
       identifier:
           identifier == const $CopyWithPlaceholder() || identifier == null
-              ? _value.identifier
-              // ignore: cast_nullable_to_non_nullable
-              : identifier as String,
+          ? _value.identifier
+          // ignore: cast_nullable_to_non_nullable
+          : identifier as String,
       isActive: isActive == const $CopyWithPlaceholder() || isActive == null
           ? _value.isActive
           // ignore: cast_nullable_to_non_nullable
@@ -119,20 +118,21 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
           : willRenew as bool,
       periodType:
           periodType == const $CopyWithPlaceholder() || periodType == null
-              ? _value.periodType
-              // ignore: cast_nullable_to_non_nullable
-              : periodType as String,
-      latestPurchaseDate: latestPurchaseDate == const $CopyWithPlaceholder() ||
+          ? _value.periodType
+          // ignore: cast_nullable_to_non_nullable
+          : periodType as String,
+      latestPurchaseDate:
+          latestPurchaseDate == const $CopyWithPlaceholder() ||
               latestPurchaseDate == null
           ? _value.latestPurchaseDate
           // ignore: cast_nullable_to_non_nullable
           : latestPurchaseDate as DateTime,
       originalPurchaseDate:
           originalPurchaseDate == const $CopyWithPlaceholder() ||
-                  originalPurchaseDate == null
-              ? _value.originalPurchaseDate
-              // ignore: cast_nullable_to_non_nullable
-              : originalPurchaseDate as DateTime,
+              originalPurchaseDate == null
+          ? _value.originalPurchaseDate
+          // ignore: cast_nullable_to_non_nullable
+          : originalPurchaseDate as DateTime,
       expirationDate: expirationDate == const $CopyWithPlaceholder()
           ? _value.expirationDate
           // ignore: cast_nullable_to_non_nullable
@@ -141,7 +141,8 @@ class _$EntitlementInfoCWProxyImpl implements _$EntitlementInfoCWProxy {
           ? _value.store
           // ignore: cast_nullable_to_non_nullable
           : store as String,
-      productIdentifier: productIdentifier == const $CopyWithPlaceholder() ||
+      productIdentifier:
+          productIdentifier == const $CopyWithPlaceholder() ||
               productIdentifier == null
           ? _value.productIdentifier
           // ignore: cast_nullable_to_non_nullable

@@ -95,19 +95,19 @@ class ClassicSessionLog extends SessionLog {
     required DateTime startedAt,
     required DateTime endedAt,
     required List<RoundLog<ClassicExerciseLog>> rounds,
-  }) =>
-      ClassicSessionLog(
-        id: 0,
-        sessionId: sessionId,
-        name: name,
-        programName: '',
-        startedAt: startedAt,
-        endedAt: endedAt,
-        rounds: rounds,
-      );
+  }) => ClassicSessionLog(
+    id: 0,
+    sessionId: sessionId,
+    name: name,
+    programName: '',
+    startedAt: startedAt,
+    endedAt: endedAt,
+    rounds: rounds,
+  );
 
   /// Creates a [ClassicSessionLog] from a JSON object.
-  factory ClassicSessionLog.fromJson(Map<String, dynamic> json) => _$ClassicSessionLogFromJson(json);
+  factory ClassicSessionLog.fromJson(Map<String, dynamic> json) =>
+      _$ClassicSessionLogFromJson(json);
 
   /// A list of rounds performed during the classic session.
   ///
@@ -143,19 +143,19 @@ class AmrapSessionLog extends SessionLog {
     required DateTime startedAt,
     required DateTime endedAt,
     required List<RoundLog<AmrapExerciseLog>> rounds,
-  }) =>
-      AmrapSessionLog(
-        id: 0,
-        sessionId: sessionId,
-        name: name,
-        programName: '',
-        startedAt: startedAt,
-        endedAt: endedAt,
-        rounds: rounds,
-      );
+  }) => AmrapSessionLog(
+    id: 0,
+    sessionId: sessionId,
+    name: name,
+    programName: '',
+    startedAt: startedAt,
+    endedAt: endedAt,
+    rounds: rounds,
+  );
 
   /// Creates an [AmrapSessionLog] from a JSON object.
-  factory AmrapSessionLog.fromJson(Map<String, dynamic> json) => _$AmrapSessionLogFromJson(json);
+  factory AmrapSessionLog.fromJson(Map<String, dynamic> json) =>
+      _$AmrapSessionLogFromJson(json);
 
   /// The list of rounds completed during the AMRAP session.
   final List<RoundLog<AmrapExerciseLog>> rounds;
@@ -188,19 +188,19 @@ class EmomSessionLog extends SessionLog {
     required DateTime startedAt,
     required DateTime endedAt,
     required List<RoundLog<EmomExerciseLog>> rounds,
-  }) =>
-      EmomSessionLog(
-        id: 0,
-        sessionId: sessionId,
-        name: name,
-        programName: '',
-        startedAt: startedAt,
-        endedAt: endedAt,
-        rounds: rounds,
-      );
+  }) => EmomSessionLog(
+    id: 0,
+    sessionId: sessionId,
+    name: name,
+    programName: '',
+    startedAt: startedAt,
+    endedAt: endedAt,
+    rounds: rounds,
+  );
 
   /// Creates an [EmomSessionLog] from a JSON object.
-  factory EmomSessionLog.fromJson(Map<String, dynamic> json) => _$EmomSessionLogFromJson(json);
+  factory EmomSessionLog.fromJson(Map<String, dynamic> json) =>
+      _$EmomSessionLogFromJson(json);
 
   /// The list of rounds performed during the EMOM session.
   final List<RoundLog<EmomExerciseLog>> rounds;
@@ -233,19 +233,19 @@ class HiitSessionLog extends SessionLog {
     required DateTime startedAt,
     required DateTime endedAt,
     required List<RoundLog<HiitExerciseLog>> rounds,
-  }) =>
-      HiitSessionLog(
-        id: 0,
-        sessionId: sessionId,
-        name: name,
-        programName: '',
-        startedAt: startedAt,
-        endedAt: endedAt,
-        rounds: rounds,
-      );
+  }) => HiitSessionLog(
+    id: 0,
+    sessionId: sessionId,
+    name: name,
+    programName: '',
+    startedAt: startedAt,
+    endedAt: endedAt,
+    rounds: rounds,
+  );
 
   /// Creates a [HiitSessionLog] from a JSON object.
-  factory HiitSessionLog.fromJson(Map<String, dynamic> json) => _$HiitSessionLogFromJson(json);
+  factory HiitSessionLog.fromJson(Map<String, dynamic> json) =>
+      _$HiitSessionLogFromJson(json);
 
   /// The list of rounds performed during the HIIT session.
   final List<RoundLog<HiitExerciseLog>> rounds;

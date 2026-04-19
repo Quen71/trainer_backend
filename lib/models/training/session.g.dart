@@ -58,7 +58,6 @@ class _$ClassicSessionCWProxyImpl implements _$ClassicSessionCWProxy {
       call(exercises: exercises);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSession(...).copyWith.fieldName(value)`.
   ///
@@ -82,7 +81,8 @@ class _$ClassicSessionCWProxyImpl implements _$ClassicSessionCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+      orderInProgram:
+          orderInProgram == const $CopyWithPlaceholder() ||
               orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
@@ -164,7 +164,6 @@ class _$AmrapSessionCWProxyImpl implements _$AmrapSessionCWProxy {
   AmrapSession duration(Duration duration) => call(duration: duration);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSession(...).copyWith.fieldName(value)`.
   ///
@@ -189,7 +188,8 @@ class _$AmrapSessionCWProxyImpl implements _$AmrapSessionCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+      orderInProgram:
+          orderInProgram == const $CopyWithPlaceholder() ||
               orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
@@ -275,7 +275,6 @@ class _$EmomSessionCWProxyImpl implements _$EmomSessionCWProxy {
   EmomSession roundNumber(int roundNumber) => call(roundNumber: roundNumber);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSession(...).copyWith.fieldName(value)`.
   ///
@@ -300,7 +299,8 @@ class _$EmomSessionCWProxyImpl implements _$EmomSessionCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+      orderInProgram:
+          orderInProgram == const $CopyWithPlaceholder() ||
               orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
@@ -315,9 +315,9 @@ class _$EmomSessionCWProxyImpl implements _$EmomSessionCWProxy {
           : exercises as List<EmomExercise>,
       roundNumber:
           roundNumber == const $CopyWithPlaceholder() || roundNumber == null
-              ? _value.roundNumber
-              // ignore: cast_nullable_to_non_nullable
-              : roundNumber as int,
+          ? _value.roundNumber
+          // ignore: cast_nullable_to_non_nullable
+          : roundNumber as int,
     );
   }
 }
@@ -387,7 +387,6 @@ class _$HiitSessionCWProxyImpl implements _$HiitSessionCWProxy {
   HiitSession roundNumber(int roundNumber) => call(roundNumber: roundNumber);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSession(...).copyWith.fieldName(value)`.
   ///
@@ -412,7 +411,8 @@ class _$HiitSessionCWProxyImpl implements _$HiitSessionCWProxy {
           ? _value.name
           // ignore: cast_nullable_to_non_nullable
           : name as String,
-      orderInProgram: orderInProgram == const $CopyWithPlaceholder() ||
+      orderInProgram:
+          orderInProgram == const $CopyWithPlaceholder() ||
               orderInProgram == null
           ? _value.orderInProgram
           // ignore: cast_nullable_to_non_nullable
@@ -427,9 +427,9 @@ class _$HiitSessionCWProxyImpl implements _$HiitSessionCWProxy {
           : exercises as List<HiitExercise>,
       roundNumber:
           roundNumber == const $CopyWithPlaceholder() || roundNumber == null
-              ? _value.roundNumber
-              // ignore: cast_nullable_to_non_nullable
-              : roundNumber as int,
+          ? _value.roundNumber
+          // ignore: cast_nullable_to_non_nullable
+          : roundNumber as int,
     );
   }
 }
@@ -472,16 +472,17 @@ const _$SessionStyleEnumMap = {
 };
 
 AmrapSession _$AmrapSessionFromJson(Map<String, dynamic> json) => AmrapSession(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      orderInProgram: (json['order_in_program'] as num).toInt(),
-      style: $enumDecode(_$SessionStyleEnumMap, json['style']),
-      exercises: (json['exercises'] as List<dynamic>)
-          .map((e) => AmrapExercise.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      duration:
-          const DurationConverter().fromJson((json['duration'] as num).toInt()),
-    );
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  orderInProgram: (json['order_in_program'] as num).toInt(),
+  style: $enumDecode(_$SessionStyleEnumMap, json['style']),
+  exercises: (json['exercises'] as List<dynamic>)
+      .map((e) => AmrapExercise.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  duration: const DurationConverter().fromJson(
+    (json['duration'] as num).toInt(),
+  ),
+);
 
 Map<String, dynamic> _$AmrapSessionToJson(AmrapSession instance) =>
     <String, dynamic>{
@@ -494,15 +495,15 @@ Map<String, dynamic> _$AmrapSessionToJson(AmrapSession instance) =>
     };
 
 EmomSession _$EmomSessionFromJson(Map<String, dynamic> json) => EmomSession(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      orderInProgram: (json['order_in_program'] as num).toInt(),
-      style: $enumDecode(_$SessionStyleEnumMap, json['style']),
-      exercises: (json['exercises'] as List<dynamic>)
-          .map((e) => EmomExercise.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      roundNumber: (json['round_number'] as num).toInt(),
-    );
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  orderInProgram: (json['order_in_program'] as num).toInt(),
+  style: $enumDecode(_$SessionStyleEnumMap, json['style']),
+  exercises: (json['exercises'] as List<dynamic>)
+      .map((e) => EmomExercise.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  roundNumber: (json['round_number'] as num).toInt(),
+);
 
 Map<String, dynamic> _$EmomSessionToJson(EmomSession instance) =>
     <String, dynamic>{
@@ -515,15 +516,15 @@ Map<String, dynamic> _$EmomSessionToJson(EmomSession instance) =>
     };
 
 HiitSession _$HiitSessionFromJson(Map<String, dynamic> json) => HiitSession(
-      id: (json['id'] as num).toInt(),
-      name: json['name'] as String,
-      orderInProgram: (json['order_in_program'] as num).toInt(),
-      style: $enumDecode(_$SessionStyleEnumMap, json['style']),
-      exercises: (json['exercises'] as List<dynamic>)
-          .map((e) => HiitExercise.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      roundNumber: (json['round_number'] as num).toInt(),
-    );
+  id: (json['id'] as num).toInt(),
+  name: json['name'] as String,
+  orderInProgram: (json['order_in_program'] as num).toInt(),
+  style: $enumDecode(_$SessionStyleEnumMap, json['style']),
+  exercises: (json['exercises'] as List<dynamic>)
+      .map((e) => HiitExercise.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  roundNumber: (json['round_number'] as num).toInt(),
+);
 
 Map<String, dynamic> _$HiitSessionToJson(HiitSession instance) =>
     <String, dynamic>{

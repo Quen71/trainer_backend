@@ -10,10 +10,7 @@ part 'offerings.g.dart';
 @CopyWith()
 class Offerings {
   /// Creates an instance of [Offerings].
-  const Offerings({
-    required this.all,
-    this.current,
-  });
+  const Offerings({required this.all, this.current});
 
   /// Map of all available offerings, keyed by identifier.
   final Map<String, Offering> all;

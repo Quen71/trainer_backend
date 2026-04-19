@@ -70,7 +70,6 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
       call(rounds: rounds);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `ClassicSessionLog(...).copyWith.fieldName(value)`.
   ///
@@ -102,9 +101,9 @@ class _$ClassicSessionLogCWProxyImpl implements _$ClassicSessionLogCWProxy {
           : name as String,
       programName:
           programName == const $CopyWithPlaceholder() || programName == null
-              ? _value.programName
-              // ignore: cast_nullable_to_non_nullable
-              : programName as String,
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -193,7 +192,6 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
       call(rounds: rounds);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `AmrapSessionLog(...).copyWith.fieldName(value)`.
   ///
@@ -225,9 +223,9 @@ class _$AmrapSessionLogCWProxyImpl implements _$AmrapSessionLogCWProxy {
           : name as String,
       programName:
           programName == const $CopyWithPlaceholder() || programName == null
-              ? _value.programName
-              // ignore: cast_nullable_to_non_nullable
-              : programName as String,
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -315,7 +313,6 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
       call(rounds: rounds);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `EmomSessionLog(...).copyWith.fieldName(value)`.
   ///
@@ -347,9 +344,9 @@ class _$EmomSessionLogCWProxyImpl implements _$EmomSessionLogCWProxy {
           : name as String,
       programName:
           programName == const $CopyWithPlaceholder() || programName == null
-              ? _value.programName
-              // ignore: cast_nullable_to_non_nullable
-              : programName as String,
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -437,7 +434,6 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
       call(rounds: rounds);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `HiitSessionLog(...).copyWith.fieldName(value)`.
   ///
@@ -469,9 +465,9 @@ class _$HiitSessionLogCWProxyImpl implements _$HiitSessionLogCWProxy {
           : name as String,
       programName:
           programName == const $CopyWithPlaceholder() || programName == null
-              ? _value.programName
-              // ignore: cast_nullable_to_non_nullable
-              : programName as String,
+          ? _value.programName
+          // ignore: cast_nullable_to_non_nullable
+          : programName as String,
       startedAt: startedAt == const $CopyWithPlaceholder() || startedAt == null
           ? _value.startedAt
           // ignore: cast_nullable_to_non_nullable
@@ -508,10 +504,13 @@ ClassicSessionLog _$ClassicSessionLogFromJson(Map<String, dynamic> json) =>
       startedAt: DateTime.parse(json['started_at'] as String),
       endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
-          .map((e) => RoundLog<ClassicExerciseLog>.fromJson(
+          .map(
+            (e) => RoundLog<ClassicExerciseLog>.fromJson(
               e as Map<String, dynamic>,
               (value) =>
-                  ClassicExerciseLog.fromJson(value as Map<String, dynamic>)))
+                  ClassicExerciseLog.fromJson(value as Map<String, dynamic>),
+            ),
+          )
           .toList(),
     );
 
@@ -524,9 +523,7 @@ Map<String, dynamic> _$ClassicSessionLogToJson(ClassicSessionLog instance) =>
       'started_at': instance.startedAt.toIso8601String(),
       'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
-          .map((e) => e.toJson(
-                (value) => value.toJson(),
-              ))
+          .map((e) => e.toJson((value) => value.toJson()))
           .toList(),
     };
 
@@ -539,10 +536,13 @@ AmrapSessionLog _$AmrapSessionLogFromJson(Map<String, dynamic> json) =>
       startedAt: DateTime.parse(json['started_at'] as String),
       endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
-          .map((e) => RoundLog<AmrapExerciseLog>.fromJson(
+          .map(
+            (e) => RoundLog<AmrapExerciseLog>.fromJson(
               e as Map<String, dynamic>,
               (value) =>
-                  AmrapExerciseLog.fromJson(value as Map<String, dynamic>)))
+                  AmrapExerciseLog.fromJson(value as Map<String, dynamic>),
+            ),
+          )
           .toList(),
     );
 
@@ -555,9 +555,7 @@ Map<String, dynamic> _$AmrapSessionLogToJson(AmrapSessionLog instance) =>
       'started_at': instance.startedAt.toIso8601String(),
       'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
-          .map((e) => e.toJson(
-                (value) => value.toJson(),
-              ))
+          .map((e) => e.toJson((value) => value.toJson()))
           .toList(),
     };
 
@@ -570,10 +568,13 @@ EmomSessionLog _$EmomSessionLogFromJson(Map<String, dynamic> json) =>
       startedAt: DateTime.parse(json['started_at'] as String),
       endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
-          .map((e) => RoundLog<EmomExerciseLog>.fromJson(
+          .map(
+            (e) => RoundLog<EmomExerciseLog>.fromJson(
               e as Map<String, dynamic>,
               (value) =>
-                  EmomExerciseLog.fromJson(value as Map<String, dynamic>)))
+                  EmomExerciseLog.fromJson(value as Map<String, dynamic>),
+            ),
+          )
           .toList(),
     );
 
@@ -586,9 +587,7 @@ Map<String, dynamic> _$EmomSessionLogToJson(EmomSessionLog instance) =>
       'started_at': instance.startedAt.toIso8601String(),
       'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
-          .map((e) => e.toJson(
-                (value) => value.toJson(),
-              ))
+          .map((e) => e.toJson((value) => value.toJson()))
           .toList(),
     };
 
@@ -601,10 +600,13 @@ HiitSessionLog _$HiitSessionLogFromJson(Map<String, dynamic> json) =>
       startedAt: DateTime.parse(json['started_at'] as String),
       endedAt: DateTime.parse(json['ended_at'] as String),
       rounds: (json['rounds'] as List<dynamic>)
-          .map((e) => RoundLog<HiitExerciseLog>.fromJson(
+          .map(
+            (e) => RoundLog<HiitExerciseLog>.fromJson(
               e as Map<String, dynamic>,
               (value) =>
-                  HiitExerciseLog.fromJson(value as Map<String, dynamic>)))
+                  HiitExerciseLog.fromJson(value as Map<String, dynamic>),
+            ),
+          )
           .toList(),
     );
 
@@ -617,8 +619,6 @@ Map<String, dynamic> _$HiitSessionLogToJson(HiitSessionLog instance) =>
       'started_at': instance.startedAt.toIso8601String(),
       'ended_at': instance.endedAt.toIso8601String(),
       'rounds': instance.rounds
-          .map((e) => e.toJson(
-                (value) => value.toJson(),
-              ))
+          .map((e) => e.toJson((value) => value.toJson()))
           .toList(),
     };

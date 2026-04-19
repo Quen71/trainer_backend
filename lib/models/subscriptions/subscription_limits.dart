@@ -23,7 +23,8 @@ class SubscriptionLimits {
   });
 
   /// Creates a [SubscriptionLimits] from a JSON object.
-  factory SubscriptionLimits.fromJson(Map<String, dynamic> json) => _$SubscriptionLimitsFromJson(json);
+  factory SubscriptionLimits.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionLimitsFromJson(json);
 
   /// The ID of the entitlement these limits apply to.
   @JsonKey(name: 'entitlement_id')

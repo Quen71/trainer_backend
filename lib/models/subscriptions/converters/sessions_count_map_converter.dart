@@ -4,13 +4,17 @@ import 'package:json_annotation/json_annotation.dart';
 ///
 /// The database may return values as strings (e.g., "5") or integers (e.g., 5),
 /// so this converter ensures they are always converted to integers.6
-class SessionsCountMapConverter implements JsonConverter<Map<String, int>, Map<String, dynamic>> {
+class SessionsCountMapConverter
+    implements JsonConverter<Map<String, int>, Map<String, dynamic>> {
   /// Creates a new [SessionsCountMapConverter].
   const SessionsCountMapConverter();
 
   @override
   // ignore: always_specify_types
-  Map<String, int> fromJson(Map<String, dynamic> json) => json.map((String key, value) {
+  Map<String, int> fromJson(Map<String, dynamic> json) => json.map((
+    String key,
+    value,
+  ) {
     if (value is int) {
       return MapEntry<String, int>(key, value);
     } else if (value is String) {
@@ -25,6 +29,7 @@ class SessionsCountMapConverter implements JsonConverter<Map<String, int>, Map<S
   });
 
   @override
-  Map<String, dynamic> toJson(Map<String, int> object) =>
-      object.map((String key, int value) => MapEntry<String, dynamic>(key, value));
+  Map<String, dynamic> toJson(Map<String, int> object) => object.map(
+    (String key, int value) => MapEntry<String, dynamic>(key, value),
+  );
 }

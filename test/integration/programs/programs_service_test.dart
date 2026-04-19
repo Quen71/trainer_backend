@@ -50,7 +50,9 @@ void main() {
 
       expect(created.id, greaterThan(0));
       expect(created.sessions.length, equals(1));
-      final ClassicSession session = created.sessions.whereType<ClassicSession>().first;
+      final ClassicSession session = created.sessions
+          .whereType<ClassicSession>()
+          .first;
       expect(session.id, greaterThan(0));
       expect(session.exercises.first.id, greaterThan(0));
     });
@@ -59,14 +61,21 @@ void main() {
       final Program created = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'AMRAP Program',
-          sessions: <Session>[TestPrograms.createAmrapSession(name: 'AMRAP Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createAmrapSession(
+              name: 'AMRAP Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
       expect(created.id, greaterThan(0));
       expect(created.sessions.length, equals(1));
-      final AmrapSession session = created.sessions.whereType<AmrapSession>().first;
+      final AmrapSession session = created.sessions
+          .whereType<AmrapSession>()
+          .first;
       expect(session.id, greaterThan(0));
       expect(session.exercises.first.id, greaterThan(0));
     });
@@ -75,14 +84,21 @@ void main() {
       final Program created = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'EMOM Program',
-          sessions: <Session>[TestPrograms.createEmomSession(name: 'EMOM Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createEmomSession(
+              name: 'EMOM Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
       expect(created.id, greaterThan(0));
       expect(created.sessions.length, equals(1));
-      final EmomSession session = created.sessions.whereType<EmomSession>().first;
+      final EmomSession session = created.sessions
+          .whereType<EmomSession>()
+          .first;
       expect(session.id, greaterThan(0));
       expect(session.roundNumber, equals(10));
       expect(session.exercises.first.id, greaterThan(0));
@@ -92,33 +108,43 @@ void main() {
       final Program created = await ProgramsService.createFullProgram(
         Program.forCreation(
           name: 'HIIT Program',
-          sessions: <Session>[TestPrograms.createHiitSession(name: 'HIIT Session', orderInProgram: 0)],
+          sessions: <Session>[
+            TestPrograms.createHiitSession(
+              name: 'HIIT Session',
+              orderInProgram: 0,
+            ),
+          ],
         ),
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
       expect(created.id, greaterThan(0));
       expect(created.sessions.length, equals(1));
-      final HiitSession session = created.sessions.whereType<HiitSession>().first;
+      final HiitSession session = created.sessions
+          .whereType<HiitSession>()
+          .first;
       expect(session.id, greaterThan(0));
       expect(session.roundNumber, equals(8));
       expect(session.exercises.first.id, greaterThan(0));
     });
 
-    test('should create a program with mixed session types and deserialize all correctly', () async {
-      final Program created = await ProgramsService.createFullProgram(
-        TestPrograms.createMixedTypeProgram(name: 'Mixed Program'),
-      );
-      addTearDown(() async => ProgramsService.deleteProgram(created.id));
+    test(
+      'should create a program with mixed session types and deserialize all correctly',
+      () async {
+        final Program created = await ProgramsService.createFullProgram(
+          TestPrograms.createMixedTypeProgram(name: 'Mixed Program'),
+        );
+        addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
-      expect(created.id, greaterThan(0));
-      expect(created.sessions.length, equals(4));
-      expect(created.sessions.whereType<ClassicSession>().length, equals(1));
-      expect(created.sessions.whereType<AmrapSession>().length, equals(1));
-      expect(created.sessions.whereType<EmomSession>().length, equals(1));
-      expect(created.sessions.whereType<HiitSession>().length, equals(1));
-      expect(created.sessions.every((Session s) => s.id > 0), isTrue);
-    });
+        expect(created.id, greaterThan(0));
+        expect(created.sessions.length, equals(4));
+        expect(created.sessions.whereType<ClassicSession>().length, equals(1));
+        expect(created.sessions.whereType<AmrapSession>().length, equals(1));
+        expect(created.sessions.whereType<EmomSession>().length, equals(1));
+        expect(created.sessions.whereType<HiitSession>().length, equals(1));
+        expect(created.sessions.every((Session s) => s.id > 0), isTrue);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------
@@ -127,19 +153,27 @@ void main() {
 
   group('fetchUserPrograms', () {
     test('should return empty list when no programs exist', () async {
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
       expect(programs, isEmpty);
     });
 
     test('should return created programs on page 0', () async {
-      final Program a = await ProgramsService.createFullProgram(TestPrograms.createSimpleProgram(name: 'Program A'));
-      final Program b = await ProgramsService.createFullProgram(TestPrograms.createSimpleProgram(name: 'Program B'));
+      final Program a = await ProgramsService.createFullProgram(
+        TestPrograms.createSimpleProgram(name: 'Program A'),
+      );
+      final Program b = await ProgramsService.createFullProgram(
+        TestPrograms.createSimpleProgram(name: 'Program B'),
+      );
       addTearDown(() async {
         await ProgramsService.deleteProgram(a.id);
         await ProgramsService.deleteProgram(b.id);
       });
 
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
 
       // Filter by name so the test is resilient to extra programs created by
       // concurrent test files that share the same premiumUser account.
@@ -156,9 +190,13 @@ void main() {
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
 
-      final Program fetched = programs.firstWhere((Program p) => p.id == created.id);
+      final Program fetched = programs.firstWhere(
+        (Program p) => p.id == created.id,
+      );
       expect(fetched.sessions.whereType<ClassicSession>().length, equals(1));
       expect(fetched.sessions.whereType<AmrapSession>().length, equals(1));
       expect(fetched.sessions.whereType<EmomSession>().length, equals(1));
@@ -166,10 +204,15 @@ void main() {
     });
 
     test('should return empty list for out-of-bounds page', () async {
-      final Program p = await ProgramsService.createFullProgram(TestPrograms.createSimpleProgram(name: 'Program A'));
+      final Program p = await ProgramsService.createFullProgram(
+        TestPrograms.createSimpleProgram(name: 'Program A'),
+      );
       addTearDown(() async => ProgramsService.deleteProgram(p.id));
 
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 1, pageSize: 5);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 1,
+        pageSize: 5,
+      );
       expect(programs, isEmpty);
     });
 
@@ -177,7 +220,9 @@ void main() {
       final List<Program> created = <Program>[];
       for (int i = 1; i <= 4; i++) {
         created.add(
-          await ProgramsService.createFullProgram(TestPrograms.createSimpleProgram(name: 'PageSize-$i')),
+          await ProgramsService.createFullProgram(
+            TestPrograms.createSimpleProgram(name: 'PageSize-$i'),
+          ),
         );
       }
       addTearDown(() async {
@@ -186,8 +231,14 @@ void main() {
         }
       });
 
-      final List<Program> page0 = await ProgramsService.fetchUserPrograms(page: 0, pageSize: 2);
-      final List<Program> page1 = await ProgramsService.fetchUserPrograms(page: 1, pageSize: 2);
+      final List<Program> page0 = await ProgramsService.fetchUserPrograms(
+        page: 0,
+        pageSize: 2,
+      );
+      final List<Program> page1 = await ProgramsService.fetchUserPrograms(
+        page: 1,
+        pageSize: 2,
+      );
 
       expect(page0.length, equals(2));
       expect(page1.length, greaterThanOrEqualTo(2));
@@ -209,7 +260,9 @@ void main() {
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
-      final Program updated = await ProgramsService.updateFullProgram(created.copyWith(name: 'Updated Name'));
+      final Program updated = await ProgramsService.updateFullProgram(
+        created.copyWith(name: 'Updated Name'),
+      );
 
       expect(updated.id, equals(created.id));
       expect(updated.name, equals('Updated Name'));
@@ -230,7 +283,10 @@ void main() {
 
     test('should update session order with Classic sessions', () async {
       final Program created = await ProgramsService.createFullProgram(
-        TestPrograms.createProgramWithMultipleSessions(name: 'Program with 2 sessions', sessionCount: 2),
+        TestPrograms.createProgramWithMultipleSessions(
+          name: 'Program with 2 sessions',
+          sessionCount: 2,
+        ),
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
@@ -238,13 +294,19 @@ void main() {
       final Session session1 = created.sessions[1];
 
       final Program updated = await ProgramsService.updateFullProgram(
-        created.copyWith(sessions: <Session>[_withOrder(session1, 0), _withOrder(session0, 1)]),
+        created.copyWith(
+          sessions: <Session>[_withOrder(session1, 0), _withOrder(session0, 1)],
+        ),
       );
 
       // The RPC may return sessions in insertion order, so look up by ID.
       expect(updated.sessions.length, equals(2));
-      final Session returned0 = updated.sessions.firstWhere((Session s) => s.id == session0.id);
-      final Session returned1 = updated.sessions.firstWhere((Session s) => s.id == session1.id);
+      final Session returned0 = updated.sessions.firstWhere(
+        (Session s) => s.id == session0.id,
+      );
+      final Session returned1 = updated.sessions.firstWhere(
+        (Session s) => s.id == session1.id,
+      );
       expect(returned0.orderInProgram, equals(1));
       expect(returned1.orderInProgram, equals(0));
     });
@@ -259,15 +321,22 @@ void main() {
       final List<Session> reversed = created.sessions
           .asMap()
           .entries
-          .map((MapEntry<int, Session> e) => _withOrder(e.value, created.sessions.length - 1 - e.key))
+          .map(
+            (MapEntry<int, Session> e) =>
+                _withOrder(e.value, created.sessions.length - 1 - e.key),
+          )
           .toList();
 
-      final Program updated = await ProgramsService.updateFullProgram(created.copyWith(sessions: reversed));
+      final Program updated = await ProgramsService.updateFullProgram(
+        created.copyWith(sessions: reversed),
+      );
 
       expect(updated.sessions.length, equals(4));
       // Verify each session has its new orderInProgram value
       for (final Session s in reversed) {
-        final Session returned = updated.sessions.firstWhere((Session r) => r.id == s.id);
+        final Session returned = updated.sessions.firstWhere(
+          (Session r) => r.id == s.id,
+        );
         expect(returned.orderInProgram, equals(s.orderInProgram));
       }
     });
@@ -287,7 +356,10 @@ void main() {
 
       final Program updated = await ProgramsService.addSessionToProgram(
         programId: created.id,
-        session: TestPrograms.createClassicSession(name: 'New Classic Session', orderInProgram: initialCount),
+        session: TestPrograms.createClassicSession(
+          name: 'New Classic Session',
+          orderInProgram: initialCount,
+        ),
       );
 
       expect(updated.sessions.length, equals(initialCount + 1));
@@ -305,7 +377,10 @@ void main() {
 
       final Program updated = await ProgramsService.addSessionToProgram(
         programId: created.id,
-        session: TestPrograms.createAmrapSession(name: 'New AMRAP Session', orderInProgram: created.sessions.length),
+        session: TestPrograms.createAmrapSession(
+          name: 'New AMRAP Session',
+          orderInProgram: created.sessions.length,
+        ),
       );
 
       final AmrapSession added = updated.sessions
@@ -322,7 +397,10 @@ void main() {
 
       final Program updated = await ProgramsService.addSessionToProgram(
         programId: created.id,
-        session: TestPrograms.createEmomSession(name: 'New EMOM Session', orderInProgram: created.sessions.length),
+        session: TestPrograms.createEmomSession(
+          name: 'New EMOM Session',
+          orderInProgram: created.sessions.length,
+        ),
       );
 
       final EmomSession added = updated.sessions
@@ -340,7 +418,10 @@ void main() {
 
       final Program updated = await ProgramsService.addSessionToProgram(
         programId: created.id,
-        session: TestPrograms.createHiitSession(name: 'New HIIT Session', orderInProgram: created.sessions.length),
+        session: TestPrograms.createHiitSession(
+          name: 'New HIIT Session',
+          orderInProgram: created.sessions.length,
+        ),
       );
 
       final HiitSession added = updated.sessions
@@ -376,77 +457,127 @@ void main() {
   // ---------------------------------------------------------------------------
 
   group('deleteSession', () {
-    test('should delete a Classic session and return the updated program', () async {
-      final Program created = await ProgramsService.createFullProgram(
-        TestPrograms.createProgramWithMultipleSessions(name: 'Program with 2 sessions', sessionCount: 2),
-      );
-      addTearDown(() async => ProgramsService.deleteProgram(created.id));
-      final int sessionToDeleteId = created.sessions.first.id;
+    test(
+      'should delete a Classic session and return the updated program',
+      () async {
+        final Program created = await ProgramsService.createFullProgram(
+          TestPrograms.createProgramWithMultipleSessions(
+            name: 'Program with 2 sessions',
+            sessionCount: 2,
+          ),
+        );
+        addTearDown(() async => ProgramsService.deleteProgram(created.id));
+        final int sessionToDeleteId = created.sessions.first.id;
 
-      final Program updated = await ProgramsService.deleteSession(sessionToDeleteId);
+        final Program updated = await ProgramsService.deleteSession(
+          sessionToDeleteId,
+        );
 
-      expect(updated.id, equals(created.id));
-      expect(updated.sessions.length, equals(1));
-      expect(updated.sessions.any((Session s) => s.id == sessionToDeleteId), isFalse);
-    });
+        expect(updated.id, equals(created.id));
+        expect(updated.sessions.length, equals(1));
+        expect(
+          updated.sessions.any((Session s) => s.id == sessionToDeleteId),
+          isFalse,
+        );
+      },
+    );
 
-    test('should delete an AMRAP session and return the updated program', () async {
-      final Program created = await ProgramsService.createFullProgram(
-        Program.forCreation(
-          name: 'Program with AMRAP',
-          sessions: <Session>[
-            TestPrograms.createClassicSession(name: 'Classic Session', orderInProgram: 0),
-            TestPrograms.createAmrapSession(name: 'AMRAP To Delete', orderInProgram: 1),
-          ],
-        ),
-      );
-      addTearDown(() async => ProgramsService.deleteProgram(created.id));
-      final AmrapSession toDelete = created.sessions.whereType<AmrapSession>().first;
+    test(
+      'should delete an AMRAP session and return the updated program',
+      () async {
+        final Program created = await ProgramsService.createFullProgram(
+          Program.forCreation(
+            name: 'Program with AMRAP',
+            sessions: <Session>[
+              TestPrograms.createClassicSession(
+                name: 'Classic Session',
+                orderInProgram: 0,
+              ),
+              TestPrograms.createAmrapSession(
+                name: 'AMRAP To Delete',
+                orderInProgram: 1,
+              ),
+            ],
+          ),
+        );
+        addTearDown(() async => ProgramsService.deleteProgram(created.id));
+        final AmrapSession toDelete = created.sessions
+            .whereType<AmrapSession>()
+            .first;
 
-      final Program updated = await ProgramsService.deleteSession(toDelete.id);
+        final Program updated = await ProgramsService.deleteSession(
+          toDelete.id,
+        );
 
-      expect(updated.sessions.length, equals(1));
-      expect(updated.sessions.whereType<AmrapSession>(), isEmpty);
-      expect(updated.sessions.first, isA<ClassicSession>());
-    });
+        expect(updated.sessions.length, equals(1));
+        expect(updated.sessions.whereType<AmrapSession>(), isEmpty);
+        expect(updated.sessions.first, isA<ClassicSession>());
+      },
+    );
 
-    test('should delete an EMOM session and return the updated program', () async {
-      final Program created = await ProgramsService.createFullProgram(
-        Program.forCreation(
-          name: 'Program with EMOM',
-          sessions: <Session>[
-            TestPrograms.createClassicSession(name: 'Classic Session', orderInProgram: 0),
-            TestPrograms.createEmomSession(name: 'EMOM To Delete', orderInProgram: 1),
-          ],
-        ),
-      );
-      addTearDown(() async => ProgramsService.deleteProgram(created.id));
-      final EmomSession toDelete = created.sessions.whereType<EmomSession>().first;
+    test(
+      'should delete an EMOM session and return the updated program',
+      () async {
+        final Program created = await ProgramsService.createFullProgram(
+          Program.forCreation(
+            name: 'Program with EMOM',
+            sessions: <Session>[
+              TestPrograms.createClassicSession(
+                name: 'Classic Session',
+                orderInProgram: 0,
+              ),
+              TestPrograms.createEmomSession(
+                name: 'EMOM To Delete',
+                orderInProgram: 1,
+              ),
+            ],
+          ),
+        );
+        addTearDown(() async => ProgramsService.deleteProgram(created.id));
+        final EmomSession toDelete = created.sessions
+            .whereType<EmomSession>()
+            .first;
 
-      final Program updated = await ProgramsService.deleteSession(toDelete.id);
+        final Program updated = await ProgramsService.deleteSession(
+          toDelete.id,
+        );
 
-      expect(updated.sessions.length, equals(1));
-      expect(updated.sessions.whereType<EmomSession>(), isEmpty);
-    });
+        expect(updated.sessions.length, equals(1));
+        expect(updated.sessions.whereType<EmomSession>(), isEmpty);
+      },
+    );
 
-    test('should delete a HIIT session and return the updated program', () async {
-      final Program created = await ProgramsService.createFullProgram(
-        Program.forCreation(
-          name: 'Program with HIIT',
-          sessions: <Session>[
-            TestPrograms.createClassicSession(name: 'Classic Session', orderInProgram: 0),
-            TestPrograms.createHiitSession(name: 'HIIT To Delete', orderInProgram: 1),
-          ],
-        ),
-      );
-      addTearDown(() async => ProgramsService.deleteProgram(created.id));
-      final HiitSession toDelete = created.sessions.whereType<HiitSession>().first;
+    test(
+      'should delete a HIIT session and return the updated program',
+      () async {
+        final Program created = await ProgramsService.createFullProgram(
+          Program.forCreation(
+            name: 'Program with HIIT',
+            sessions: <Session>[
+              TestPrograms.createClassicSession(
+                name: 'Classic Session',
+                orderInProgram: 0,
+              ),
+              TestPrograms.createHiitSession(
+                name: 'HIIT To Delete',
+                orderInProgram: 1,
+              ),
+            ],
+          ),
+        );
+        addTearDown(() async => ProgramsService.deleteProgram(created.id));
+        final HiitSession toDelete = created.sessions
+            .whereType<HiitSession>()
+            .first;
 
-      final Program updated = await ProgramsService.deleteSession(toDelete.id);
+        final Program updated = await ProgramsService.deleteSession(
+          toDelete.id,
+        );
 
-      expect(updated.sessions.length, equals(1));
-      expect(updated.sessions.whereType<HiitSession>(), isEmpty);
-    });
+        expect(updated.sessions.length, equals(1));
+        expect(updated.sessions.whereType<HiitSession>(), isEmpty);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------
@@ -462,18 +593,25 @@ void main() {
       final int deletedId = await ProgramsService.deleteProgram(created.id);
 
       expect(deletedId, equals(created.id));
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
       expect(programs.any((Program p) => p.id == created.id), isFalse);
     });
 
     test('should delete all sessions along with the program', () async {
       final Program created = await ProgramsService.createFullProgram(
-        TestPrograms.createProgramWithMultipleSessions(name: 'Program with 3 sessions', sessionCount: 3),
+        TestPrograms.createProgramWithMultipleSessions(
+          name: 'Program with 3 sessions',
+          sessionCount: 3,
+        ),
       );
 
       await ProgramsService.deleteProgram(created.id);
 
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
       expect(programs.any((Program p) => p.id == created.id), isFalse);
     });
 
@@ -485,7 +623,9 @@ void main() {
       final int deletedId = await ProgramsService.deleteProgram(created.id);
 
       expect(deletedId, equals(created.id));
-      final List<Program> programs = await ProgramsService.fetchUserPrograms(page: 0);
+      final List<Program> programs = await ProgramsService.fetchUserPrograms(
+        page: 0,
+      );
       expect(programs.any((Program p) => p.id == created.id), isFalse);
     });
   });
@@ -502,7 +642,9 @@ void main() {
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
       expect(created.isFavorite, isFalse);
 
-      final Program favorited = await ProgramsService.addProgramToFavorites(created.id);
+      final Program favorited = await ProgramsService.addProgramToFavorites(
+        created.id,
+      );
 
       expect(favorited.id, equals(created.id));
       expect(favorited.isFavorite, isTrue);
@@ -517,7 +659,8 @@ void main() {
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
       await ProgramsService.addProgramToFavorites(created.id);
 
-      final Program unfavorited = await ProgramsService.removeProgramFromFavorites(created.id);
+      final Program unfavorited =
+          await ProgramsService.removeProgramFromFavorites(created.id);
 
       expect(unfavorited.id, equals(created.id));
       expect(unfavorited.isFavorite, isFalse);
@@ -529,10 +672,13 @@ void main() {
       );
       addTearDown(() async => ProgramsService.deleteProgram(created.id));
 
-      final Program afterAdd = await ProgramsService.addProgramToFavorites(created.id);
+      final Program afterAdd = await ProgramsService.addProgramToFavorites(
+        created.id,
+      );
       expect(afterAdd.isFavorite, isTrue);
 
-      final Program afterRemove = await ProgramsService.removeProgramFromFavorites(created.id);
+      final Program afterRemove =
+          await ProgramsService.removeProgramFromFavorites(created.id);
       expect(afterRemove.isFavorite, isFalse);
     });
   });

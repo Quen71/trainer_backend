@@ -49,4 +49,3 @@ class EntitlementInfo {
   /// The product identifier associated with this entitlement.
   final String productIdentifier;
 }
-

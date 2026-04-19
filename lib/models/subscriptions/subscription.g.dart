@@ -115,7 +115,6 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
       call(entitlement: entitlement);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Subscription(...).copyWith.fieldName(value)`.
   ///
@@ -150,9 +149,9 @@ class _$SubscriptionCWProxyImpl implements _$SubscriptionCWProxy {
           : userId as String,
       entitlementId:
           entitlementId == const $CopyWithPlaceholder() || entitlementId == null
-              ? _value.entitlementId
-              // ignore: cast_nullable_to_non_nullable
-              : entitlementId as String,
+          ? _value.entitlementId
+          // ignore: cast_nullable_to_non_nullable
+          : entitlementId as String,
       productId: productId == const $CopyWithPlaceholder()
           ? _value.productId
           // ignore: cast_nullable_to_non_nullable
@@ -213,27 +212,28 @@ extension $SubscriptionCopyWith on Subscription {
 // **************************************************************************
 
 Subscription _$SubscriptionFromJson(Map<String, dynamic> json) => Subscription(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      entitlementId: json['entitlement_id'] as String,
-      productId: json['product_id'] as String?,
-      vendorTransactionId: json['vendor_transaction_id'] as String?,
-      status: const SubscriptionStatusConverter()
-          .fromJson(json['status'] as String),
-      startedAt: DateTime.parse(json['started_at'] as String),
-      expiresAt: json['expires_at'] == null
-          ? null
-          : DateTime.parse(json['expires_at'] as String),
-      isTrial: json['is_trial'] as bool? ?? false,
-      rawReceipt: json['raw_receipt'] as Map<String, dynamic>?,
-      metadata: json['metadata'] as Map<String, dynamic>? ??
-          const <String, dynamic>{},
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      entitlement: json['entitlement'] == null
-          ? null
-          : Entitlement.fromJson(json['entitlement'] as Map<String, dynamic>),
-    );
+  id: json['id'] as String,
+  userId: json['user_id'] as String,
+  entitlementId: json['entitlement_id'] as String,
+  productId: json['product_id'] as String?,
+  vendorTransactionId: json['vendor_transaction_id'] as String?,
+  status: const SubscriptionStatusConverter().fromJson(
+    json['status'] as String,
+  ),
+  startedAt: DateTime.parse(json['started_at'] as String),
+  expiresAt: json['expires_at'] == null
+      ? null
+      : DateTime.parse(json['expires_at'] as String),
+  isTrial: json['is_trial'] as bool? ?? false,
+  rawReceipt: json['raw_receipt'] as Map<String, dynamic>?,
+  metadata:
+      json['metadata'] as Map<String, dynamic>? ?? const <String, dynamic>{},
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  entitlement: json['entitlement'] == null
+      ? null
+      : Entitlement.fromJson(json['entitlement'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$SubscriptionToJson(Subscription instance) =>
     <String, dynamic>{

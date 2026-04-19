@@ -1,16 +1,48 @@
-# Integration tests (`test/`)
+# Tests (`test/`)
 
-This directory contains **integration tests** for the `trainer_backend` package against a real Supabase project (via the Flutter client / PostgREST). They cover:
+This directory contains **unit tests** and **integration tests** for the `trainer_backend` package.
+
+## Layout
+
+| Area | Role |
+|------|------|
+| **`unit/`** | Fast, isolated tests (no live Supabase project). Mirrors `lib/` under `exceptions/`, `services/`, etc. |
+| **`integration/`** | Tests against a real Supabase project (Flutter client / PostgREST). |
+| **`fixtures/`** | Shared data builders and env-backed test accounts for integration suites. |
+| **`helpers/`** | Shared utilities (e.g. cleanup) for integration tests. |
+
+## Unit tests (`test/unit/`)
+
+These cover pure Dart behaviour: exception mapping, validators, and similar code paths that do not require `unit-test.env` or network access to your test project.
+
+```
+test/unit/
+├── exceptions/
+│   └── trainer_backend_exception_test.dart   # TrainerBackend*Exception mapping
+└── services/
+    └── auth_response_validator_test.dart     # validateSignUpResponse
+```
+
+Run them with:
+
+```bash
+flutter test test/unit/
+```
+
+## Integration tests (`test/integration/`)
+
+Integration tests run against a real Supabase project (via the Flutter client / PostgREST). They cover:
 
 1. **`lib/services`** — CRUD flows and RPCs aligned with the app (programs, sessions, history, subscriptions).
 2. **Subscription limits** (Free / Basic / Premium) — quotas enforced in the database and verified via `ProgramsService` and usage counters.
 
 **RevenueCat** methods on `SubscriptionsService` (offerings, purchases, etc.) are **not** tested here: they require a real store environment. There is no dedicated test file for `AuthService` in this folder.
 
-## Structure
+## Structure (integration + shared assets)
 
 ```
 test/
+├── unit/                        # Unit tests (see above)
 ├── fixtures/
 │   ├── test_accounts.dart       # Test accounts (Free / Basic / Premium)
 │   ├── test_programs.dart       # Test programs and sessions

@@ -59,10 +59,7 @@ class ProgramsService {
   }) async {
     final dynamic response = await _client.rpc(
       'get_user_programs',
-      params: <String, dynamic>{
-        'page_number': page,
-        'page_size': pageSize,
-      },
+      params: <String, dynamic>{'page_number': page, 'page_size': pageSize},
     );
 
     if (response == null) {
@@ -71,7 +68,9 @@ class ProgramsService {
 
     final List<dynamic> programsJson = response as List<dynamic>;
 
-    return programsJson.map((dynamic p) => Program.fromJson(p as Map<String, dynamic>)).toList();
+    return programsJson
+        .map((dynamic p) => Program.fromJson(p as Map<String, dynamic>))
+        .toList();
   }
 
   /// Updates an existing program's metadata and the order of its sessions.

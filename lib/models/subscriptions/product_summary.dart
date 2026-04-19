@@ -19,7 +19,8 @@ class ProductSummary {
   });
 
   /// Creates a [ProductSummary] from a JSON object.
-  factory ProductSummary.fromJson(Map<String, dynamic> json) => _$ProductSummaryFromJson(json);
+  factory ProductSummary.fromJson(Map<String, dynamic> json) =>
+      _$ProductSummaryFromJson(json);
 
   /// The unique identifier for the product.
   final String id;

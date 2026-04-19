@@ -24,24 +24,23 @@ class TestPrograms {
     String sessionName = 'Session 1',
     SessionStyle style = SessionStyle.weights,
     int exerciseCount = 1,
-  }) =>
-      Program.forCreation(
-        name: name,
-        sessions: <Session>[
-        ClassicSession.forCreation(
-          name: sessionName,
-          orderInProgram: 0,
-          style: style,
-          exercises: List<ClassicExercise>.generate(
-            exerciseCount,
-            (int index) => _createClassicExercise(
-              orderInSession: index,
-              name: 'Exercise ${index + 1}',
-            ),
+  }) => Program.forCreation(
+    name: name,
+    sessions: <Session>[
+      ClassicSession.forCreation(
+        name: sessionName,
+        orderInProgram: 0,
+        style: style,
+        exercises: List<ClassicExercise>.generate(
+          exerciseCount,
+          (int index) => _createClassicExercise(
+            orderInSession: index,
+            name: 'Exercise ${index + 1}',
           ),
         ),
-        ],
-      );
+      ),
+    ],
+  );
 
   /// Creates a program with multiple classic sessions.
   ///
@@ -55,25 +54,24 @@ class TestPrograms {
     required int sessionCount,
     int exercisesPerSession = 1,
     SessionStyle style = SessionStyle.weights,
-  }) =>
-      Program.forCreation(
-        name: name,
-      sessions: List<Session>.generate(
-        sessionCount,
-        (int index) => ClassicSession.forCreation(
-          name: 'Session ${index + 1}',
-          orderInProgram: index,
-          style: style,
-          exercises: List<ClassicExercise>.generate(
-            exercisesPerSession,
-            (int exIndex) => _createClassicExercise(
-              orderInSession: exIndex,
-              name: 'Exercise ${exIndex + 1}',
-            ),
+  }) => Program.forCreation(
+    name: name,
+    sessions: List<Session>.generate(
+      sessionCount,
+      (int index) => ClassicSession.forCreation(
+        name: 'Session ${index + 1}',
+        orderInProgram: index,
+        style: style,
+        exercises: List<ClassicExercise>.generate(
+          exercisesPerSession,
+          (int exIndex) => _createClassicExercise(
+            orderInSession: exIndex,
+            name: 'Exercise ${exIndex + 1}',
           ),
         ),
       ),
-      );
+    ),
+  );
 
   /// Creates a program with mixed session types (Classic, AMRAP, EMOM, HIIT).
   ///
@@ -166,10 +164,7 @@ class TestPrograms {
       );
     }
 
-    return Program.forCreation(
-      name: name,
-      sessions: sessions,
-    );
+    return Program.forCreation(name: name, sessions: sessions);
   }
 
   /// Creates a program with mixed session types (Classic, AMRAP, EMOM, HIIT) cycling.
@@ -185,21 +180,23 @@ class TestPrograms {
     required int sessionCount,
     int exercisesPerSession = 1,
   }) {
-    const List<String> sessionTypes = <String>['classic', 'amrap', 'emom', 'hiit'];
+    const List<String> sessionTypes = <String>[
+      'classic',
+      'amrap',
+      'emom',
+      'hiit',
+    ];
     return Program.forCreation(
       name: name,
-      sessions: List<Session>.generate(
-        sessionCount,
-        (int index) {
-          final String sessionType = sessionTypes[index % 4];
-          return _createSessionByType(
-            sessionType: sessionType,
-            orderInProgram: index,
-            name: 'Session ${index + 1}',
-            exerciseCount: exercisesPerSession,
-          );
-        },
-      ),
+      sessions: List<Session>.generate(sessionCount, (int index) {
+        final String sessionType = sessionTypes[index % 4];
+        return _createSessionByType(
+          sessionType: sessionType,
+          orderInProgram: index,
+          name: 'Session ${index + 1}',
+          exerciseCount: exercisesPerSession,
+        );
+      }),
     );
   }
 
@@ -215,19 +212,18 @@ class TestPrograms {
     required int sessionCount,
     String sessionType = 'classic',
     int exercisesPerSession = 1,
-  }) =>
-      Program.forCreation(
-        name: name,
-      sessions: List<Session>.generate(
-        sessionCount,
-        (int index) => _createSessionByType(
-          sessionType: sessionType,
-          orderInProgram: index,
-          name: 'Session ${index + 1}',
-          exerciseCount: exercisesPerSession,
-        ),
+  }) => Program.forCreation(
+    name: name,
+    sessions: List<Session>.generate(
+      sessionCount,
+      (int index) => _createSessionByType(
+        sessionType: sessionType,
+        orderInProgram: index,
+        name: 'Session ${index + 1}',
+        exerciseCount: exercisesPerSession,
       ),
-      );
+    ),
+  );
 
   /// Creates a program with a session containing a specific number of exercises.
   ///
@@ -241,18 +237,17 @@ class TestPrograms {
     required String name,
     required int exerciseCount,
     String sessionType = 'classic',
-  }) =>
-      Program.forCreation(
-        name: name,
-      sessions: <Session>[
-        _createSessionByType(
-          sessionType: sessionType,
-          orderInProgram: 0,
-          name: 'Test Session',
-          exerciseCount: exerciseCount,
-        ),
-      ],
-      );
+  }) => Program.forCreation(
+    name: name,
+    sessions: <Session>[
+      _createSessionByType(
+        sessionType: sessionType,
+        orderInProgram: 0,
+        name: 'Test Session',
+        exerciseCount: exerciseCount,
+      ),
+    ],
+  );
 
   /// Creates a classic session with configurable parameters.
   ///
@@ -266,19 +261,18 @@ class TestPrograms {
     required int orderInProgram,
     SessionStyle style = SessionStyle.weights,
     int exerciseCount = 1,
-  }) =>
-      ClassicSession.forCreation(
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-      exercises: List<ClassicExercise>.generate(
-        exerciseCount,
-        (int index) => _createClassicExercise(
-          orderInSession: index,
-          name: 'Exercise ${index + 1}',
-        ),
+  }) => ClassicSession.forCreation(
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    exercises: List<ClassicExercise>.generate(
+      exerciseCount,
+      (int index) => _createClassicExercise(
+        orderInSession: index,
+        name: 'Exercise ${index + 1}',
       ),
-      );
+    ),
+  );
 
   /// Creates an AMRAP session with configurable parameters.
   ///
@@ -294,20 +288,19 @@ class TestPrograms {
     Duration duration = const Duration(minutes: 20),
     SessionStyle style = SessionStyle.bodyweight,
     int exerciseCount = 1,
-  }) =>
-      AmrapSession.forCreation(
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        duration: duration,
-      exercises: List<AmrapExercise>.generate(
-        exerciseCount,
-        (int index) => _createAmrapExercise(
-          orderInSession: index,
-          name: 'Exercise ${index + 1}',
-        ),
+  }) => AmrapSession.forCreation(
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    duration: duration,
+    exercises: List<AmrapExercise>.generate(
+      exerciseCount,
+      (int index) => _createAmrapExercise(
+        orderInSession: index,
+        name: 'Exercise ${index + 1}',
       ),
-      );
+    ),
+  );
 
   /// Creates an EMOM session with configurable parameters.
   ///
@@ -323,20 +316,19 @@ class TestPrograms {
     int roundNumber = 10,
     SessionStyle style = SessionStyle.bodyweight,
     int exerciseCount = 1,
-  }) =>
-      EmomSession.forCreation(
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        roundNumber: roundNumber,
-      exercises: List<EmomExercise>.generate(
-        exerciseCount,
-        (int index) => _createEmomExercise(
-          orderInSession: index,
-          name: 'Exercise ${index + 1}',
-        ),
+  }) => EmomSession.forCreation(
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    roundNumber: roundNumber,
+    exercises: List<EmomExercise>.generate(
+      exerciseCount,
+      (int index) => _createEmomExercise(
+        orderInSession: index,
+        name: 'Exercise ${index + 1}',
       ),
-      );
+    ),
+  );
 
   /// Creates a HIIT session with configurable parameters.
   ///
@@ -352,20 +344,19 @@ class TestPrograms {
     int roundNumber = 8,
     SessionStyle style = SessionStyle.bodyweight,
     int exerciseCount = 1,
-  }) =>
-      HiitSession.forCreation(
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        roundNumber: roundNumber,
-      exercises: List<HiitExercise>.generate(
-        exerciseCount,
-        (int index) => _createHiitExercise(
-          orderInSession: index,
-          name: 'Exercise ${index + 1}',
-        ),
+  }) => HiitSession.forCreation(
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    roundNumber: roundNumber,
+    exercises: List<HiitExercise>.generate(
+      exerciseCount,
+      (int index) => _createHiitExercise(
+        orderInSession: index,
+        name: 'Exercise ${index + 1}',
       ),
-      );
+    ),
+  );
 
   // --- Private Helper Methods ---
 
@@ -414,22 +405,21 @@ class TestPrograms {
     int reps = 10,
     double weight = 50.0,
     Duration restDuration = const Duration(minutes: 1),
-  }) =>
-      ClassicExercise.forCreation(
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: ClassicExerciseParameters(
-          sets: List<ClassicExerciseSet>.generate(
-            sets,
-            (int index) => ClassicExerciseSet(
-              orderInExercise: index,
-              repsNumber: reps,
-              weight: weight,
-              restDuration: restDuration,
-            ),
-          ),
+  }) => ClassicExercise.forCreation(
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: ClassicExerciseParameters(
+      sets: List<ClassicExerciseSet>.generate(
+        sets,
+        (int index) => ClassicExerciseSet(
+          orderInExercise: index,
+          repsNumber: reps,
+          weight: weight,
+          restDuration: restDuration,
         ),
-      );
+      ),
+    ),
+  );
 
   /// Creates an AMRAP exercise with default parameters.
   static AmrapExercise _createAmrapExercise({
@@ -437,15 +427,14 @@ class TestPrograms {
     required String name,
     int reps = 15,
     double weight = 20.0,
-  }) =>
-      AmrapExercise.forCreation(
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: AmrapExerciseParameters(
-          repsNumber: reps,
-          weight: weight,
-        ),
-      );
+  }) => AmrapExercise.forCreation(
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: AmrapExerciseParameters(
+      repsNumber: reps,
+      weight: weight,
+    ),
+  );
 
   /// Creates an EMOM exercise with default parameters.
   static EmomExercise _createEmomExercise({
@@ -454,16 +443,15 @@ class TestPrograms {
     Duration duration = const Duration(seconds: 40),
     int reps = 12,
     double weight = 30.0,
-  }) =>
-      EmomExercise.forCreation(
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: EmomExerciseParameters(
-          duration: duration,
-          repsNumber: reps,
-          weight: weight,
-        ),
-      );
+  }) => EmomExercise.forCreation(
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: EmomExerciseParameters(
+      duration: duration,
+      repsNumber: reps,
+      weight: weight,
+    ),
+  );
 
   /// Creates a HIIT exercise with default parameters.
   static HiitExercise _createHiitExercise({
@@ -472,14 +460,13 @@ class TestPrograms {
     Duration effortDuration = const Duration(seconds: 30),
     Duration restDuration = const Duration(seconds: 15),
     double weight = 0.0,
-  }) =>
-      HiitExercise.forCreation(
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: HiitExerciseParameters(
-          effortDuration: effortDuration,
-          restDuration: restDuration,
-          weight: weight,
-        ),
-      );
+  }) => HiitExercise.forCreation(
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: HiitExerciseParameters(
+      effortDuration: effortDuration,
+      restDuration: restDuration,
+      weight: weight,
+    ),
+  );
 }

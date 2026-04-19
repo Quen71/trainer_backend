@@ -28,7 +28,9 @@ class RevenueCatMapper {
     IntroductoryPrice? introductoryPrice;
 
     if (rcStoreProduct.introductoryPrice != null) {
-      introductoryPrice = convertIntroductoryPrice(rcStoreProduct.introductoryPrice!);
+      introductoryPrice = convertIntroductoryPrice(
+        rcStoreProduct.introductoryPrice!,
+      );
     }
 
     return StoreProduct(
@@ -43,14 +45,16 @@ class RevenueCatMapper {
   }
 
   /// Converts a RevenueCat IntroductoryPrice to a backend IntroductoryPrice model.
-  static IntroductoryPrice convertIntroductoryPrice(rc.IntroductoryPrice rcIntro) => IntroductoryPrice(
-        price: rcIntro.price,
-        priceString: rcIntro.priceString,
-        period: rcIntro.period,
-        cycles: rcIntro.cycles,
-        periodUnit: convertPeriodUnit(rcIntro.periodUnit),
-        periodNumberOfUnits: rcIntro.periodNumberOfUnits,
-      );
+  static IntroductoryPrice convertIntroductoryPrice(
+    rc.IntroductoryPrice rcIntro,
+  ) => IntroductoryPrice(
+    price: rcIntro.price,
+    priceString: rcIntro.priceString,
+    period: rcIntro.period,
+    cycles: rcIntro.cycles,
+    periodUnit: convertPeriodUnit(rcIntro.periodUnit),
+    periodNumberOfUnits: rcIntro.periodNumberOfUnits,
+  );
 
   /// Converts a RevenueCat PeriodUnit to a backend PeriodUnit enum.
   static PeriodUnit convertPeriodUnit(rc.PeriodUnit rcPeriodUnit) {
@@ -108,7 +112,8 @@ class RevenueCatMapper {
   /// the subscription period (e.g., PackageType.monthly, PackageType.annual).
   static Package convertPackage(rc.Package rcPackage) {
     final String productId = rcPackage.storeProduct.identifier;
-    final String? entitlementIdentifier = SubscriptionConstants.productToEntitlement[productId];
+    final String? entitlementIdentifier =
+        SubscriptionConstants.productToEntitlement[productId];
 
     return Package(
       identifier: rcPackage.identifier,
@@ -120,10 +125,12 @@ class RevenueCatMapper {
 
   /// Converts a RevenueCat Offering to a backend Offering model.
   static Offering convertOffering(rc.Offering rcOffering) => Offering(
-        identifier: rcOffering.identifier,
-        serverDescription: rcOffering.serverDescription,
-        availablePackages: rcOffering.availablePackages.map(convertPackage).toList(),
-      );
+    identifier: rcOffering.identifier,
+    serverDescription: rcOffering.serverDescription,
+    availablePackages: rcOffering.availablePackages
+        .map(convertPackage)
+        .toList(),
+  );
 
   /// Converts a RevenueCat Offerings to a backend Offerings model.
   static Offerings convertOfferings(rc.Offerings rcOfferings) {
@@ -134,35 +141,46 @@ class RevenueCatMapper {
 
     return Offerings(
       all: allOfferings,
-      current: rcOfferings.current != null ? convertOffering(rcOfferings.current!) : null,
+      current: rcOfferings.current != null
+          ? convertOffering(rcOfferings.current!)
+          : null,
     );
   }
 
   /// Converts a RevenueCat EntitlementInfo to a backend EntitlementInfo model.
-  static EntitlementInfo convertEntitlementInfo(rc.EntitlementInfo rcEntitlementInfo) => EntitlementInfo(
-        identifier: rcEntitlementInfo.identifier,
-        isActive: rcEntitlementInfo.isActive,
-        willRenew: rcEntitlementInfo.willRenew,
-        periodType: rcEntitlementInfo.periodType.toString(),
-        latestPurchaseDate: DateTime.parse(rcEntitlementInfo.latestPurchaseDate),
-        originalPurchaseDate: DateTime.parse(rcEntitlementInfo.originalPurchaseDate),
-        expirationDate:
-            rcEntitlementInfo.expirationDate != null ? DateTime.parse(rcEntitlementInfo.expirationDate!) : null,
-        store: rcEntitlementInfo.store.toString(),
-        productIdentifier: rcEntitlementInfo.productIdentifier,
-      );
+  static EntitlementInfo convertEntitlementInfo(
+    rc.EntitlementInfo rcEntitlementInfo,
+  ) => EntitlementInfo(
+    identifier: rcEntitlementInfo.identifier,
+    isActive: rcEntitlementInfo.isActive,
+    willRenew: rcEntitlementInfo.willRenew,
+    periodType: rcEntitlementInfo.periodType.toString(),
+    latestPurchaseDate: DateTime.parse(rcEntitlementInfo.latestPurchaseDate),
+    originalPurchaseDate: DateTime.parse(
+      rcEntitlementInfo.originalPurchaseDate,
+    ),
+    expirationDate: rcEntitlementInfo.expirationDate != null
+        ? DateTime.parse(rcEntitlementInfo.expirationDate!)
+        : null,
+    store: rcEntitlementInfo.store.toString(),
+    productIdentifier: rcEntitlementInfo.productIdentifier,
+  );
 
   /// Converts a RevenueCat CustomerInfo to a backend CustomerInfo model.
   static CustomerInfo convertCustomerInfo(rc.CustomerInfo rcCustomerInfo) {
-    final Map<String, EntitlementInfo> entitlements = <String, EntitlementInfo>{};
-    for (final MapEntry<String, rc.EntitlementInfo> entry in rcCustomerInfo.entitlements.active.entries) {
+    final Map<String, EntitlementInfo> entitlements =
+        <String, EntitlementInfo>{};
+    for (final MapEntry<String, rc.EntitlementInfo> entry
+        in rcCustomerInfo.entitlements.active.entries) {
       entitlements[entry.key] = convertEntitlementInfo(entry.value);
     }
 
     return CustomerInfo(
       entitlements: entitlements,
       activeSubscriptions: rcCustomerInfo.activeSubscriptions.toList(),
-      allPurchasedProductIdentifiers: rcCustomerInfo.allPurchasedProductIdentifiers.toList(),
+      allPurchasedProductIdentifiers: rcCustomerInfo
+          .allPurchasedProductIdentifiers
+          .toList(),
       firstSeen: DateTime.parse(rcCustomerInfo.firstSeen),
       requestDate: DateTime.parse(rcCustomerInfo.requestDate),
       originalAppUserId: rcCustomerInfo.originalAppUserId,

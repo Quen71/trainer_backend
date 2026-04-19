@@ -19,7 +19,8 @@ class Entitlement {
   });
 
   /// Creates an [Entitlement] from a JSON object.
-  factory Entitlement.fromJson(Map<String, dynamic> json) => _$EntitlementFromJson(json);
+  factory Entitlement.fromJson(Map<String, dynamic> json) =>
+      _$EntitlementFromJson(json);
 
   /// The unique identifier for the entitlement.
   final String id;

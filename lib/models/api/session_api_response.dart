@@ -11,13 +11,11 @@ part 'session_api_response.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class SessionApiResponse {
   /// Creates an instance of [SessionApiResponse].
-  const SessionApiResponse({
-    required this.programId,
-    required this.session,
-  });
+  const SessionApiResponse({required this.programId, required this.session});
 
   /// Creates a [SessionApiResponse] from a JSON object.
-  factory SessionApiResponse.fromJson(Map<String, dynamic> json) => _$SessionApiResponseFromJson(json);
+  factory SessionApiResponse.fromJson(Map<String, dynamic> json) =>
+      _$SessionApiResponseFromJson(json);
 
   /// The ID of the program that this session belongs to.
   final int programId;

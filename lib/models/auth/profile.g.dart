@@ -75,7 +75,6 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
       call(sessionLogs: sessionLogs);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Profile(...).copyWith.fieldName(value)`.
   ///
@@ -124,9 +123,9 @@ class _$ProfileCWProxyImpl implements _$ProfileCWProxy {
           : programs as List<Program>,
       sessionLogs:
           sessionLogs == const $CopyWithPlaceholder() || sessionLogs == null
-              ? _value.sessionLogs
-              // ignore: cast_nullable_to_non_nullable
-              : sessionLogs as List<SessionLog>,
+          ? _value.sessionLogs
+          // ignore: cast_nullable_to_non_nullable
+          : sessionLogs as List<SessionLog>,
     );
   }
 }
@@ -143,33 +142,35 @@ extension $ProfileCopyWith on Profile {
 // **************************************************************************
 
 Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile(
-      id: json['id'] as String,
-      username: json['username'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      fullName: json['full_name'] as String?,
-      role: $enumDecodeNullable(_$UserRoleEnumMap, json['role']) ??
-          UserRole.standard,
-      programs: (json['programs'] as List<dynamic>?)
-              ?.map((e) => Program.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <Program>[],
-      sessionLogs: (json['session_logs'] as List<dynamic>?)
-              ?.map((e) => SessionLog.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          const <SessionLog>[],
-    );
+  id: json['id'] as String,
+  username: json['username'] as String,
+  createdAt: DateTime.parse(json['created_at'] as String),
+  updatedAt: DateTime.parse(json['updated_at'] as String),
+  fullName: json['full_name'] as String?,
+  role:
+      $enumDecodeNullable(_$UserRoleEnumMap, json['role']) ?? UserRole.standard,
+  programs:
+      (json['programs'] as List<dynamic>?)
+          ?.map((e) => Program.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <Program>[],
+  sessionLogs:
+      (json['session_logs'] as List<dynamic>?)
+          ?.map((e) => SessionLog.fromJson(e as Map<String, dynamic>))
+          .toList() ??
+      const <SessionLog>[],
+);
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
-      'id': instance.id,
-      'username': instance.username,
-      'full_name': instance.fullName,
-      'role': _$UserRoleEnumMap[instance.role]!,
-      'created_at': instance.createdAt.toIso8601String(),
-      'updated_at': instance.updatedAt.toIso8601String(),
-      'programs': instance.programs,
-      'session_logs': instance.sessionLogs,
-    };
+  'id': instance.id,
+  'username': instance.username,
+  'full_name': instance.fullName,
+  'role': _$UserRoleEnumMap[instance.role]!,
+  'created_at': instance.createdAt.toIso8601String(),
+  'updated_at': instance.updatedAt.toIso8601String(),
+  'programs': instance.programs,
+  'session_logs': instance.sessionLogs,
+};
 
 const _$UserRoleEnumMap = {
   UserRole.standard: 'standard',

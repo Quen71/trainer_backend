@@ -38,12 +38,17 @@ class SubscriptionsService {
   ///
   /// Throws a [PurchasesError] if the SDK configuration fails or if the
   /// API key is invalid. Throws an [Exception] if the userId is empty.
-  static Future<void> configureRevenueCat({required String apiKey, required String userId}) async {
+  static Future<void> configureRevenueCat({
+    required String apiKey,
+    required String userId,
+  }) async {
     if (userId.isEmpty) {
       throw Exception('User ID cannot be empty');
     }
 
-    final rc.PurchasesConfiguration configuration = rc.PurchasesConfiguration(apiKey)..appUserID = userId;
+    final rc.PurchasesConfiguration configuration = rc.PurchasesConfiguration(
+      apiKey,
+    )..appUserID = userId;
 
     await rc.Purchases.configure(configuration);
 
@@ -119,7 +124,9 @@ class SubscriptionsService {
   /// - `PURCHASE_NOT_ALLOWED`: Purchase is not allowed
   /// - `PRODUCT_NOT_AVAILABLE_FOR_PURCHASE`: Product is not available
   /// - Other network/StoreKit errors
-  static Future<SubscriptionSummary> purchasePackage({required Package package}) async {
+  static Future<SubscriptionSummary> purchasePackage({
+    required Package package,
+  }) async {
     _checkRevenueCatInitialized();
 
     // Validate entitlement identifier
@@ -139,17 +146,24 @@ class SubscriptionsService {
     // Use storeProduct.identifier (the unique product ID) instead of package.identifier
     // because package.identifier (e.g., "$rc_monthly") is shared across offerings,
     // while storeProduct.identifier (e.g., "basic_monthly_subscription") is unique.
-    final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(rcOfferings, package.storeProduct.identifier);
+    final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(
+      rcOfferings,
+      package.storeProduct.identifier,
+    );
 
     if (rcPackage == null) {
-      throw Exception('Package not found in offerings for product: ${package.storeProduct.identifier}');
+      throw Exception(
+        'Package not found in offerings for product: ${package.storeProduct.identifier}',
+      );
     }
 
     // 1. Purchase via RevenueCat
-    final CustomerInfo customerInfo = await _purchasePackageWithRevenueCatPackage(rcPackage);
+    final CustomerInfo customerInfo =
+        await _purchasePackageWithRevenueCatPackage(rcPackage);
 
     // 2. Fetch limits from Supabase (independent of webhook)
-    final SubscriptionSummaryLimits limits = await SubscriptionSummaryUtils.getEntitlementLimits(entitlementKey);
+    final SubscriptionSummaryLimits limits =
+        await SubscriptionSummaryUtils.getEntitlementLimits(entitlementKey);
 
     // 3. Build and return SubscriptionSummary
     return SubscriptionSummaryUtils.buildFromCustomerInfo(
@@ -164,10 +178,16 @@ class SubscriptionsService {
   ///
   /// This method performs the actual purchase operation without needing to
   /// look up the package in offerings.
-  static Future<CustomerInfo> _purchasePackageWithRevenueCatPackage(rc.Package rcPackage) async {
+  static Future<CustomerInfo> _purchasePackageWithRevenueCatPackage(
+    rc.Package rcPackage,
+  ) async {
     try {
-      final rc.PurchaseParams purchaseParams = rc.PurchaseParams.package(rcPackage);
-      final rc.PurchaseResult purchaseResult = await rc.Purchases.purchase(purchaseParams);
+      final rc.PurchaseParams purchaseParams = rc.PurchaseParams.package(
+        rcPackage,
+      );
+      final rc.PurchaseResult purchaseResult = await rc.Purchases.purchase(
+        purchaseParams,
+      );
       return RevenueCatMapper.convertCustomerInfo(purchaseResult.customerInfo);
     } on rc.PurchasesError catch (e) {
       throw Exception('Purchase failed: ${e.message} (code: ${e.code})');
@@ -189,7 +209,8 @@ class SubscriptionsService {
     _checkRevenueCatInitialized();
 
     try {
-      final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.restorePurchases();
+      final rc.CustomerInfo rcCustomerInfo =
+          await rc.Purchases.restorePurchases();
       return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
     } on rc.PurchasesError catch (e) {
       throw Exception('Failed to restore purchases: ${e.message}');
@@ -217,7 +238,8 @@ class SubscriptionsService {
     _checkRevenueCatInitialized();
 
     try {
-      final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.getCustomerInfo();
+      final rc.CustomerInfo rcCustomerInfo =
+          await rc.Purchases.getCustomerInfo();
       return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
     } on rc.PurchasesError catch (e) {
       throw Exception('Failed to get customer info: ${e.message}');
@@ -236,7 +258,8 @@ class SubscriptionsService {
     _checkRevenueCatInitialized();
 
     try {
-      final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.getCustomerInfo();
+      final rc.CustomerInfo rcCustomerInfo =
+          await rc.Purchases.getCustomerInfo();
       return rcCustomerInfo.managementURL;
     } on rc.PurchasesError catch (e) {
       throw Exception('Failed to get management URL: ${e.message}');
@@ -261,7 +284,9 @@ class SubscriptionsService {
       params: <String, dynamic>{'p_user_id': null},
     );
 
-    return SubscriptionLimitsWithUsage.fromJson(response as Map<String, dynamic>);
+    return SubscriptionLimitsWithUsage.fromJson(
+      response as Map<String, dynamic>,
+    );
   }
 
   /// Checks if RevenueCat SDK has been initialized.
@@ -269,7 +294,9 @@ class SubscriptionsService {
   /// Throws an [Exception] if RevenueCat has not been initialized.
   static void _checkRevenueCatInitialized() {
     if (!_isRevenueCatInitialized) {
-      throw Exception('RevenueCat SDK not initialized. Call configureRevenueCat() first.');
+      throw Exception(
+        'RevenueCat SDK not initialized. Call configureRevenueCat() first.',
+      );
     }
   }
 }

@@ -15,7 +15,8 @@ class InMemoryGotrueAsyncStorage implements GotrueAsyncStorage {
   final Map<String, String> _storage = <String, String>{};
 
   @override
-  Future<String?> getItem({required String key}) => Future<String?>.value(_storage[key]);
+  Future<String?> getItem({required String key}) =>
+      Future<String?>.value(_storage[key]);
 
   @override
   Future<void> setItem({required String key, required String value}) async {
@@ -30,7 +31,7 @@ class InMemoryGotrueAsyncStorage implements GotrueAsyncStorage {
 
 /// Common setup for integration tests.
 ///
-  /// Initializes Supabase client with test credentials from unit-test.env file.
+/// Initializes Supabase client with test credentials from unit-test.env file.
 /// This setup must be called in setUpAll() of each test file.
 class TestSetup {
   TestSetup._();
@@ -75,9 +76,15 @@ class TestSetup {
 
     // Get Supabase credentials from environment variables
     // Priority: dotenv file > system environment variables
-    final String supabaseUrl = dotenv.env['TEST_BASE_URL'] ?? Platform.environment['TEST_BASE_URL'] ?? '';
+    final String supabaseUrl =
+        dotenv.env['TEST_BASE_URL'] ??
+        Platform.environment['TEST_BASE_URL'] ??
+        '';
 
-    final String supabaseAnonKey = dotenv.env['TEST_ANON_KEY'] ?? Platform.environment['TEST_ANON_KEY'] ?? '';
+    final String supabaseAnonKey =
+        dotenv.env['TEST_ANON_KEY'] ??
+        Platform.environment['TEST_ANON_KEY'] ??
+        '';
 
     if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
       throw Exception(
@@ -120,7 +127,10 @@ class TestSetup {
       );
       await Future<void>.delayed(const Duration(milliseconds: 500));
     }
-    await CleanupHelper.cleanupUserData(supabase, supabase.auth.currentUser!.id);
+    await CleanupHelper.cleanupUserData(
+      supabase,
+      supabase.auth.currentUser!.id,
+    );
     await Future<void>.delayed(const Duration(milliseconds: 200));
   }
 }

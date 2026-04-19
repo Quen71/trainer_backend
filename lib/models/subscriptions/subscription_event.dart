@@ -23,7 +23,8 @@ class SubscriptionEvent {
   });
 
   /// Creates a [SubscriptionEvent] from a JSON object.
-  factory SubscriptionEvent.fromJson(Map<String, dynamic> json) => _$SubscriptionEventFromJson(json);
+  factory SubscriptionEvent.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionEventFromJson(json);
 
   /// The unique identifier for the event.
   final String id;

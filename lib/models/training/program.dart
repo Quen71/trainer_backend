@@ -28,20 +28,20 @@ class Program {
     required String name,
     String? description,
     required List<Session> sessions,
-  }) =>
-      Program(
-        id: 0,
-        userId: '',
-        name: name,
-        isFavorite: false,
-        description: description,
-        sessions: sessions,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+  }) => Program(
+    id: 0,
+    userId: '',
+    name: name,
+    isFavorite: false,
+    description: description,
+    sessions: sessions,
+    createdAt: DateTime.now(),
+    updatedAt: DateTime.now(),
+  );
 
   /// Creates a [Program] from a JSON object.
-  factory Program.fromJson(Map<String, dynamic> json) => _$ProgramFromJson(json);
+  factory Program.fromJson(Map<String, dynamic> json) =>
+      _$ProgramFromJson(json);
 
   /// The unique identifier for the program.
   final int id;

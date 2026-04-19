@@ -69,7 +69,8 @@ class SubscriptionSummaryUtils {
     required Package package,
     required String entitlementKey,
   }) {
-    final EntitlementInfo? entitlementInfo = customerInfo.entitlements[entitlementKey];
+    final EntitlementInfo? entitlementInfo =
+        customerInfo.entitlements[entitlementKey];
 
     if (entitlementInfo == null) {
       throw Exception(
@@ -138,7 +139,8 @@ class SubscriptionSummaryUtils {
   /// - [periodType]: The period type string from RevenueCat.
   ///
   /// Returns `true` if the period type indicates a trial.
-  static bool _isTrial(String periodType) => periodType.toLowerCase().contains('trial');
+  static bool _isTrial(String periodType) =>
+      periodType.toLowerCase().contains('trial');
 
   /// Extracts a vendor identifier from the RevenueCat store string.
   ///

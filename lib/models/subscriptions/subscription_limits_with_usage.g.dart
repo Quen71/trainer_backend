@@ -20,7 +20,8 @@ abstract class _$SubscriptionLimitsWithUsageCWProxy {
   SubscriptionLimitsWithUsage isTrial(bool isTrial);
 
   SubscriptionLimitsWithUsage entitlement(
-      SubscriptionSummaryEntitlement entitlement);
+    SubscriptionSummaryEntitlement entitlement,
+  );
 
   SubscriptionLimitsWithUsage product(ProductSummary? product);
 
@@ -80,8 +81,8 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
 
   @override
   SubscriptionLimitsWithUsage entitlement(
-          SubscriptionSummaryEntitlement entitlement) =>
-      call(entitlement: entitlement);
+    SubscriptionSummaryEntitlement entitlement,
+  ) => call(entitlement: entitlement);
 
   @override
   SubscriptionLimitsWithUsage product(ProductSummary? product) =>
@@ -96,7 +97,6 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
       call(usage: usage);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionLimitsWithUsage(...).copyWith.fieldName(value)`.
   ///
@@ -143,9 +143,9 @@ class _$SubscriptionLimitsWithUsageCWProxyImpl
           : isTrial as bool,
       entitlement:
           entitlement == const $CopyWithPlaceholder() || entitlement == null
-              ? _value.entitlement
-              // ignore: cast_nullable_to_non_nullable
-              : entitlement as SubscriptionSummaryEntitlement,
+          ? _value.entitlement
+          // ignore: cast_nullable_to_non_nullable
+          : entitlement as SubscriptionSummaryEntitlement,
       product: product == const $CopyWithPlaceholder()
           ? _value.product
           // ignore: cast_nullable_to_non_nullable
@@ -174,7 +174,8 @@ abstract class _$SubscriptionUsageCWProxy {
   SubscriptionUsage programsCount(int programsCount);
 
   SubscriptionUsage sessionsCountByProgram(
-      Map<String, int> sessionsCountByProgram);
+    Map<String, int> sessionsCountByProgram,
+  );
 
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionUsage(...).copyWith.fieldName(value)`.
@@ -202,11 +203,10 @@ class _$SubscriptionUsageCWProxyImpl implements _$SubscriptionUsageCWProxy {
 
   @override
   SubscriptionUsage sessionsCountByProgram(
-          Map<String, int> sessionsCountByProgram) =>
-      call(sessionsCountByProgram: sessionsCountByProgram);
+    Map<String, int> sessionsCountByProgram,
+  ) => call(sessionsCountByProgram: sessionsCountByProgram);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionUsage(...).copyWith.fieldName(value)`.
   ///
@@ -221,15 +221,15 @@ class _$SubscriptionUsageCWProxyImpl implements _$SubscriptionUsageCWProxy {
     return SubscriptionUsage(
       programsCount:
           programsCount == const $CopyWithPlaceholder() || programsCount == null
-              ? _value.programsCount
-              // ignore: cast_nullable_to_non_nullable
-              : programsCount as int,
+          ? _value.programsCount
+          // ignore: cast_nullable_to_non_nullable
+          : programsCount as int,
       sessionsCountByProgram:
           sessionsCountByProgram == const $CopyWithPlaceholder() ||
-                  sessionsCountByProgram == null
-              ? _value.sessionsCountByProgram
-              // ignore: cast_nullable_to_non_nullable
-              : sessionsCountByProgram as Map<String, int>,
+              sessionsCountByProgram == null
+          ? _value.sessionsCountByProgram
+          // ignore: cast_nullable_to_non_nullable
+          : sessionsCountByProgram as Map<String, int>,
     );
   }
 }
@@ -247,54 +247,59 @@ extension $SubscriptionUsageCopyWith on SubscriptionUsage {
 // **************************************************************************
 
 SubscriptionLimitsWithUsage _$SubscriptionLimitsWithUsageFromJson(
-        Map<String, dynamic> json) =>
-    SubscriptionLimitsWithUsage(
-      id: json['id'] as String?,
-      userId: json['user_id'] as String,
-      status: const SubscriptionStatusConverter()
-          .fromJson(json['status'] as String),
-      startedAt: json['started_at'] == null
-          ? null
-          : DateTime.parse(json['started_at'] as String),
-      expiresAt: json['expires_at'] == null
-          ? null
-          : DateTime.parse(json['expires_at'] as String),
-      isTrial: json['is_trial'] as bool,
-      entitlement: SubscriptionSummaryEntitlement.fromJson(
-          json['entitlement'] as Map<String, dynamic>),
-      product: json['product'] == null
-          ? null
-          : ProductSummary.fromJson(json['product'] as Map<String, dynamic>),
-      limits: SubscriptionSummaryLimits.fromJson(
-          json['limits'] as Map<String, dynamic>),
-      usage: SubscriptionUsage.fromJson(json['usage'] as Map<String, dynamic>),
-    );
+  Map<String, dynamic> json,
+) => SubscriptionLimitsWithUsage(
+  id: json['id'] as String?,
+  userId: json['user_id'] as String,
+  status: const SubscriptionStatusConverter().fromJson(
+    json['status'] as String,
+  ),
+  startedAt: json['started_at'] == null
+      ? null
+      : DateTime.parse(json['started_at'] as String),
+  expiresAt: json['expires_at'] == null
+      ? null
+      : DateTime.parse(json['expires_at'] as String),
+  isTrial: json['is_trial'] as bool,
+  entitlement: SubscriptionSummaryEntitlement.fromJson(
+    json['entitlement'] as Map<String, dynamic>,
+  ),
+  product: json['product'] == null
+      ? null
+      : ProductSummary.fromJson(json['product'] as Map<String, dynamic>),
+  limits: SubscriptionSummaryLimits.fromJson(
+    json['limits'] as Map<String, dynamic>,
+  ),
+  usage: SubscriptionUsage.fromJson(json['usage'] as Map<String, dynamic>),
+);
 
 Map<String, dynamic> _$SubscriptionLimitsWithUsageToJson(
-        SubscriptionLimitsWithUsage instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'user_id': instance.userId,
-      'status': const SubscriptionStatusConverter().toJson(instance.status),
-      'started_at': instance.startedAt?.toIso8601String(),
-      'expires_at': instance.expiresAt?.toIso8601String(),
-      'is_trial': instance.isTrial,
-      'entitlement': instance.entitlement,
-      'product': instance.product,
-      'limits': instance.limits,
-      'usage': instance.usage,
-    };
+  SubscriptionLimitsWithUsage instance,
+) => <String, dynamic>{
+  'id': instance.id,
+  'user_id': instance.userId,
+  'status': const SubscriptionStatusConverter().toJson(instance.status),
+  'started_at': instance.startedAt?.toIso8601String(),
+  'expires_at': instance.expiresAt?.toIso8601String(),
+  'is_trial': instance.isTrial,
+  'entitlement': instance.entitlement,
+  'product': instance.product,
+  'limits': instance.limits,
+  'usage': instance.usage,
+};
 
 SubscriptionUsage _$SubscriptionUsageFromJson(Map<String, dynamic> json) =>
     SubscriptionUsage(
       programsCount: (json['programs_count'] as num).toInt(),
-      sessionsCountByProgram: const SessionsCountMapConverter()
-          .fromJson(json['sessions_count_by_program'] as Map<String, dynamic>),
+      sessionsCountByProgram: const SessionsCountMapConverter().fromJson(
+        json['sessions_count_by_program'] as Map<String, dynamic>,
+      ),
     );
 
 Map<String, dynamic> _$SubscriptionUsageToJson(SubscriptionUsage instance) =>
     <String, dynamic>{
       'programs_count': instance.programsCount,
-      'sessions_count_by_program': const SessionsCountMapConverter()
-          .toJson(instance.sessionsCountByProgram),
+      'sessions_count_by_program': const SessionsCountMapConverter().toJson(
+        instance.sessionsCountByProgram,
+      ),
     };

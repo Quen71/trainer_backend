@@ -77,7 +77,6 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
   SubscriptionEvent createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionEvent(...).copyWith.fieldName(value)`.
   ///
@@ -122,9 +121,9 @@ class _$SubscriptionEventCWProxyImpl implements _$SubscriptionEventCWProxy {
           : eventTime as DateTime,
       eventPayload:
           eventPayload == const $CopyWithPlaceholder() || eventPayload == null
-              ? _value.eventPayload
-              // ignore: cast_nullable_to_non_nullable
-              : eventPayload as Map<String, dynamic>,
+          ? _value.eventPayload
+          // ignore: cast_nullable_to_non_nullable
+          : eventPayload as Map<String, dynamic>,
       createdAt: createdAt == const $CopyWithPlaceholder() || createdAt == null
           ? _value.createdAt
           // ignore: cast_nullable_to_non_nullable

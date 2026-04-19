@@ -25,4 +25,3 @@ class Offering {
   /// List of available packages in this offering.
   final List<Package> availablePackages;
 }
-

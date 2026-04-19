@@ -24,23 +24,21 @@ class RoundLog<T extends ExerciseLog> {
   factory RoundLog.forCreation({
     required int roundNumber,
     required List<T> exercises,
-  }) =>
-      RoundLog<T>(
-        id: 0,
-        roundNumber: roundNumber,
-        exercises: exercises,
-      );
+  }) => RoundLog<T>(id: 0, roundNumber: roundNumber, exercises: exercises);
 
   /// Creates a [RoundLog] from a JSON object.
   ///
   /// This factory supports generic deserialization for the list of exercises.
-  factory RoundLog.fromJson(Map<String, dynamic> json, T Function(Object? json) fromJsonT) =>
-      _$RoundLogFromJson(json, fromJsonT);
+  factory RoundLog.fromJson(
+    Map<String, dynamic> json,
+    T Function(Object? json) fromJsonT,
+  ) => _$RoundLogFromJson(json, fromJsonT);
 
   /// Converts this [RoundLog] to a JSON object.
   ///
   /// This method supports generic serialization for the list of exercises.
-  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) => _$RoundLogToJson(this, toJsonT);
+  Map<String, dynamic> toJson(Object? Function(T value) toJsonT) =>
+      _$RoundLogToJson(this, toJsonT);
 
   /// The unique identifier for the round log.
   final int id;

@@ -1,6 +1,8 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/exceptions/trainer_backend_exception.dart';
 import 'package:trainer_backend/models/models.export.dart' hide Session;
+import 'package:trainer_backend/services/auth_response_validator.dart';
 
 /// A service class for handling user authentication with Supabase.
 ///
@@ -55,7 +57,8 @@ class AuthService {
   static Stream<AppAuthState> get onAuthStateChange async* {
     yield const AppAuthInitial();
 
-    await for (final AuthState data in TrainerAPI.authManager.onAuthStateChange) {
+    await for (final AuthState data
+        in TrainerAPI.authManager.onAuthStateChange) {
       final AuthChangeEvent event = data.event;
       final Session? session = data.session;
 
@@ -87,10 +90,7 @@ class AuthService {
           // Show loading state, then authenticated state with isTokenRefresh: false
           yield const AppAuthLoading();
           if (session != null) {
-            yield AppAuthenticated(
-              session.user,
-              isTokenRefresh: false,
-            );
+            yield AppAuthenticated(session.user, isTokenRefresh: false);
           } else {
             yield const AppUnauthenticated();
           }
@@ -115,7 +115,9 @@ class AuthService {
   /// - [limit]: The maximum number of programs and session logs to retrieve.
   ///
   /// Returns a [Profile] object populated with the user's data.
-  /// Throws an [Exception] if the RPC call fails or returns no data.
+  ///
+  /// Throws a [TrainerBackendRpcException] or [TrainerBackendUnknownException]
+  /// if the RPC call fails or returns no data.
   static Future<Profile> getProfileWithInitialData({required int limit}) async {
     try {
       final dynamic response = await TrainerAPI.client.rpc(
@@ -124,12 +126,36 @@ class AuthService {
       );
 
       if (response == null) {
-        throw Exception('Failed to retrieve profile: No data returned.');
+        throw const TrainerBackendUnknownException(
+          operation: 'getProfileWithInitialData',
+          message: 'Failed to retrieve profile: No data returned.',
+        );
       }
 
       return Profile.fromJson(response as Map<String, dynamic>);
-    } catch (e) {
-      throw Exception('Failed to retrieve profile: $e');
+    } on PostgrestException catch (error) {
+      throw TrainerBackendRpcException.fromPostgrestException(
+        operation: 'getProfileWithInitialData',
+        exception: error,
+      );
+    } catch (error) {
+      if (error is TrainerBackendException) {
+        rethrow;
+      }
+
+      if (_isNetworkIssue(error)) {
+        throw TrainerBackendNetworkException(
+          operation: 'getProfileWithInitialData',
+          message: 'Failed to retrieve profile because of a network error.',
+          cause: error,
+        );
+      }
+
+      throw TrainerBackendUnknownException(
+        operation: 'getProfileWithInitialData',
+        message: 'Failed to retrieve profile.',
+        cause: error,
+      );
     }
   }
 
@@ -140,29 +166,21 @@ class AuthService {
   /// - [username]: The user's unique username.
   /// - [fullName]: An optional full name for the user.
   ///
-  /// Throws an [AuthException] if sign-up fails.
+  /// Throws a [TrainerBackendAuthException] if sign-up fails.
   static Future<void> signUp({
     required String email,
     required String password,
     required String username,
     String? fullName,
   }) async {
-    try {
-      final AuthResponse response = await TrainerAPI.authManager.signUp(
+    final AuthResponse response = await _runAuthOperation(
+      () => TrainerAPI.authManager.signUp(
         email: email,
         password: password,
-        data: <String, dynamic>{
-          'username': username,
-          'full_name': fullName,
-        },
-      );
-
-      if (response.user == null) {
-        throw const AuthException('User is null after sign up.');
-      }
-    } on AuthException {
-      rethrow;
-    }
+        data: <String, dynamic>{'username': username, 'full_name': fullName},
+      ),
+    );
+    validateSignUpResponse(response);
   }
 
   /// Signs in an existing user with their email and password.
@@ -170,65 +188,65 @@ class AuthService {
   /// - [email]: The email address of the user.
   /// - [password]: The password of the user.
   ///
-  /// Throws an [AuthException] if sign-in fails.
+  /// Throws a [TrainerBackendAuthException] if sign-in fails.
   static Future<void> signIn({
     required String email,
     required String password,
-  }) async {
-    try {
-      await TrainerAPI.authManager.signInWithPassword(
-        email: email,
-        password: password,
-      );
-    } on AuthException {
-      rethrow;
-    }
-  }
+  }) async => _runAuthOperation(
+    () => TrainerAPI.authManager.signInWithPassword(
+      email: email,
+      password: password,
+    ),
+  );
 
   /// Signs out the currently signed-in user.
   ///
-  /// Throws an [AuthException] if sign-out fails.
-  static Future<void> signOut() async {
-    try {
-      await TrainerAPI.authManager.signOut();
-    } on AuthException {
-      rethrow;
-    }
-  }
+  /// Throws a [TrainerBackendAuthException] if sign-out fails.
+  static Future<void> signOut() async =>
+      _runAuthOperation(TrainerAPI.authManager.signOut);
 
   /// Initiates the Google OAuth sign-in flow.
   ///
-  /// Throws an [AuthException] if the process fails.
-  static Future<void> signInWithGoogle() async {
-    try {
-      await TrainerAPI.authManager.signInWithOAuth(OAuthProvider.google);
-    } on AuthException {
-      rethrow;
-    }
-  }
+  /// Throws a [TrainerBackendAuthException] if the process fails.
+  static Future<void> signInWithGoogle() async => _runAuthOperation(
+    () => TrainerAPI.authManager.signInWithOAuth(OAuthProvider.google),
+  );
 
   /// Initiates the Apple OAuth sign-in flow.
   ///
-  /// Throws an [AuthException] if the process fails.
-  static Future<void> signInWithApple() async {
-    try {
-      await TrainerAPI.authManager.signInWithOAuth(OAuthProvider.apple);
-    } on AuthException {
-      rethrow;
-    }
-  }
+  /// Throws a [TrainerBackendAuthException] if the process fails.
+  static Future<void> signInWithApple() async => _runAuthOperation(
+    () => TrainerAPI.authManager.signInWithOAuth(OAuthProvider.apple),
+  );
 
   /// Deletes the user's account from the database.
   ///
   /// This is a permanent action and cannot be undone.
   ///
-  /// Throws an [Exception] if the operation fails.
+  /// Throws a [TrainerBackendRpcException] or [TrainerBackendUnknownException]
+  /// if the operation fails.
   static Future<void> deleteAccount() async {
     try {
       await TrainerAPI.client.rpc('delete_user_account');
-    } catch (e) {
-      // It's better to catch a generic exception here as RPC can throw various errors.
-      throw Exception('Failed to delete account: $e');
+    } on PostgrestException catch (error) {
+      throw TrainerBackendRpcException.fromPostgrestException(
+        operation: 'deleteAccount',
+        exception: error,
+      );
+    } catch (error) {
+      if (_isNetworkIssue(error)) {
+        throw TrainerBackendNetworkException(
+          operation: 'deleteAccount',
+          message: 'Failed to delete account because of a network error.',
+          cause: error,
+        );
+      }
+
+      throw TrainerBackendUnknownException(
+        operation: 'deleteAccount',
+        message: 'Failed to delete account.',
+        cause: error,
+      );
     }
   }
 
@@ -239,22 +257,25 @@ class AuthService {
   /// - [email]: The user's email address.
   /// - [token]: The OTP token received by the user.
   ///
-  /// Throws an [AuthException] if OTP verification fails.
+  /// Throws a [TrainerBackendAuthException] if OTP verification fails.
   static Future<void> confirmSignUp({
     required String email,
     required String token,
   }) async {
-    try {
-      final AuthResponse response = await TrainerAPI.authManager.verifyOTP(
+    final AuthResponse response = await _runAuthOperation(
+      () => TrainerAPI.authManager.verifyOTP(
         email: email,
         token: token,
         type: OtpType.signup,
+      ),
+    );
+
+    if (response.session == null) {
+      // Wrapper-level invariant: Supabase accepted the OTP flow but did not
+      // return the session required by the app to continue.
+      throw const TrainerBackendAuthException.sessionMissing(
+        message: 'No session received after sign up confirmation.',
       );
-      if (response.session == null) {
-        throw const AuthException('No session received after sign up confirmation.');
-      }
-    } on AuthException {
-      rethrow;
     }
   }
 
@@ -262,17 +283,11 @@ class AuthService {
   ///
   /// - [email]: The email address to which the code should be resent.
   ///
-  /// Throws an [AuthException] if the operation fails.
-  static Future<void> resendConfirmationCode({required String email}) async {
-    try {
-      await TrainerAPI.authManager.resend(
-        email: email,
-        type: OtpType.signup,
+  /// Throws a [TrainerBackendAuthException] if the operation fails.
+  static Future<void> resendConfirmationCode({required String email}) async =>
+      _runAuthOperation(
+        () => TrainerAPI.authManager.resend(email: email, type: OtpType.signup),
       );
-    } on AuthException {
-      rethrow;
-    }
-  }
 
   // --- Password Reset (OTP) ---
 
@@ -284,36 +299,36 @@ class AuthService {
   ///
   /// - [email]: The user's email address.
   ///
-  /// Throws an [AuthException] if the operation fails.
-  static Future<void> sendPasswordResetCode({required String email}) async {
-    try {
-      await TrainerAPI.authManager.resetPasswordForEmail(email);
-    } on AuthException {
-      rethrow;
-    }
-  }
+  /// Throws a [TrainerBackendAuthException] if the operation fails.
+  static Future<void> sendPasswordResetCode({required String email}) async =>
+      _runAuthOperation(
+        () => TrainerAPI.authManager.resetPasswordForEmail(email),
+      );
 
   /// Verifies the password reset code and signs the user in.
   ///
   /// - [email]: The user's email address.
   /// - [token]: The OTP token received by the user.
   ///
-  /// Throws an [AuthException] if verification fails.
+  /// Throws a [TrainerBackendAuthException] if verification fails.
   static Future<void> verifyPasswordResetCode({
     required String email,
     required String token,
   }) async {
-    try {
-      final AuthResponse response = await TrainerAPI.authManager.verifyOTP(
+    final AuthResponse response = await _runAuthOperation(
+      () => TrainerAPI.authManager.verifyOTP(
         email: email,
         token: token,
         type: OtpType.recovery,
+      ),
+    );
+
+    if (response.session == null) {
+      // Wrapper-level invariant: Supabase accepted the OTP flow but did not
+      // return the recovery session required by the app to update the password.
+      throw const TrainerBackendAuthException.sessionMissing(
+        message: 'No session received after password reset verification.',
       );
-      if (response.session == null) {
-        throw const AuthException('No session received after password reset verification.');
-      }
-    } on AuthException {
-      rethrow;
     }
   }
 
@@ -321,12 +336,43 @@ class AuthService {
   ///
   /// - [newPassword]: The new password to set for the user.
   ///
-  /// Throws an [AuthException] if the update fails.
-  static Future<void> updatePassword({required String newPassword}) async {
+  /// Throws a [TrainerBackendAuthException] if the update fails.
+  static Future<void> updatePassword({required String newPassword}) async =>
+      _runAuthOperation(
+        () => TrainerAPI.authManager.updateUser(
+          UserAttributes(password: newPassword),
+        ),
+      );
+
+  static Future<T> _runAuthOperation<T>(Future<T> Function() operation) async {
     try {
-      await TrainerAPI.authManager.updateUser(UserAttributes(password: newPassword));
-    } on AuthException {
-      rethrow;
+      return await operation();
+    } on AuthException catch (error) {
+      throw TrainerBackendAuthException.fromAuthException(error);
+    } catch (error) {
+      if (_isNetworkIssue(error)) {
+        throw TrainerBackendNetworkException(
+          operation: 'authOperation',
+          message: 'An unexpected network error occurred.',
+          cause: error,
+        );
+      }
+
+      throw TrainerBackendUnknownException(
+        operation: 'authOperation',
+        message: 'An unexpected authentication error occurred.',
+        cause: error,
+      );
     }
+  }
+
+  static bool _isNetworkIssue(Object error) {
+    final String normalizedError = error.toString().toLowerCase();
+
+    return normalizedError.contains('failed host lookup') ||
+        normalizedError.contains('network') ||
+        normalizedError.contains('connection') ||
+        normalizedError.contains('socketexception') ||
+        normalizedError.contains('timeout');
   }
 }

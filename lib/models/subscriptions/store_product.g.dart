@@ -72,7 +72,6 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
       call(introductoryPrice: introductoryPrice);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `StoreProduct(...).copyWith.fieldName(value)`.
   ///
@@ -92,32 +91,32 @@ class _$StoreProductCWProxyImpl implements _$StoreProductCWProxy {
     return StoreProduct(
       identifier:
           identifier == const $CopyWithPlaceholder() || identifier == null
-              ? _value.identifier
-              // ignore: cast_nullable_to_non_nullable
-              : identifier as String,
+          ? _value.identifier
+          // ignore: cast_nullable_to_non_nullable
+          : identifier as String,
       title: title == const $CopyWithPlaceholder() || title == null
           ? _value.title
           // ignore: cast_nullable_to_non_nullable
           : title as String,
       description:
           description == const $CopyWithPlaceholder() || description == null
-              ? _value.description
-              // ignore: cast_nullable_to_non_nullable
-              : description as String,
+          ? _value.description
+          // ignore: cast_nullable_to_non_nullable
+          : description as String,
       price: price == const $CopyWithPlaceholder() || price == null
           ? _value.price
           // ignore: cast_nullable_to_non_nullable
           : price as double,
       priceString:
           priceString == const $CopyWithPlaceholder() || priceString == null
-              ? _value.priceString
-              // ignore: cast_nullable_to_non_nullable
-              : priceString as String,
+          ? _value.priceString
+          // ignore: cast_nullable_to_non_nullable
+          : priceString as String,
       currencyCode:
           currencyCode == const $CopyWithPlaceholder() || currencyCode == null
-              ? _value.currencyCode
-              // ignore: cast_nullable_to_non_nullable
-              : currencyCode as String,
+          ? _value.currencyCode
+          // ignore: cast_nullable_to_non_nullable
+          : currencyCode as String,
       introductoryPrice: introductoryPrice == const $CopyWithPlaceholder()
           ? _value.introductoryPrice
           // ignore: cast_nullable_to_non_nullable

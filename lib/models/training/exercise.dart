@@ -7,7 +7,8 @@ part 'exercise.g.dart';
 
 /// A helper function for `json_serializable` to read the exercise name
 /// from a nested 'exercise' object in the JSON payload.
-Object? _readName(Map<dynamic, dynamic> json, String key) => (json['exercise'] as Map<String, dynamic>)['name'];
+Object? _readName(Map<dynamic, dynamic> json, String key) =>
+    (json['exercise'] as Map<String, dynamic>)['name'];
 
 /// A sealed class representing an exercise within a training session.
 ///
@@ -36,7 +37,9 @@ sealed class Exercise {
   /// `session_type` field and delegates deserialization to the
   /// appropriate subclass.
   factory Exercise.fromJson(Map<String, dynamic> json) {
-    final SessionType type = SessionType.values.byName(json['session_type'] as String);
+    final SessionType type = SessionType.values.byName(
+      json['session_type'] as String,
+    );
     switch (type) {
       case SessionType.classic:
         return ClassicExercise.fromJson(json);
@@ -68,18 +71,15 @@ sealed class Exercise {
   ///
   /// Subclasses should override this and add their specific fields.
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'exercise_id': exerciseId,
-        'order_in_session': orderInSession,
-        'name': name,
-      };
+    'id': id,
+    'exercise_id': exerciseId,
+    'order_in_session': orderInSession,
+    'name': name,
+  };
 }
 
 /// Represents a 'Classic' style exercise, defined by sets, reps, and weight.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class ClassicExercise extends Exercise {
   /// Creates an instance of [ClassicExercise].
@@ -101,35 +101,41 @@ class ClassicExercise extends Exercise {
     required String name,
     required ClassicExerciseParameters templateParameters,
     ClassicExerciseParameters? objectiveParameters,
-  }) =>
-      ClassicExercise(
-        id: 0,
-        exerciseId: 0,
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: templateParameters,
-        objectiveParameters: objectiveParameters,
-      );
+  }) => ClassicExercise(
+    id: 0,
+    exerciseId: 0,
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: templateParameters,
+    objectiveParameters: objectiveParameters,
+  );
 
   /// Creates a [ClassicExercise] from a JSON object.
-  factory ClassicExercise.fromJson(Map<String, dynamic> json) => _$ClassicExerciseFromJson(json);
+  factory ClassicExercise.fromJson(Map<String, dynamic> json) =>
+      _$ClassicExerciseFromJson(json);
 
   /// The base parameters for the exercise (e.g., target reps, weight).
   @JsonKey(name: 'parameters')
   final ClassicExerciseParameters templateParameters;
 
   /// The parameters for progressive overload, if any.
-  @JsonKey(name: 'progression', fromJson: _progressionToObjective, toJson: _objectiveToProgression)
+  @JsonKey(
+    name: 'progression',
+    fromJson: _progressionToObjective,
+    toJson: _objectiveToProgression,
+  )
   final ClassicExerciseParameters? objectiveParameters;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$ClassicExerciseToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$ClassicExerciseToJson(this));
 }
 
 /// Converts the 'progression' JSON field to [ClassicExerciseParameters].
 ClassicExerciseParameters? _progressionToObjective(List<dynamic>? progression) {
   final Map<String, dynamic>? objective =
-      progression?.firstOrNull?['next_objective_parameters'] as Map<String, dynamic>?;
+      progression?.firstOrNull?['next_objective_parameters']
+          as Map<String, dynamic>?;
   if (objective == null) {
     return null;
   }
@@ -149,10 +155,7 @@ List<Map<String, dynamic>>? _objectiveToProgression(
 }
 
 /// Represents an 'AMRAP' style exercise.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class AmrapExercise extends Exercise {
   /// Creates an instance of [AmrapExercise].
@@ -173,35 +176,43 @@ class AmrapExercise extends Exercise {
     required String name,
     required AmrapExerciseParameters templateParameters,
     AmrapExerciseParameters? objectiveParameters,
-  }) =>
-      AmrapExercise(
-        id: 0,
-        exerciseId: 0,
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: templateParameters,
-        objectiveParameters: objectiveParameters,
-      );
+  }) => AmrapExercise(
+    id: 0,
+    exerciseId: 0,
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: templateParameters,
+    objectiveParameters: objectiveParameters,
+  );
 
   /// Creates an [AmrapExercise] from a JSON object.
-  factory AmrapExercise.fromJson(Map<String, dynamic> json) => _$AmrapExerciseFromJson(json);
+  factory AmrapExercise.fromJson(Map<String, dynamic> json) =>
+      _$AmrapExerciseFromJson(json);
 
   /// The base parameters for the AMRAP exercise.
   @JsonKey(name: 'parameters')
   final AmrapExerciseParameters templateParameters;
 
   /// The parameters for progressive overload in an AMRAP context.
-  @JsonKey(name: 'progression', fromJson: _amrapProgressionToObjective, toJson: _amrapObjectiveToProgression)
+  @JsonKey(
+    name: 'progression',
+    fromJson: _amrapProgressionToObjective,
+    toJson: _amrapObjectiveToProgression,
+  )
   final AmrapExerciseParameters? objectiveParameters;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$AmrapExerciseToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$AmrapExerciseToJson(this));
 }
 
 /// Converts the 'progression' JSON field to [AmrapExerciseParameters].
-AmrapExerciseParameters? _amrapProgressionToObjective(List<dynamic>? progression) {
+AmrapExerciseParameters? _amrapProgressionToObjective(
+  List<dynamic>? progression,
+) {
   final Map<String, dynamic>? objective =
-      progression?.firstOrNull?['next_objective_parameters'] as Map<String, dynamic>?;
+      progression?.firstOrNull?['next_objective_parameters']
+          as Map<String, dynamic>?;
   if (objective == null) {
     return null;
   }
@@ -221,10 +232,7 @@ List<Map<String, dynamic>>? _amrapObjectiveToProgression(
 }
 
 /// Represents an 'EMOM' style exercise.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class EmomExercise extends Exercise {
   /// Creates an instance of [EmomExercise].
@@ -245,35 +253,43 @@ class EmomExercise extends Exercise {
     required String name,
     required EmomExerciseParameters templateParameters,
     EmomExerciseParameters? objectiveParameters,
-  }) =>
-      EmomExercise(
-        id: 0,
-        exerciseId: 0,
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: templateParameters,
-        objectiveParameters: objectiveParameters,
-      );
+  }) => EmomExercise(
+    id: 0,
+    exerciseId: 0,
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: templateParameters,
+    objectiveParameters: objectiveParameters,
+  );
 
   /// Creates an [EmomExercise] from a JSON object.
-  factory EmomExercise.fromJson(Map<String, dynamic> json) => _$EmomExerciseFromJson(json);
+  factory EmomExercise.fromJson(Map<String, dynamic> json) =>
+      _$EmomExerciseFromJson(json);
 
   /// The base parameters for the EMOM exercise.
   @JsonKey(name: 'parameters')
   final EmomExerciseParameters templateParameters;
 
   /// The parameters for progressive overload in an EMOM context.
-  @JsonKey(name: 'progression', fromJson: _emomProgressionToObjective, toJson: _emomObjectiveToProgression)
+  @JsonKey(
+    name: 'progression',
+    fromJson: _emomProgressionToObjective,
+    toJson: _emomObjectiveToProgression,
+  )
   final EmomExerciseParameters? objectiveParameters;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$EmomExerciseToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$EmomExerciseToJson(this));
 }
 
 /// Converts the 'progression' JSON field to [EmomExerciseParameters].
-EmomExerciseParameters? _emomProgressionToObjective(List<dynamic>? progression) {
+EmomExerciseParameters? _emomProgressionToObjective(
+  List<dynamic>? progression,
+) {
   final Map<String, dynamic>? objective =
-      progression?.firstOrNull?['next_objective_parameters'] as Map<String, dynamic>?;
+      progression?.firstOrNull?['next_objective_parameters']
+          as Map<String, dynamic>?;
   if (objective == null) {
     return null;
   }
@@ -293,10 +309,7 @@ List<Map<String, dynamic>>? _emomObjectiveToProgression(
 }
 
 /// Represents a 'HIIT' style exercise.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class HiitExercise extends Exercise {
   /// Creates an instance of [HiitExercise].
@@ -317,35 +330,43 @@ class HiitExercise extends Exercise {
     required String name,
     required HiitExerciseParameters templateParameters,
     HiitExerciseParameters? objectiveParameters,
-  }) =>
-      HiitExercise(
-        id: 0,
-        exerciseId: 0,
-        orderInSession: orderInSession,
-        name: name,
-        templateParameters: templateParameters,
-        objectiveParameters: objectiveParameters,
-      );
+  }) => HiitExercise(
+    id: 0,
+    exerciseId: 0,
+    orderInSession: orderInSession,
+    name: name,
+    templateParameters: templateParameters,
+    objectiveParameters: objectiveParameters,
+  );
 
   /// Creates a [HiitExercise] from a JSON object.
-  factory HiitExercise.fromJson(Map<String, dynamic> json) => _$HiitExerciseFromJson(json);
+  factory HiitExercise.fromJson(Map<String, dynamic> json) =>
+      _$HiitExerciseFromJson(json);
 
   /// The base parameters for the HIIT exercise.
   @JsonKey(name: 'parameters')
   final HiitExerciseParameters templateParameters;
 
   /// The parameters for progressive overload in a HIIT context.
-  @JsonKey(name: 'progression', fromJson: _hiitProgressionToObjective, toJson: _hiitObjectiveToProgression)
+  @JsonKey(
+    name: 'progression',
+    fromJson: _hiitProgressionToObjective,
+    toJson: _hiitObjectiveToProgression,
+  )
   final HiitExerciseParameters? objectiveParameters;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$HiitExerciseToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$HiitExerciseToJson(this));
 }
 
 /// Converts the 'progression' JSON field to [HiitExerciseParameters].
-HiitExerciseParameters? _hiitProgressionToObjective(List<dynamic>? progression) {
+HiitExerciseParameters? _hiitProgressionToObjective(
+  List<dynamic>? progression,
+) {
   final Map<String, dynamic>? objective =
-      progression?.firstOrNull?['next_objective_parameters'] as Map<String, dynamic>?;
+      progression?.firstOrNull?['next_objective_parameters']
+          as Map<String, dynamic>?;
   if (objective == null) {
     return null;
   }

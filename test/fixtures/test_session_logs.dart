@@ -34,8 +34,12 @@ class TestSessionLogs {
             orderInRoundLog: 0,
             sets: List<SetLog>.generate(
               setCount,
-              (int index) =>
-                  SetLog(number: index + 1, weight: 50.0, reps: 10, restDuration: const Duration(minutes: 1)),
+              (int index) => SetLog(
+                number: index + 1,
+                weight: 50.0,
+                reps: 10,
+                restDuration: const Duration(minutes: 1),
+              ),
             ),
           ),
         ],

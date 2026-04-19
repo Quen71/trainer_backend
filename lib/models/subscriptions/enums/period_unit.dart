@@ -18,4 +18,3 @@ enum PeriodUnit {
   /// Unknown or unrecognized period unit.
   unknown,
 }
-

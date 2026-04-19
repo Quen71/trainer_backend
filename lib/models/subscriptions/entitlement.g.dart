@@ -51,7 +51,6 @@ class _$EntitlementCWProxyImpl implements _$EntitlementCWProxy {
   Entitlement createdAt(DateTime createdAt) => call(createdAt: createdAt);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Entitlement(...).copyWith.fieldName(value)`.
   ///
@@ -70,7 +69,8 @@ class _$EntitlementCWProxyImpl implements _$EntitlementCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      entitlementKey: entitlementKey == const $CopyWithPlaceholder() ||
+      entitlementKey:
+          entitlementKey == const $CopyWithPlaceholder() ||
               entitlementKey == null
           ? _value.entitlementKey
           // ignore: cast_nullable_to_non_nullable
@@ -99,11 +99,11 @@ extension $EntitlementCopyWith on Entitlement {
 // **************************************************************************
 
 Entitlement _$EntitlementFromJson(Map<String, dynamic> json) => Entitlement(
-      id: json['id'] as String,
-      entitlementKey: json['entitlement_key'] as String,
-      name: json['name'] as String,
-      createdAt: DateTime.parse(json['created_at'] as String),
-    );
+  id: json['id'] as String,
+  entitlementKey: json['entitlement_key'] as String,
+  name: json['name'] as String,
+  createdAt: DateTime.parse(json['created_at'] as String),
+);
 
 Map<String, dynamic> _$EntitlementToJson(Entitlement instance) =>
     <String, dynamic>{

@@ -31,7 +31,8 @@ void main() {
 
     test('should return a non-null summary with valid structure', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert: Core fields are populated
       expect(summary.userId, isNotEmpty);
@@ -41,15 +42,20 @@ void main() {
 
     test('should return the Free entitlement', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert: Entitlement key matches the Free plan
-      expect(summary.entitlement.entitlementKey.toLowerCase(), equals(TestAccounts.freeUser.plan!.toLowerCase()));
+      expect(
+        summary.entitlement.entitlementKey.toLowerCase(),
+        equals(TestAccounts.freeUser.plan!.toLowerCase()),
+      );
     });
 
     test('should return non-null limits for Free plan', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert
       expect(summary.limits.maxPrograms, isNotNull);
@@ -65,7 +71,8 @@ void main() {
 
     test('should return a non-null summary with valid structure', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert
       expect(summary.userId, isNotEmpty);
@@ -75,10 +82,14 @@ void main() {
 
     test('should return the Basic entitlement', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert
-      expect(summary.entitlement.entitlementKey.toLowerCase(), equals(TestAccounts.basicUser.plan!.toLowerCase()));
+      expect(
+        summary.entitlement.entitlementKey.toLowerCase(),
+        equals(TestAccounts.basicUser.plan!.toLowerCase()),
+      );
     });
   });
 
@@ -89,7 +100,8 @@ void main() {
 
     test('should return a non-null summary with valid structure', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert
       expect(summary.userId, isNotEmpty);
@@ -99,15 +111,20 @@ void main() {
 
     test('should return the Premium entitlement', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert
-      expect(summary.entitlement.entitlementKey.toLowerCase(), equals(TestAccounts.premiumUser.plan!.toLowerCase()));
+      expect(
+        summary.entitlement.entitlementKey.toLowerCase(),
+        equals(TestAccounts.premiumUser.plan!.toLowerCase()),
+      );
     });
 
     test('should return virtually unlimited limits for Premium plan', () async {
       // Act
-      final SubscriptionSummary summary = await SubscriptionsService.getUserSubscriptionSummary();
+      final SubscriptionSummary summary =
+          await SubscriptionsService.getUserSubscriptionSummary();
 
       // Assert: Premium limits are set to 999999
       expect(summary.limits.maxPrograms, equals(999999));

@@ -27,7 +27,8 @@ class SubscriptionSummary {
   });
 
   /// Creates a [SubscriptionSummary] from a JSON object.
-  factory SubscriptionSummary.fromJson(Map<String, dynamic> json) => _$SubscriptionSummaryFromJson(json);
+  factory SubscriptionSummary.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionSummaryFromJson(json);
 
   /// The unique identifier for the subscription.
   /// Can be null for free plan users who don't have an active subscription.
@@ -121,7 +122,8 @@ class SubscriptionSummaryLimits {
   });
 
   /// Creates a [SubscriptionSummaryLimits] from a JSON object.
-  factory SubscriptionSummaryLimits.fromJson(Map<String, dynamic> json) => _$SubscriptionSummaryLimitsFromJson(json);
+  factory SubscriptionSummaryLimits.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionSummaryLimitsFromJson(json);
 
   /// Maximum number of programs the user can create.
   @JsonKey(name: 'max_programs')

@@ -64,13 +64,13 @@ sealed class Session {
   ///
   /// Subclasses should override this and add their specific fields.
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'id': id,
-        'name': name,
-        'order_in_program': orderInProgram,
-        'type': type.toJson(),
-        'style': style.toJson(),
-        // 'exercises' will be handled by subclasses
-      };
+    'id': id,
+    'name': name,
+    'order_in_program': orderInProgram,
+    'type': type.toJson(),
+    'style': style.toJson(),
+    // 'exercises' will be handled by subclasses
+  };
 }
 
 /// A helper function to inject the session type into exercise JSON objects.
@@ -88,10 +88,7 @@ void _injectSessionType(Map<String, dynamic> json) {
 }
 
 /// Represents a 'Classic' training session, typically focused on sets and reps.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class ClassicSession extends Session {
   /// Creates an instance of [ClassicSession].
@@ -101,9 +98,7 @@ class ClassicSession extends Session {
     required super.orderInProgram,
     required super.style,
     required this.exercises,
-  }) : super(
-          type: SessionType.classic,
-        );
+  }) : super(type: SessionType.classic);
 
   /// A factory for creating a [ClassicSession] for insertion into the db.
   ///
@@ -113,14 +108,13 @@ class ClassicSession extends Session {
     required int orderInProgram,
     required SessionStyle style,
     required List<ClassicExercise> exercises,
-  }) =>
-      ClassicSession(
-        id: 0,
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        exercises: exercises,
-      );
+  }) => ClassicSession(
+    id: 0,
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    exercises: exercises,
+  );
 
   /// Creates a [ClassicSession] from a JSON object.
   ///
@@ -134,14 +128,12 @@ class ClassicSession extends Session {
   final List<ClassicExercise> exercises;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$ClassicSessionToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$ClassicSessionToJson(this));
 }
 
 /// Represents an 'AMRAP' (As Many Rounds As Possible) session.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class AmrapSession extends Session {
   /// Creates an instance of [AmrapSession].
@@ -152,9 +144,7 @@ class AmrapSession extends Session {
     required super.style,
     required this.exercises,
     required this.duration,
-  }) : super(
-          type: SessionType.amrap,
-        );
+  }) : super(type: SessionType.amrap);
 
   /// A factory for creating an [AmrapSession] for insertion into the db.
   ///
@@ -165,15 +155,14 @@ class AmrapSession extends Session {
     required SessionStyle style,
     required List<AmrapExercise> exercises,
     required Duration duration,
-  }) =>
-      AmrapSession(
-        id: 0,
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        exercises: exercises,
-        duration: duration,
-      );
+  }) => AmrapSession(
+    id: 0,
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    exercises: exercises,
+    duration: duration,
+  );
 
   /// Creates an [AmrapSession] from a JSON object.
   ///
@@ -192,14 +181,12 @@ class AmrapSession extends Session {
   final Duration duration;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$AmrapSessionToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$AmrapSessionToJson(this));
 }
 
 /// Represents an 'EMOM' (Every Minute On the Minute) session.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class EmomSession extends Session {
   /// Creates an instance of [EmomSession].
@@ -210,9 +197,7 @@ class EmomSession extends Session {
     required super.style,
     required this.exercises,
     required this.roundNumber,
-  }) : super(
-          type: SessionType.emom,
-        );
+  }) : super(type: SessionType.emom);
 
   /// A factory for creating an [EmomSession] for insertion into the db.
   ///
@@ -223,15 +208,14 @@ class EmomSession extends Session {
     required SessionStyle style,
     required List<EmomExercise> exercises,
     required int roundNumber,
-  }) =>
-      EmomSession(
-        id: 0,
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        exercises: exercises,
-        roundNumber: roundNumber,
-      );
+  }) => EmomSession(
+    id: 0,
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    exercises: exercises,
+    roundNumber: roundNumber,
+  );
 
   /// Creates an [EmomSession] from a JSON object.
   ///
@@ -249,14 +233,12 @@ class EmomSession extends Session {
   final int roundNumber;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$EmomSessionToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$EmomSessionToJson(this));
 }
 
 /// Represents a 'HIIT' (High-Intensity Interval Training) session.
-@JsonSerializable(
-  fieldRename: FieldRename.snake,
-  explicitToJson: true,
-)
+@JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 @CopyWith()
 class HiitSession extends Session {
   /// Creates an instance of [HiitSession].
@@ -267,9 +249,7 @@ class HiitSession extends Session {
     required super.style,
     required this.exercises,
     required this.roundNumber,
-  }) : super(
-          type: SessionType.hiit,
-        );
+  }) : super(type: SessionType.hiit);
 
   /// A factory for creating a [HiitSession] for insertion into the db.
   ///
@@ -280,15 +260,14 @@ class HiitSession extends Session {
     required SessionStyle style,
     required List<HiitExercise> exercises,
     required int roundNumber,
-  }) =>
-      HiitSession(
-        id: 0,
-        name: name,
-        orderInProgram: orderInProgram,
-        style: style,
-        exercises: exercises,
-        roundNumber: roundNumber,
-      );
+  }) => HiitSession(
+    id: 0,
+    name: name,
+    orderInProgram: orderInProgram,
+    style: style,
+    exercises: exercises,
+    roundNumber: roundNumber,
+  );
 
   /// Creates a [HiitSession] from a JSON object.
   ///
@@ -306,5 +285,6 @@ class HiitSession extends Session {
   final int roundNumber;
 
   @override
-  Map<String, dynamic> toJson() => super.toJson()..addAll(_$HiitSessionToJson(this));
+  Map<String, dynamic> toJson() =>
+      super.toJson()..addAll(_$HiitSessionToJson(this));
 }

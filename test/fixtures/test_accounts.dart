@@ -28,27 +28,27 @@ class TestAccounts {
 
   /// User account with Free subscription (limits: 1 program, 2 sessions, 6 exercises).
   static TestAccount get freeUser => TestAccount(
-        email: _env('TEST_FREE_EMAIL'),
-        password: _env('TEST_FREE_PASSWORD'),
-        userId: '',
-        plan: 'Free',
-      );
+    email: _env('TEST_FREE_EMAIL'),
+    password: _env('TEST_FREE_PASSWORD'),
+    userId: '',
+    plan: 'Free',
+  );
 
   /// User account with Basic subscription (limits: 5 programs, 10 sessions, 15 exercises).
   static TestAccount get basicUser => TestAccount(
-        email: _env('TEST_BASIC_EMAIL'),
-        password: _env('TEST_BASIC_PASSWORD'),
-        userId: '',
-        plan: 'Basic',
-      );
+    email: _env('TEST_BASIC_EMAIL'),
+    password: _env('TEST_BASIC_PASSWORD'),
+    userId: '',
+    plan: 'Basic',
+  );
 
   /// User account with Premium subscription (limits: unlimited programs, 30 sessions, 20 exercises).
   static TestAccount get premiumUser => TestAccount(
-        email: _env('TEST_PREMIUM_EMAIL'),
-        password: _env('TEST_PREMIUM_PASSWORD'),
-        userId: '',
-        plan: 'Premium',
-      );
+    email: _env('TEST_PREMIUM_EMAIL'),
+    password: _env('TEST_PREMIUM_PASSWORD'),
+    userId: '',
+    plan: 'Premium',
+  );
 }
 
 /// Represents a test account with its credentials and metadata.
@@ -74,9 +74,9 @@ class TestAccount {
 
   /// Returns a copy with updated userId.
   TestAccount copyWith({String? userId}) => TestAccount(
-        email: email,
-        password: password,
-        userId: userId ?? this.userId,
-        plan: plan,
-      );
+    email: email,
+    password: password,
+    userId: userId ?? this.userId,
+    plan: plan,
+  );
 }

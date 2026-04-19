@@ -53,7 +53,6 @@ class _$PackageCWProxyImpl implements _$PackageCWProxy {
       call(entitlementIdentifier: entitlementIdentifier);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `Package(...).copyWith.fieldName(value)`.
   ///
@@ -70,24 +69,24 @@ class _$PackageCWProxyImpl implements _$PackageCWProxy {
     return Package(
       identifier:
           identifier == const $CopyWithPlaceholder() || identifier == null
-              ? _value.identifier
-              // ignore: cast_nullable_to_non_nullable
-              : identifier as String,
+          ? _value.identifier
+          // ignore: cast_nullable_to_non_nullable
+          : identifier as String,
       packageType:
           packageType == const $CopyWithPlaceholder() || packageType == null
-              ? _value.packageType
-              // ignore: cast_nullable_to_non_nullable
-              : packageType as PackageType,
+          ? _value.packageType
+          // ignore: cast_nullable_to_non_nullable
+          : packageType as PackageType,
       storeProduct:
           storeProduct == const $CopyWithPlaceholder() || storeProduct == null
-              ? _value.storeProduct
-              // ignore: cast_nullable_to_non_nullable
-              : storeProduct as StoreProduct,
+          ? _value.storeProduct
+          // ignore: cast_nullable_to_non_nullable
+          : storeProduct as StoreProduct,
       entitlementIdentifier:
           entitlementIdentifier == const $CopyWithPlaceholder()
-              ? _value.entitlementIdentifier
-              // ignore: cast_nullable_to_non_nullable
-              : entitlementIdentifier as String?,
+          ? _value.entitlementIdentifier
+          // ignore: cast_nullable_to_non_nullable
+          : entitlementIdentifier as String?,
     );
   }
 }

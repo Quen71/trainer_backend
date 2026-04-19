@@ -82,7 +82,6 @@ class _$SubscriptionLimitsCWProxyImpl implements _$SubscriptionLimitsCWProxy {
       call(metadata: metadata);
 
   @override
-
   /// Creates a new instance with the provided field values.
   /// Passing `null` to a nullable field nullifies it, while `null` for a non-nullable field is ignored. To update a single field use `SubscriptionLimits(...).copyWith.fieldName(value)`.
   ///
@@ -103,33 +102,34 @@ class _$SubscriptionLimitsCWProxyImpl implements _$SubscriptionLimitsCWProxy {
     return SubscriptionLimits(
       entitlementId:
           entitlementId == const $CopyWithPlaceholder() || entitlementId == null
-              ? _value.entitlementId
-              // ignore: cast_nullable_to_non_nullable
-              : entitlementId as String,
+          ? _value.entitlementId
+          // ignore: cast_nullable_to_non_nullable
+          : entitlementId as String,
       maxPrograms: maxPrograms == const $CopyWithPlaceholder()
           ? _value.maxPrograms
           // ignore: cast_nullable_to_non_nullable
           : maxPrograms as int?,
       maxSessionsPerProgram:
           maxSessionsPerProgram == const $CopyWithPlaceholder()
-              ? _value.maxSessionsPerProgram
-              // ignore: cast_nullable_to_non_nullable
-              : maxSessionsPerProgram as int?,
+          ? _value.maxSessionsPerProgram
+          // ignore: cast_nullable_to_non_nullable
+          : maxSessionsPerProgram as int?,
       historyDays: historyDays == const $CopyWithPlaceholder()
           ? _value.historyDays
           // ignore: cast_nullable_to_non_nullable
           : historyDays as int?,
       maxExercisesPerSession:
           maxExercisesPerSession == const $CopyWithPlaceholder()
-              ? _value.maxExercisesPerSession
-              // ignore: cast_nullable_to_non_nullable
-              : maxExercisesPerSession as int?,
+          ? _value.maxExercisesPerSession
+          // ignore: cast_nullable_to_non_nullable
+          : maxExercisesPerSession as int?,
       canExportData:
           canExportData == const $CopyWithPlaceholder() || canExportData == null
-              ? _value.canExportData
-              // ignore: cast_nullable_to_non_nullable
-              : canExportData as bool,
-      canSharePrograms: canSharePrograms == const $CopyWithPlaceholder() ||
+          ? _value.canExportData
+          // ignore: cast_nullable_to_non_nullable
+          : canExportData as bool,
+      canSharePrograms:
+          canSharePrograms == const $CopyWithPlaceholder() ||
               canSharePrograms == null
           ? _value.canSharePrograms
           // ignore: cast_nullable_to_non_nullable
@@ -154,20 +154,19 @@ extension $SubscriptionLimitsCopyWith on SubscriptionLimits {
 // JsonSerializableGenerator
 // **************************************************************************
 
-SubscriptionLimits _$SubscriptionLimitsFromJson(Map<String, dynamic> json) =>
-    SubscriptionLimits(
-      entitlementId: json['entitlement_id'] as String,
-      maxPrograms: (json['max_programs'] as num?)?.toInt(),
-      maxSessionsPerProgram:
-          (json['max_sessions_per_program'] as num?)?.toInt(),
-      historyDays: (json['history_days'] as num?)?.toInt(),
-      maxExercisesPerSession:
-          (json['max_exercises_per_session'] as num?)?.toInt(),
-      canExportData: json['can_export_data'] as bool? ?? false,
-      canSharePrograms: json['can_share_programs'] as bool? ?? false,
-      metadata: json['metadata'] as Map<String, dynamic>? ??
-          const <String, dynamic>{},
-    );
+SubscriptionLimits _$SubscriptionLimitsFromJson(
+  Map<String, dynamic> json,
+) => SubscriptionLimits(
+  entitlementId: json['entitlement_id'] as String,
+  maxPrograms: (json['max_programs'] as num?)?.toInt(),
+  maxSessionsPerProgram: (json['max_sessions_per_program'] as num?)?.toInt(),
+  historyDays: (json['history_days'] as num?)?.toInt(),
+  maxExercisesPerSession: (json['max_exercises_per_session'] as num?)?.toInt(),
+  canExportData: json['can_export_data'] as bool? ?? false,
+  canSharePrograms: json['can_share_programs'] as bool? ?? false,
+  metadata:
+      json['metadata'] as Map<String, dynamic>? ?? const <String, dynamic>{},
+);
 
 Map<String, dynamic> _$SubscriptionLimitsToJson(SubscriptionLimits instance) =>
     <String, dynamic>{
