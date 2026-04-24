@@ -30,11 +30,27 @@ interface RevenueCatWebhookEvent {
   };
 }
 
-interface DenoRequest {
-  method: string;
-  headers: Headers;
-  json: () => Promise<RevenueCatWebhookEvent>;
-  text: () => Promise<string>;
+function jsonResponse(
+  body: Record<string, unknown>,
+  status: number,
+): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+async function getEntitlementIdByKey(
+  supabase: ReturnType<typeof createClient>,
+  entitlementKey: string,
+): Promise<string | null> {
+  const { data } = await supabase
+    .from('entitlements')
+    .select('id')
+    .eq('entitlement_key', entitlementKey)
+    .single();
+
+  return data?.id ?? null;
 }
 
 Deno.serve(async (req: Request) => {
@@ -49,10 +65,7 @@ Deno.serve(async (req: Request) => {
     const webhookSecret = Deno.env.get('REVENUECAT_WEBHOOK_SECRET');
     if (!webhookSecret) {
       console.error('REVENUECAT_WEBHOOK_SECRET not configured');
-      return new Response(
-        JSON.stringify({ error: 'Webhook secret not configured' }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-      );
+      return jsonResponse({ error: 'Webhook secret not configured' }, 500);
     }
 
     // Validate authorization header (recommended by RevenueCat)
@@ -60,10 +73,7 @@ Deno.serve(async (req: Request) => {
     const authHeader = req.headers.get('authorization');
     if (!authHeader) {
       console.error('Missing Authorization header');
-      return new Response(
-        JSON.stringify({ error: 'Missing authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-      );
+      return jsonResponse({ error: 'Missing authorization header' }, 401);
     }
 
     // Compare authorization header with configured secret
@@ -80,10 +90,7 @@ Deno.serve(async (req: Request) => {
       normalizedAuth.replace(/^Bearer\s+/, '') !== normalizedSecret
     ) {
       console.error('Invalid authorization header');
-      return new Response(
-        JSON.stringify({ error: 'Invalid authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-      );
+      return jsonResponse({ error: 'Invalid authorization header' }, 401);
     }
 
     // Parse the webhook payload
@@ -101,12 +108,8 @@ Deno.serve(async (req: Request) => {
 
     // Determine event type
     const eventType = event.type.toUpperCase();
-    const isInitialPurchase = eventType === 'INITIAL_PURCHASE';
-    const isRenewal = eventType === 'RENEWAL';
     const isCancellation = eventType === 'CANCELLATION';
     const isExpiration = eventType === 'EXPIRATION';
-    const isRefund = eventType === 'REFUND';
-    const isRestore = eventType === 'RESTORE';
 
     // STEP 1: Get or create product FIRST (before finding entitlement)
     // This ensures the product exists when we try to find the entitlement via product_id
@@ -175,14 +178,13 @@ Deno.serve(async (req: Request) => {
       } else if (productId && !existingProduct) {
         // Product was just created, link it to Premium entitlement by default
         console.log(`[${eventType}] No entitlement link found for new product, linking to Premium`);
-        const { data: defaultEntitlement } = await supabase
-          .from('entitlements')
-          .select('id')
-          .eq('entitlement_key', 'Premium')
-          .single();
+        const premiumEntitlementId = await getEntitlementIdByKey(
+          supabase,
+          'Premium',
+        );
 
-        if (defaultEntitlement) {
-          entitlementId = defaultEntitlement.id;
+        if (premiumEntitlementId) {
+          entitlementId = premiumEntitlementId;
           // Create the link
           const { error: linkError } = await supabase.from('entitlement_products').insert({
             entitlement_id: entitlementId,
@@ -200,24 +202,20 @@ Deno.serve(async (req: Request) => {
     // STEP 4: If still no entitlement found, default to Premium (for backward compatibility)
     if (!entitlementId) {
       console.log(`[${eventType}] Using fallback: Premium entitlement`);
-      const { data: defaultEntitlement } = await supabase
-        .from('entitlements')
-        .select('id')
-        .eq('entitlement_key', 'Premium')
-        .single();
+      const premiumEntitlementId = await getEntitlementIdByKey(
+        supabase,
+        'Premium',
+      );
 
-      if (defaultEntitlement) {
-        entitlementId = defaultEntitlement.id;
+      if (premiumEntitlementId) {
+        entitlementId = premiumEntitlementId;
         console.log(`[${eventType}] Fallback entitlement found: Premium -> ${entitlementId}`);
       }
     }
 
     if (!entitlementId) {
       console.error(`[${eventType}] Could not find entitlement for product:`, event.product_id);
-      return new Response(
-        JSON.stringify({ error: 'Entitlement not found' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-      );
+      return jsonResponse({ error: 'Entitlement not found' }, 400);
     }
 
     // Determine subscription status
@@ -286,10 +284,7 @@ Deno.serve(async (req: Request) => {
 
       if (directError) {
         console.error(`[${eventType}] Direct upsert error:`, directError);
-        return new Response(
-          JSON.stringify({ error: 'Failed to update subscription' }),
-          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-        );
+        return jsonResponse({ error: 'Failed to update subscription' }, 500);
       } else {
         console.log(`[${eventType}] Direct upsert succeeded (fallback)`);
       }
@@ -344,16 +339,10 @@ Deno.serve(async (req: Request) => {
       }
     }
 
-    return new Response(
-      JSON.stringify({ success: true, event_type: eventType }),
-      { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ success: true, event_type: eventType }, 200);
   } catch (error) {
     console.error('Webhook processing error:', error);
-    return new Response(
-      JSON.stringify({ error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-    );
+    return jsonResponse({ error: error.message }, 500);
   }
 });
 
