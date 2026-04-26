@@ -1,15 +1,21 @@
-import 'dart:developer';
-
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/exceptions/exceptions.export.dart';
 import 'package:trainer_backend/models/api/create_session_log_response.dart';
 import 'package:trainer_backend/models/history/session_log.dart';
+import 'package:trainer_backend/utils/rpc.guard.dart';
 
 /// A service class for managing user training history.
 ///
 /// This class provides methods to interact with the user's session logs,
 /// allowing for the creation and retrieval of training session data.
 /// It communicates with the Supabase backend via RPC (Remote Procedure Calls).
+///
+/// All methods normalize Supabase errors into [TrainerBackendException]
+/// subclasses via [RpcGuard]. Generic Postgres failures become
+/// [TrainerBackendRpcException]; network failures become
+/// [TrainerBackendNetworkException]; and any remaining errors become
+/// [TrainerBackendUnknownException].
 class HistoryService {
   /// The constructor is private to prevent instantiation of the class.
   const HistoryService._();
@@ -24,23 +30,21 @@ class HistoryService {
   ///
   /// Returns a [Future] that completes with a [CreateSessionLogResponse]
   /// containing both the created log and a preview of the updated session.
-  /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<CreateSessionLogResponse> createSessionLog(
-    SessionLog sessionLog,
-  ) async {
-    final Map<String, dynamic> sessionLogJson = sessionLog.toJson();
-
-    final dynamic responseData = await _client.rpc(
-      'create_session_log',
-      params: <String, dynamic>{'session_log_data': sessionLogJson},
-    );
-
-    log('responseData: ${responseData['updated_session_preview']}');
-
-    return CreateSessionLogResponse.fromJson(
-      responseData as Map<String, dynamic>,
-    );
-  }
+  ///
+  /// Throws a [TrainerBackendRpcException] if the RPC call fails (e.g. session
+  /// not found or access denied).
+  /// Throws a [TrainerBackendNetworkException] on network failure.
+  /// Throws a [TrainerBackendUnknownException] for any other error.
+  static Future<CreateSessionLogResponse> createSessionLog(SessionLog sessionLog) => RpcGuard.run(
+    operation: 'createSessionLog',
+    body: () async {
+      final dynamic data = await _client.rpc(
+        'create_session_log',
+        params: <String, dynamic>{'session_log_data': sessionLog.toJson()},
+      );
+      return CreateSessionLogResponse.fromJson(data as Map<String, dynamic>);
+    },
+  );
 
   /// Fetches a paginated list of session logs for the current user.
   ///
@@ -49,24 +53,21 @@ class HistoryService {
   ///
   /// Returns a [Future] that completes with a list of [SessionLog] objects.
   /// If there are no logs or the page is out of bounds, it returns an empty list.
-  /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<List<SessionLog>> fetchUserSessionsLogs({
-    required int page,
-    int pageSize = 5,
-  }) async {
-    final dynamic response = await _client.rpc(
-      'get_user_sessions_logs',
-      params: <String, dynamic>{'page_number': page, 'page_size': pageSize},
-    );
+  ///
+  /// Throws a [TrainerBackendRpcException] if the RPC call fails.
+  /// Throws a [TrainerBackendNetworkException] on network failure.
+  /// Throws a [TrainerBackendUnknownException] for any other error.
+  static Future<List<SessionLog>> fetchUserSessionsLogs({required int page, int pageSize = 5}) => RpcGuard.run(
+    operation: 'fetchUserSessionsLogs',
+    body: () async {
+      final dynamic response = await _client.rpc(
+        'get_user_sessions_logs',
+        params: <String, dynamic>{'page_number': page, 'page_size': pageSize},
+      );
 
-    if (response == null) {
-      return <SessionLog>[];
-    }
+      if (response == null) return <SessionLog>[];
 
-    final List<dynamic> logsJson = response as List<dynamic>;
-
-    return logsJson
-        .map((dynamic l) => SessionLog.fromJson(l as Map<String, dynamic>))
-        .toList();
-  }
+      return (response as List<dynamic>).map((dynamic l) => SessionLog.fromJson(l as Map<String, dynamic>)).toList();
+    },
+  );
 }

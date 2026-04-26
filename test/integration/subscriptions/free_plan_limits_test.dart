@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' hide Session;
+import 'package:trainer_backend/exceptions/exceptions.export.dart';
 import 'package:trainer_backend/models/subscriptions/subscription_limits_with_usage.dart';
 import 'package:trainer_backend/models/training/program.dart';
 import 'package:trainer_backend/models/training/session.dart';
@@ -73,9 +74,10 @@ void main() {
       expect(
         () => ProgramsService.createFullProgram(program2),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_PROGRAMS'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxPrograms,
           ),
         ),
       );
@@ -120,9 +122,10 @@ void main() {
           session: newSession,
         ),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxSessions,
           ),
         ),
       );
@@ -158,9 +161,10 @@ void main() {
       expect(
         () => ProgramsService.createFullProgram(program),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxExercisesPerSession,
           ),
         ),
       );
@@ -199,9 +203,10 @@ void main() {
       expect(
         () => ProgramsService.createFullProgram(program),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxExercisesPerSession,
           ),
         ),
       );
@@ -240,9 +245,10 @@ void main() {
       expect(
         () => ProgramsService.createFullProgram(program),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxExercisesPerSession,
           ),
         ),
       );
@@ -281,9 +287,10 @@ void main() {
       expect(
         () => ProgramsService.createFullProgram(program),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_EXERCISES_PER_SESSION'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxExercisesPerSession,
           ),
         ),
       );
@@ -335,9 +342,10 @@ void main() {
           session: newSession,
         ),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxSessions,
           ),
         ),
       );
@@ -397,9 +405,10 @@ void main() {
           session: newSession,
         ),
         throwsA(
-          predicate<PostgrestException>(
-            (PostgrestException e) =>
-                e.message.contains('LIMIT_EXCEEDED:MAX_SESSIONS'),
+          isA<TrainerBackendSubscriptionException>().having(
+            (TrainerBackendSubscriptionException e) => e.code,
+            'code',
+            TrainerBackendSubscriptionErrorCode.limitExceededMaxSessions,
           ),
         ),
       );

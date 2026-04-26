@@ -47,6 +47,8 @@ import '../models/auth/profile.dart';
 - Exports: `*.export.dart`
 - Configuration: `*.configuration.dart`
 - Clients: `*.api.dart`
+- Guards (error-boundary utilities): `*.guard.dart` in `/utils`
+- Utilities: `*.utils.dart` in `/utils`
 
 ### Classes
 - Services: `FeatureService`

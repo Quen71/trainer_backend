@@ -1,8 +1,7 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
-import 'package:trainer_backend/exceptions/trainer_backend_exception.dart';
+import 'package:trainer_backend/exceptions/exceptions.export.dart';
 import 'package:trainer_backend/models/models.export.dart' hide Session;
-import 'package:trainer_backend/services/auth_response_validator.dart';
 
 /// A service class for handling user authentication with Supabase.
 ///
@@ -180,7 +179,7 @@ class AuthService {
         data: <String, dynamic>{'username': username, 'full_name': fullName},
       ),
     );
-    validateSignUpResponse(response);
+    _validateSignUpResponse(response);
   }
 
   /// Signs in an existing user with their email and password.
@@ -364,6 +363,39 @@ class AuthService {
         cause: error,
       );
     }
+  }
+
+  /// Validates the [AuthResponse] returned by Supabase after a sign-up attempt.
+  ///
+  /// Throws a [TrainerBackendUnknownException] if the user is null.
+  /// Throws a [TrainerBackendAuthException] with [TrainerBackendAuthErrorCode.emailAlreadyUsed]
+  /// if Supabase silently masked a duplicate-email sign-up.
+  static void _validateSignUpResponse(AuthResponse response) {
+    final User? user = response.user;
+
+    if (user == null) {
+      throw const TrainerBackendUnknownException(
+        operation: 'signUp',
+        message: 'Failed to sign up: User is null after sign up.',
+      );
+    }
+
+    if (_isExistingUserEmailSignUpResponse(response)) {
+      throw const TrainerBackendAuthException(
+        code: TrainerBackendAuthErrorCode.emailAlreadyUsed,
+        message: 'An account already exists for this email address.',
+      );
+    }
+  }
+
+  /// Returns `true` when Supabase masks a duplicate-email sign-up attempt by
+  /// returning a user with no session and an empty identities list instead of
+  /// throwing an error.
+  static bool _isExistingUserEmailSignUpResponse(AuthResponse response) {
+    final User? user = response.user;
+    if (user == null) return false;
+
+    return response.session == null && user.identities?.isEmpty == true;
   }
 
   static bool _isNetworkIssue(Object error) {

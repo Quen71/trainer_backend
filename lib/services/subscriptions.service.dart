@@ -1,13 +1,16 @@
 import 'package:purchases_flutter/purchases_flutter.dart' as rc;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:trainer_backend/clients/trainer.api.dart';
+import 'package:trainer_backend/exceptions/exceptions.export.dart';
 import 'package:trainer_backend/mappers/revenuecat.mapper.dart';
 import 'package:trainer_backend/models/subscriptions/customer_info.dart';
 import 'package:trainer_backend/models/subscriptions/offerings.dart';
 import 'package:trainer_backend/models/subscriptions/package.dart';
 import 'package:trainer_backend/models/subscriptions/subscription_limits_with_usage.dart';
 import 'package:trainer_backend/models/subscriptions/subscription_summary.dart';
+import 'package:trainer_backend/utils/revenuecat.guard.dart';
 import 'package:trainer_backend/utils/revenuecat.utils.dart';
+import 'package:trainer_backend/utils/rpc.guard.dart';
 import 'package:trainer_backend/utils/subscription_summary.utils.dart';
 
 /// A service class for managing user subscriptions.
@@ -15,7 +18,12 @@ import 'package:trainer_backend/utils/subscription_summary.utils.dart';
 /// This class provides static methods to retrieve subscription information,
 /// check feature access, interact with subscription-related data, and manage
 /// purchases through RevenueCat SDK. All database operations are performed
-/// via RPC calls to Supabase, while purchase operations use RevenueCat SDK.
+/// via RPC calls to Supabase using [RpcGuard], while purchase operations use
+/// the RevenueCat SDK directly.
+///
+/// RPC failures are surfaced as [TrainerBackendRpcException],
+/// [TrainerBackendNetworkException], or [TrainerBackendUnknownException].
+/// RevenueCat failures are surfaced as [TrainerBackendPurchaseException].
 class SubscriptionsService {
   /// The constructor is private to prevent instantiation of the class.
   const SubscriptionsService._();
@@ -36,23 +44,25 @@ class SubscriptionsService {
   ///   `appl_...` for iOS production, `goog_...` for Android production).
   /// - [userId]: The UUID of the Supabase user (`auth.uid()`).
   ///
-  /// Throws a [PurchasesError] if the SDK configuration fails or if the
-  /// API key is invalid. Throws an [Exception] if the userId is empty.
-  static Future<void> configureRevenueCat({
-    required String apiKey,
-    required String userId,
-  }) async {
-    if (userId.isEmpty) {
-      throw Exception('User ID cannot be empty');
-    }
+  /// Throws a [TrainerBackendPurchaseException] if the SDK configuration fails,
+  /// the API key is invalid, or the [userId] is empty.
+  static Future<void> configureRevenueCat({required String apiKey, required String userId}) async {
+    await RevenueCatGuard.run<void>(
+      operation: 'configureRevenueCat',
+      body: () async {
+        if (userId.isEmpty) {
+          throw const TrainerBackendPurchaseException.notInitialized(
+            operation: 'configureRevenueCat',
+            message: 'User ID cannot be empty.',
+          );
+        }
 
-    final rc.PurchasesConfiguration configuration = rc.PurchasesConfiguration(
-      apiKey,
-    )..appUserID = userId;
+        final rc.PurchasesConfiguration configuration = rc.PurchasesConfiguration(apiKey)..appUserID = userId;
 
-    await rc.Purchases.configure(configuration);
-
-    _isRevenueCatInitialized = true;
+        await rc.Purchases.configure(configuration);
+        _isRevenueCatInitialized = true;
+      },
+    );
   }
 
   /// Retrieves the active subscription summary for the current user.
@@ -61,18 +71,23 @@ class SubscriptionsService {
   /// entitlement and limits information. If no active subscription exists,
   /// it automatically falls back to the Free entitlement with default limits.
   ///
-  /// Returns a [Future] with a [SubscriptionSummary] containing subscription details,
-  /// entitlement information, product information, and limits.
-  /// Never returns null - always returns at least the Free entitlement.
-  /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<SubscriptionSummary> getUserSubscriptionSummary() async {
-    final dynamic response = await _client.rpc(
-      'get_user_subscription_summary',
-      params: <String, dynamic>{'p_user_id': null},
-    );
-
-    return SubscriptionSummary.fromJson(response as Map<String, dynamic>);
-  }
+  /// Returns a [Future] with a [SubscriptionSummary] containing subscription
+  /// details, entitlement information, product information, and limits.
+  /// Never returns null — always returns at least the Free entitlement.
+  ///
+  /// Throws a [TrainerBackendRpcException] if the RPC call fails.
+  /// Throws a [TrainerBackendNetworkException] on network failure.
+  /// Throws a [TrainerBackendUnknownException] for any other error.
+  static Future<SubscriptionSummary> getUserSubscriptionSummary() => RpcGuard.run(
+    operation: 'getUserSubscriptionSummary',
+    body: () async {
+      final dynamic response = await _client.rpc(
+        'get_user_subscription_summary',
+        params: <String, dynamic>{'p_user_id': null},
+      );
+      return SubscriptionSummary.fromJson(response as Map<String, dynamic>);
+    },
+  );
 
   /// Retrieves the available offerings (subscription packages) from RevenueCat.
   ///
@@ -86,17 +101,18 @@ class SubscriptionsService {
   /// information using local configuration mapping. Each package will have its
   /// `entitlementIdentifier` field populated based on the product identifier.
   ///
-  /// Throws a [rc.PurchasesError] if the RevenueCat SDK is not initialized or
-  /// if a network error occurs.
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.notInitialized] if the SDK is not ready.
+  /// Throws a [TrainerBackendPurchaseException] for any RevenueCat error.
   static Future<Offerings?> getOfferings() async {
-    _checkRevenueCatInitialized();
-
-    try {
-      final rc.Offerings rcOfferings = await rc.Purchases.getOfferings();
-      return RevenueCatMapper.convertOfferings(rcOfferings);
-    } on rc.PurchasesError catch (e) {
-      throw Exception('Failed to get offerings: ${e.message}');
-    }
+    _ensureRevenueCatInitialized('getOfferings');
+    return RevenueCatGuard.run(
+      operation: 'getOfferings',
+      body: () async {
+        final rc.Offerings rcOfferings = await rc.Purchases.getOfferings();
+        return RevenueCatMapper.convertOfferings(rcOfferings);
+      },
+    );
   }
 
   /// Purchases a package from an offering.
@@ -110,88 +126,86 @@ class SubscriptionsService {
   ///
   /// - [package]: The [Package] (backend model) to purchase from an offering.
   ///
-  /// Returns a [Future] with a [SubscriptionSummary] containing:
-  /// - Subscription status and dates from RevenueCat
-  /// - Entitlement information
-  /// - Product information
-  /// - Subscription limits from Supabase
+  /// Returns a [Future] with a [SubscriptionSummary] containing subscription
+  /// status and dates, entitlement information, product information, and
+  /// subscription limits.
   ///
   /// Note: The `id` and `entitlement.id` fields will be empty strings as they
   /// are generated by Supabase when the webhook creates the subscription record.
   ///
-  /// Throws an [Exception] with specific error messages:
-  /// - `PURCHASE_CANCELLED`: User cancelled the purchase
-  /// - `PURCHASE_NOT_ALLOWED`: Purchase is not allowed
-  /// - `PRODUCT_NOT_AVAILABLE_FOR_PURCHASE`: Product is not available
-  /// - Other network/StoreKit errors
-  static Future<SubscriptionSummary> purchasePackage({
-    required Package package,
-  }) async {
-    _checkRevenueCatInitialized();
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.notInitialized] if the SDK is not ready.
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.packageNotFound] if the product is not
+  /// found in the current offerings.
+  /// Throws a [TrainerBackendPurchaseException] for any RevenueCat error.
+  /// Throws a [TrainerBackendRpcException] if the limits RPC call fails.
+  static Future<SubscriptionSummary> purchasePackage({required Package package}) async {
+    _ensureRevenueCatInitialized('purchasePackage');
 
-    // Validate entitlement identifier
     final String? entitlementKey = package.entitlementIdentifier;
     if (entitlementKey == null || entitlementKey.isEmpty) {
-      throw Exception(
-        'Package has no entitlement identifier. '
-        'Product: ${package.storeProduct.identifier}',
+      throw TrainerBackendPurchaseException.packageNotFound(
+        operation: 'purchasePackage',
+        message:
+            'Package has no entitlement identifier. '
+            'Product: ${package.storeProduct.identifier}',
       );
     }
 
-    // We must fetch offerings from RevenueCat to get the original rc.Package object.
-    // We cannot convert a backend Package to rc.Package because rc.Package contains
-    // internal references and complex objects that are only available from RevenueCat.
-    final rc.Offerings rcOfferings = await rc.Purchases.getOfferings();
+    try {
+      final CustomerInfo customerInfo = await RevenueCatGuard.run(
+        operation: 'purchasePackage',
+        body: () async {
+          final rc.Offerings rcOfferings = await rc.Purchases.getOfferings();
 
-    // Use storeProduct.identifier (the unique product ID) instead of package.identifier
-    // because package.identifier (e.g., "$rc_monthly") is shared across offerings,
-    // while storeProduct.identifier (e.g., "basic_monthly_subscription") is unique.
-    final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(
-      rcOfferings,
-      package.storeProduct.identifier,
-    );
+          final rc.Package? rcPackage = RevenueCatUtils.findPackageByProductId(
+            rcOfferings,
+            package.storeProduct.identifier,
+          );
 
-    if (rcPackage == null) {
-      throw Exception(
-        'Package not found in offerings for product: ${package.storeProduct.identifier}',
+          if (rcPackage == null) {
+            throw TrainerBackendPurchaseException.packageNotFound(
+              operation: 'purchasePackage',
+              message:
+                  'Package not found in offerings for product: '
+                  '${package.storeProduct.identifier}',
+            );
+          }
+
+          return _purchasePackageWithRevenueCatPackage(rcPackage);
+        },
+      );
+
+      final SubscriptionSummaryLimits limits = await RpcGuard.run(
+        operation: 'purchasePackage',
+        body: () => SubscriptionSummaryUtils.getEntitlementLimits(entitlementKey),
+      );
+
+      return SubscriptionSummaryUtils.buildFromCustomerInfo(
+        customerInfo: customerInfo,
+        limits: limits,
+        package: package,
+        entitlementKey: entitlementKey,
+      );
+    } catch (error) {
+      if (error is TrainerBackendException) rethrow;
+      throw TrainerBackendUnknownException(
+        operation: 'purchasePackage',
+        message: 'An unexpected error occurred during purchasePackage.',
+        cause: error,
       );
     }
-
-    // 1. Purchase via RevenueCat
-    final CustomerInfo customerInfo =
-        await _purchasePackageWithRevenueCatPackage(rcPackage);
-
-    // 2. Fetch limits from Supabase (independent of webhook)
-    final SubscriptionSummaryLimits limits =
-        await SubscriptionSummaryUtils.getEntitlementLimits(entitlementKey);
-
-    // 3. Build and return SubscriptionSummary
-    return SubscriptionSummaryUtils.buildFromCustomerInfo(
-      customerInfo: customerInfo,
-      limits: limits,
-      package: package,
-      entitlementKey: entitlementKey,
-    );
   }
 
   /// Internal method to purchase a package using the RevenueCat Package directly.
   ///
   /// This method performs the actual purchase operation without needing to
   /// look up the package in offerings.
-  static Future<CustomerInfo> _purchasePackageWithRevenueCatPackage(
-    rc.Package rcPackage,
-  ) async {
-    try {
-      final rc.PurchaseParams purchaseParams = rc.PurchaseParams.package(
-        rcPackage,
-      );
-      final rc.PurchaseResult purchaseResult = await rc.Purchases.purchase(
-        purchaseParams,
-      );
-      return RevenueCatMapper.convertCustomerInfo(purchaseResult.customerInfo);
-    } on rc.PurchasesError catch (e) {
-      throw Exception('Purchase failed: ${e.message} (code: ${e.code})');
-    }
+  static Future<CustomerInfo> _purchasePackageWithRevenueCatPackage(rc.Package rcPackage) async {
+    final rc.PurchaseParams purchaseParams = rc.PurchaseParams.package(rcPackage);
+    final rc.PurchaseResult purchaseResult = await rc.Purchases.purchase(purchaseParams);
+    return RevenueCatMapper.convertCustomerInfo(purchaseResult.customerInfo);
   }
 
   /// Restores previous purchases associated with the current user ID.
@@ -200,50 +214,43 @@ class SubscriptionsService {
   /// RevenueCat webhooks for each restored subscription, which will update
   /// the Supabase database accordingly.
   ///
-  /// Returns a [Future] with a [CustomerInfo] (backend model) object (same structure as
-  /// [purchasePackage]) containing all restored entitlements and subscriptions.
+  /// Returns a [Future] with a [CustomerInfo] (backend model) object containing
+  /// all restored entitlements and subscriptions.
   ///
-  /// Throws a [rc.PurchasesError] if a network error occurs or if the RevenueCat
-  /// SDK is not initialized.
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.notInitialized] if the SDK is not ready.
+  /// Throws a [TrainerBackendPurchaseException] for any RevenueCat error.
   static Future<CustomerInfo> restorePurchases() async {
-    _checkRevenueCatInitialized();
-
-    try {
-      final rc.CustomerInfo rcCustomerInfo =
-          await rc.Purchases.restorePurchases();
-      return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
-    } on rc.PurchasesError catch (e) {
-      throw Exception('Failed to restore purchases: ${e.message}');
-    }
+    _ensureRevenueCatInitialized('restorePurchases');
+    return RevenueCatGuard.run(
+      operation: 'restorePurchases',
+      body: () async {
+        final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.restorePurchases();
+        return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
+      },
+    );
   }
 
   /// Retrieves the current customer information from RevenueCat.
   ///
-  /// This method returns the current [CustomerInfo] (backend model) without performing any
-  /// purchase action. It allows checking active entitlements and subscriptions
-  /// without initiating a purchase flow.
-  ///
-  /// Returns a [Future] with a [CustomerInfo] (backend model) object (same structure as
-  /// [purchasePackage] and [restorePurchases]) containing:
-  /// - Active entitlements
-  /// - Active subscriptions
-  /// - All purchased product identifiers
-  /// - Customer metadata
+  /// This method returns the current [CustomerInfo] (backend model) without
+  /// performing any purchase action. It allows checking active entitlements and
+  /// subscriptions without initiating a purchase flow.
   ///
   /// The information is retrieved from cache or via a network request if needed.
   ///
-  /// Throws a [rc.PurchasesError] if a network error occurs or if the RevenueCat
-  /// SDK is not initialized.
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.notInitialized] if the SDK is not ready.
+  /// Throws a [TrainerBackendPurchaseException] for any RevenueCat error.
   static Future<CustomerInfo> getCustomerInfo() async {
-    _checkRevenueCatInitialized();
-
-    try {
-      final rc.CustomerInfo rcCustomerInfo =
-          await rc.Purchases.getCustomerInfo();
-      return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
-    } on rc.PurchasesError catch (e) {
-      throw Exception('Failed to get customer info: ${e.message}');
-    }
+    _ensureRevenueCatInitialized('getCustomerInfo');
+    return RevenueCatGuard.run(
+      operation: 'getCustomerInfo',
+      body: () async {
+        final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.getCustomerInfo();
+        return RevenueCatMapper.convertCustomerInfo(rcCustomerInfo);
+      },
+    );
   }
 
   /// Gets the URL to the platform's subscription management page.
@@ -253,49 +260,54 @@ class SubscriptionsService {
   /// customer info.
   ///
   /// Returns the management URL as a [String], or null if not available.
-  /// Throws an [Exception] if the RevenueCat SDK is not initialized.
+  ///
+  /// Throws a [TrainerBackendPurchaseException] with code
+  /// [TrainerBackendPurchaseErrorCode.notInitialized] if the SDK is not ready.
+  /// Throws a [TrainerBackendPurchaseException] for any RevenueCat error.
   static Future<String?> getManagementURL() async {
-    _checkRevenueCatInitialized();
-
-    try {
-      final rc.CustomerInfo rcCustomerInfo =
-          await rc.Purchases.getCustomerInfo();
-      return rcCustomerInfo.managementURL;
-    } on rc.PurchasesError catch (e) {
-      throw Exception('Failed to get management URL: ${e.message}');
-    }
+    _ensureRevenueCatInitialized('getManagementURL');
+    return RevenueCatGuard.run(
+      operation: 'getManagementURL',
+      body: () async {
+        final rc.CustomerInfo rcCustomerInfo = await rc.Purchases.getCustomerInfo();
+        return rcCustomerInfo.managementURL;
+      },
+    );
   }
 
   /// Retrieves subscription limits with current usage counts for the current user.
   ///
-  /// This method returns subscription summary information plus current usage statistics
-  /// including the number of programs, exercises, and sessions per program.
-  /// If no active subscription exists, it automatically falls back to the Free entitlement.
+  /// This method returns subscription summary information plus current usage
+  /// statistics including the number of programs, exercises, and sessions per
+  /// program. If no active subscription exists, it automatically falls back to
+  /// the Free entitlement.
   ///
-  /// Returns a [Future] with a [SubscriptionLimitsWithUsage] containing:
-  /// - Subscription summary (status, entitlement, limits)
-  /// - Current usage counts (programs, exercises, sessions per program)
+  /// Returns a [Future] with a [SubscriptionLimitsWithUsage] containing
+  /// subscription summary and current usage counts.
+  /// Never returns null — always returns at least the Free entitlement with
+  /// usage data.
   ///
-  /// Never returns null - always returns at least the Free entitlement with usage data.
-  /// Throws a [PostgrestException] if the RPC call fails.
-  static Future<SubscriptionLimitsWithUsage> getUserLimitsWithUsage() async {
-    final dynamic response = await _client.rpc(
-      'get_user_limits_with_usage',
-      params: <String, dynamic>{'p_user_id': null},
-    );
+  /// Throws a [TrainerBackendRpcException] if the RPC call fails.
+  /// Throws a [TrainerBackendNetworkException] on network failure.
+  /// Throws a [TrainerBackendUnknownException] for any other error.
+  static Future<SubscriptionLimitsWithUsage> getUserLimitsWithUsage() => RpcGuard.run(
+    operation: 'getUserLimitsWithUsage',
+    body: () async {
+      final dynamic response = await _client.rpc(
+        'get_user_limits_with_usage',
+        params: <String, dynamic>{'p_user_id': null},
+      );
+      return SubscriptionLimitsWithUsage.fromJson(response as Map<String, dynamic>);
+    },
+  );
 
-    return SubscriptionLimitsWithUsage.fromJson(
-      response as Map<String, dynamic>,
-    );
-  }
-
-  /// Checks if RevenueCat SDK has been initialized.
-  ///
-  /// Throws an [Exception] if RevenueCat has not been initialized.
-  static void _checkRevenueCatInitialized() {
+  /// Throws [TrainerBackendPurchaseException.notInitialized] if the RevenueCat
+  /// SDK has not been configured yet.
+  static void _ensureRevenueCatInitialized(String operation) {
     if (!_isRevenueCatInitialized) {
-      throw Exception(
-        'RevenueCat SDK not initialized. Call configureRevenueCat() first.',
+      throw TrainerBackendPurchaseException.notInitialized(
+        operation: operation,
+        message: 'RevenueCat SDK not initialized. Call configureRevenueCat() first.',
       );
     }
   }

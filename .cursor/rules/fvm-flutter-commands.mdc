@@ -1,0 +1,33 @@
+---
+description: Toujours préfixer les commandes Flutter/Dart avec fvm
+alwaysApply: false
+---
+# Commandes Flutter/Dart — Utiliser fvm
+
+Ce projet utilise [FVM (Flutter Version Manager)](https://fvm.app). Toutes les commandes Flutter et Dart doivent être préfixées par `fvm`.
+
+## Règle
+
+```bash
+# ❌ NE PAS utiliser
+flutter pub get
+dart run build_runner build
+flutter test
+flutter build apk
+
+# ✅ TOUJOURS utiliser
+fvm flutter pub get
+fvm dart run build_runner build
+fvm flutter test
+fvm flutter build apk
+```
+
+## Commandes courantes
+
+| Action | Commande |
+|--------|----------|
+| Récupérer les dépendances | `fvm flutter pub get` |
+| Générer les fichiers `.g.dart` | `fvm dart run build_runner clean && fvm dart run build_runner build --delete-conflicting-outputs` |
+| Lancer les tests | `fvm flutter test` |
+| Build release | `fvm flutter build <target>` |
+| Analyser le code | `fvm flutter analyze` |
