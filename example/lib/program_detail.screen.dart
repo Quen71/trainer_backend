@@ -388,11 +388,8 @@ class _ProgramDetailScreenState extends State<ProgramDetailScreen> {
                     ),
                   );
                 },
-                onReorder: (int oldIndex, int newIndex) {
+                onReorderItem: (int oldIndex, int newIndex) {
                   setState(() {
-                    if (newIndex > oldIndex) {
-                      newIndex -= 1;
-                    }
                     final Session item = _sessions.removeAt(oldIndex);
                     _sessions.insert(newIndex, item);
 

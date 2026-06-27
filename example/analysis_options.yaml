@@ -69,8 +69,6 @@ linter:
 
     avoid_final_parameters: true
 
-    avoid_null_checks_in_equality_operators: true
-
     avoid_return_types_on_setters: true
 
     avoid_unnecessary_containers: true

@@ -118,11 +118,8 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
     _updateSessionInBackend();
   }
 
-  void _onReorder(int oldIndex, int newIndex) {
+  void _onReorderItem(int oldIndex, int newIndex) {
     setState(() {
-      if (newIndex > oldIndex) {
-        newIndex -= 1;
-      }
       final Exercise item = _sortedExercises.removeAt(oldIndex);
       _sortedExercises.insert(newIndex, item);
 
@@ -421,7 +418,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                         ),
                       );
                     },
-                    onReorder: _onReorder,
+                    onReorderItem: _onReorderItem,
                   ),
                 ),
               ],

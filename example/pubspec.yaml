@@ -5,18 +5,18 @@ publish_to: 'none'
 version: 0.0.1+1
 
 environment:
-  sdk: '>=3.4.0 <4.0.0'
-  flutter: 3.41.4
+  sdk: '>=3.12.0 <4.0.0'
+  flutter: 3.44.2
 
 dependencies:
   flutter:
     sdk: flutter
 
   # RevenueCat for subscriptions
-  purchases_flutter: ^9.15.0
+  purchases_flutter: ^10.3.0
 
   flutter_speed_dial: ^7.0.0
-  supabase_flutter: ^2.12.0
+  supabase_flutter: ^2.15.0
   intl: ^0.20.2
 
   trainer_backend:
